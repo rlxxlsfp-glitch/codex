@@ -1,10 +1,9 @@
 {
   "name": "Codex — 중세국어",
-  "id": "/codex/app-v2",
   "short_name": "Codex",
   "description": "중세국어 개념 강의와 기출 선지 연습",
-  "start_url": "/codex/",
-  "scope": "/codex/",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "orientation": "any",
   "background_color": "#fbfaf6",
