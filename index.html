@@ -1444,7 +1444,10 @@ const addDays=(s,n)=>{const d=new Date(s+'T00:00:00');d.setDate(d.getDate()+n);r
 const DEF={onb:0,notice:1,done:{},seen:{},rev:{},stat:{},ex:{},days:[],solved:0,ok:0,fs:'m',hc:0,hide:1,last:null};
 let S=JSON.parse(JSON.stringify(DEF));
 try{const r=localStorage.getItem(KEY);if(r)S=Object.assign(S,JSON.parse(r))}catch(e){}
-const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const DATA_KEYS=['done','seen','rev','stat','ex','days','solved','ok','last'];
+const dataOf=()=>{const o={};DATA_KEYS.forEach(k=>o[k]=S[k]);return o};
+let _lastData=JSON.stringify(dataOf());
+const save=()=>{try{const dj=JSON.stringify(dataOf());if(dj!==_lastData){_lastData=dj;S.updated=Date.now();if(window.codexCloud)window.codexCloud.push()}localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
 function touchDay(){const t=today();if(!S.days.includes(t)){S.days.push(t);S.days=S.days.slice(-60);save()}}
 function streak(){let n=0,d=today();if(!S.days.includes(d))d=addDays(d,-1);while(S.days.includes(d)){n++;d=addDays(d,-1)}return n}
 function dueList(day){return Object.keys(S.rev).filter(k=>ITEMS[k]&&S.rev[k].due<=day)}
@@ -1532,6 +1535,64 @@ function sparkle(el,n){
   }
 }
 function toast(t){document.querySelectorAll('.toast').forEach(x=>x.remove());const d=document.createElement('div');d.className='toast';d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),2200)}
+
+/* ═════════ 로그인·동기화 (Firebase, VOCAP·Proof와 같은 프로젝트) ═════════ */
+window.codexCloud=(()=>{
+  let ref=null,timer=null,writing=Promise.resolve(),unsub=null,status='local';
+  const api={user:null,login:null,logout:null};
+  const TXT={ok:'기록이 서버와 동기화되고 있어요.',loading:'동기화 연결 중이에요…',err:'동기화가 끊겼어요. 이 기기에는 계속 저장돼요.',local:''};
+  const esc=x=>String(x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const payload=()=>JSON.parse(JSON.stringify(Object.assign(dataOf(),{updated:S.updated||0})));
+  // a가 우선(충돌 시), b는 빈 곳을 채움
+  function mergeState(a,b){
+    const obj=k=>Object.assign({},b[k]||{},a[k]||{}),o={};
+    o.done=obj('done');o.seen=obj('seen');o.rev=obj('rev');o.ex=obj('ex');
+    o.stat={};new Set([...Object.keys(a.stat||{}),...Object.keys(b.stat||{})]).forEach(k=>{const x=(a.stat||{})[k],y=(b.stat||{})[k];o.stat[k]=!x?y:!y?x:((y.a||0)>(x.a||0)?y:x)});
+    o.days=[...new Set([...(a.days||[]),...(b.days||[])])].sort().slice(-60);
+    o.solved=Math.max(a.solved||0,b.solved||0);o.ok=Math.max(a.ok||0,b.ok||0);
+    o.last=(a.last!=null)?a.last:b.last;
+    return o;
+  }
+  function apply(d){
+    DATA_KEYS.forEach(k=>{S[k]=d[k]!==undefined?d[k]:JSON.parse(JSON.stringify(DEF[k]))});
+    S.updated=d.updated||Date.now();_lastData=JSON.stringify(dataOf());
+    try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}
+    if(S.onb&&!R.sess&&R.exam===null&&(R.tab==='home'||R.tab==='more'))render();
+  }
+  function boxHTML(){
+    const u=api.user;
+    if(!api.login)return '<h3>계정</h3><p class="sub">로그인 기능을 불러오지 못했어요. 인터넷 연결을 확인해 주세요.</p>';
+    if(u){const name=esc((u.displayName||'').split(' ')[0]||'내 계정');
+      return `<h3>${name} 로그인됨</h3><p class="sub" style="margin-bottom:18px">${TXT[status]||TXT.ok}</p><div class="sgrid" style="grid-template-columns:1fr"><button class="sbtn" data-logout="1"><span>로그아웃</span></button></div>`;}
+    return '<h3>로그인하고 기록 지키기</h3><p class="sub" style="margin-bottom:18px">구글 계정으로 로그인하면 기록이 서버에 저장돼서, 기기를 바꾸거나 데이터를 지워도 이어서 볼 수 있어요.</p><button class="btn" data-login="1">구글로 로그인</button>';
+  }
+  function drawBox(){const b=document.getElementById('authBox');if(b)b.innerHTML=boxHTML()}
+  function setStatus(k){status=k;drawBox()}
+  function push(now){
+    if(!ref)return;clearTimeout(timer);
+    timer=setTimeout(()=>{const data=payload();writing=writing.then(()=>ref&&ref.set(data)).then(()=>setStatus('ok')).catch(()=>setStatus('err'))},now?0:1000);
+  }
+  async function connect(r,id){
+    if(unsub){unsub();unsub=null}
+    ref=r;setStatus('loading');
+    const flag=KEY+'-synced-'+id;let synced=false;try{synced=!!localStorage.getItem(flag)}catch(e){}
+    try{
+      const sn=await r.get();
+      const hasLocal=Object.keys(S.done||{}).length||S.solved||Object.keys(S.stat||{}).length;
+      if(sn.exists()){
+        const d=sn.data(),remoteNewer=(d.updated||0)>=(S.updated||0);
+        if(!synced&&hasLocal){const m=remoteNewer?mergeState(d,S):mergeState(S,d);m.updated=Date.now();apply(m);push(true)}
+        else if((d.updated||0)>(S.updated||0))apply(d);
+        else if((d.updated||0)<(S.updated||0))push(true);
+      }else if(hasLocal){push(true)}
+      try{localStorage.setItem(flag,'1')}catch(e){}
+      setStatus('ok');
+      unsub=r.onSnapshot(x=>{if(!x.exists())return;const d=x.data();if((d.updated||0)>(S.updated||0))apply(d);setStatus('ok')},()=>setStatus('err'));
+    }catch(e){console.error(e);setStatus('err')}
+  }
+  function disconnect(){if(unsub){unsub();unsub=null}clearTimeout(timer);ref=null;setStatus('local')}
+  return Object.assign(api,{push,connect,disconnect,drawBox,boxHTML});
+})();
 
 /* ═════════ 공통 조각 ═════════ */
 const seg=(name,items,cur,cls)=>`<div class="seg ${cls||''}" data-segname="${name}"><i class="knob"></i>${items.map(([k,t])=>`<button class="${k===cur?'on':''}" data-seg="${name}:${k}">${t}</button>`).join('')}</div>`;
@@ -1757,6 +1818,7 @@ function vReview(){
 /* ═════════ 더보기 (Qnote 설정) ═════════ */
 function vMore(){
   return `${pageHead('더보기','화면과 기록을 관리해요.')}
+  <div class="card setcard" id="authBox">${window.codexCloud?window.codexCloud.boxHTML():''}</div>
   <div class="card setcard"><h3>보기</h3>
    <div class="preview"><b>미리보기</b><span>이 카드처럼 글자 크기·대비가 적용돼요. <span class="mk">ᄒᆞ쇼셔</span> <span class="mk">듣ᄌᆞᄫᆞ며</span></span></div>
    <p class="lab">글자 크기</p>
@@ -1838,6 +1900,8 @@ document.addEventListener('click',ev=>{
   if(d.reonb){S.onb=0;R.onb=0;save();render('u');return}
   if(d.resetrev){if(confirm('복습 목록을 비울까요?')){S.rev={};save();render('u');toast('복습 목록을 비웠어요')}return}
   if(d.reset){if(confirm('개념 완료, 푼 기록, 복습 목록을 모두 지울까요?')){const keep={fs:S.fs,hc:S.hc,hide:S.hide,onb:1};S=Object.assign(JSON.parse(JSON.stringify(DEF)),keep);save();render('u');toast('기록을 모두 지웠어요')}return}
+  if(d.login){if(window.codexCloud&&window.codexCloud.login)window.codexCloud.login();return}
+  if(d.logout){if(confirm('로그아웃할까요?\n이 기기의 기록은 그대로 남아요.'))window.codexCloud.logout();return}
   if(d.help){toast(d.help==='unit'?'강의를 끝까지 풀면 개념 완료로 표시돼요':'');return}
   if(t.id==='bell'){const n=dueList(today()).length;toast(n?`오늘 복습 ${n}개가 기다리고 있어요`:'새 알림이 없어요');return}
 });
@@ -1856,6 +1920,54 @@ touchDay();
 render('u');
 /* 앱 설치(PWA): GitHub Pages(https)에서만 동작 */
 if('serviceWorker' in navigator&&location.protocol==='https:'){addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))}
+</script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBX63hV8FnrkrtAuh9644yw4BSV2GTUPv4",
+  authDomain: "vocap-e3e9e.firebaseapp.com",
+  projectId: "vocap-e3e9e",
+  storageBucket: "vocap-e3e9e.firebasestorage.app",
+  messagingSenderId: "322645613396",
+  appId: "1:322645613396:web:9b73e58558018c972fc6c1"
+};
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+auth.languageCode = "ko";
+const db = getFirestore(app);
+const cloud = window.codexCloud;
+
+// VOCAP(users/{uid})·Proof(users/{uid}/apps/proof)와 겹치지 않게 apps/codex에 저장해요.
+const wrap = ref => ({
+  get: () => getDoc(ref),
+  set: d => setDoc(ref, d),
+  onSnapshot: (cb, err) => onSnapshot(ref, cb, err)
+});
+
+cloud.login = async () => {
+  const provider = new GoogleAuthProvider();
+  provider.setCustomParameters({ prompt: "select_account" });
+  try { await signInWithPopup(auth, provider); }
+  catch (e) {
+    if (e.code === "auth/popup-blocked" || e.code === "auth/operation-not-supported-in-this-environment") {
+      await signInWithRedirect(auth, provider);
+    } else if (e.code !== "auth/popup-closed-by-user" && e.code !== "auth/cancelled-popup-request") {
+      toast("로그인이 안 됐어요. (" + e.code + ")");
+    }
+  }
+};
+cloud.logout = () => signOut(auth);
+
+onAuthStateChanged(auth, user => {
+  cloud.user = user;
+  if (user) cloud.connect(wrap(doc(db, "users", user.uid, "apps", "codex")), user.uid);
+  else cloud.disconnect();
+  cloud.drawBox();
+});
+cloud.drawBox();
 </script>
 </body>
 </html>
