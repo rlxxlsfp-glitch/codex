@@ -1,0 +1,1861 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#fbfaf6">
+<title>Codex — 중세국어</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Codex">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{
+  --bg:#fbfaf6; --track:#f0f0eb; --tile:#f3f4f0; --line:#e6e6df; --line2:#d9ddd6;
+  --ink:#1c2120; --ink2:#47504e; --ink3:#848c89; --ink4:#b3b9b6;
+  --p:#56726f; --p2:#6f8c88; --pl:#e7eeec; --pl2:#d6e2df; --pink:#3d5956; --gold:#c9a227; --goldl:#f7efd2;
+  --ok:#12a37c; --okl:#e4f6ef; --no:#ec4a52; --nol:#fdeeee; --warn:#d07a0b; --warnl:#fff4e2;
+  --grad:linear-gradient(100deg,#4b6764 0%,#5c7a77 55%,#6f8d89 100%);
+  --glow:0 14px 30px -12px rgba(61,89,86,.5);
+  --fs:16px; --r:24px;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+:root.hc{--ink2:#24222e;--ink3:#4f4d5c;--line:#c9c6d8;--line2:#b7b3cc;--tile:#f0eef8}
+*{box-sizing:border-box;margin:0;padding:0}
+html{height:100%;scroll-padding-top:calc(env(safe-area-inset-top,0px) + 80px)}
+body{min-height:100%;background:var(--bg);color:var(--ink);font-family:"Pretendard","Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sans-serif;font-size:var(--fs);line-height:1.7;letter-spacing:-.01em;-webkit-font-smoothing:antialiased;word-break:keep-all;overflow-wrap:anywhere;-webkit-tap-highlight-color:transparent}
+.mk{font-family:"Noto Sans CJK KR","Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",serif;font-weight:700;color:var(--pink);letter-spacing:0}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;text-align:inherit}
+button:focus-visible{outline:2px solid var(--p);outline-offset:3px;border-radius:14px}
+svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none;display:block}
+
+/* ── 상단바 (Qnote) ── */
+.top{position:fixed;top:0;left:0;right:0;z-index:40;background:rgba(251,250,246,.94);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top,0px);transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+.top-in{max-width:1000px;margin:0 auto;height:66px;padding:0 24px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:1.55rem;font-weight:800;letter-spacing:-.035em;color:var(--p)}
+.hr{display:flex;align-items:center;gap:10px}
+.bell{width:42px;height:42px;display:grid;place-items:center;color:var(--ink2);border-radius:50%;position:relative}
+.bell i{position:absolute;top:9px;right:10px;width:8px;height:8px;border-radius:50%;background:var(--no);border:2px solid #fff}
+.wallet{display:flex;align-items:center;gap:7px;height:42px;padding:0 16px;border-radius:999px;background:var(--goldl);color:#7a5f0c;font-weight:800}
+.wallet svg{color:var(--gold)}
+.wallet svg{width:19px;height:19px}
+body.hide .top{transform:translateY(-100%)}
+body.hide .tabs{transform:translateY(100%)}
+
+/* ── 본문 ── */
+main{max-width:1000px;margin:0 auto;padding:calc(66px + env(safe-area-inset-top,0px) + 30px) 24px 140px}
+.view{animation:inR .34s cubic-bezier(.2,.8,.2,1)}
+.view.l{animation:inL .34s cubic-bezier(.2,.8,.2,1)}
+.view.u{animation:inU .38s cubic-bezier(.2,.8,.2,1)}
+@keyframes inR{from{opacity:0;transform:translateX(22px)}to{opacity:1;transform:none}}
+@keyframes inL{from{opacity:0;transform:translateX(-22px)}to{opacity:1;transform:none}}
+@keyframes inU{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.ph{margin-bottom:26px}
+.ph h1{display:flex;align-items:center;gap:10px;font-size:2rem;line-height:1.3;font-weight:800;letter-spacing:-.04em}
+.ph p{color:var(--ink3);margin-top:6px;font-size:1rem}
+.qm{width:30px;height:30px;border-radius:50%;background:var(--track);color:var(--ink3);font-size:.85rem;font-weight:800;display:grid;place-items:center}
+h2.sec{font-size:1.15rem;font-weight:800;letter-spacing:-.03em;margin:38px 0 14px}
+.sub{color:var(--ink3);font-size:.92rem}
+
+body::after{content:"ᄒᆞᄂᆞ니 나랏말ᄊᆞ미 ᄉᆞᄆᆞᆺ디 ᄇᆞᄅᆞ매 ᄠᅳ들 ᄡᅮ메 니르고져 ᄆᆡᇰᄀᆞ노니";position:fixed;inset:auto -10% -6% auto;width:60vw;font-family:'Noto Sans CJK KR',serif;font-size:4.5rem;line-height:1.2;writing-mode:vertical-rl;color:rgba(61,89,86,.06);filter:blur(2.2px);pointer-events:none;z-index:-1;font-weight:700;overflow:hidden;height:80vh}
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:28px 30px;box-shadow:0 2px 10px -6px rgba(40,30,90,.08)}
+.card+.card{margin-top:16px}
+.tile{background:var(--tile);border-radius:20px;padding:20px 22px}
+
+/* 세그먼트 */
+.seg{display:flex;background:var(--track);border-radius:22px;padding:6px;gap:4px;position:relative}
+.seg button{text-align:center;flex:1;height:56px;border-radius:17px;font-weight:700;color:var(--ink3);position:relative;z-index:1;transition:color .25s}
+.seg button.on{color:var(--ink)}
+.seg .knob{position:absolute;top:6px;bottom:6px;border-radius:17px;background:#fff;box-shadow:0 4px 14px -6px rgba(40,30,90,.25);transition:left .32s cubic-bezier(.2,.8,.2,1),width .32s cubic-bezier(.2,.8,.2,1)}
+.seg.sm button{height:46px;font-size:.95rem}
+
+/* 칩 */
+.chips{display:flex;gap:10px;flex-wrap:wrap}
+.chip{height:42px;padding:0 20px;border-radius:999px;background:var(--track);color:var(--ink2);font-weight:600;font-size:.95rem}
+.chip.on{background:var(--pl);color:var(--pink);font-weight:700}
+
+/* 버튼 */
+.btn{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:62px;border-radius:999px;background:var(--grad);color:#fff;font-weight:800;font-size:1.05rem;box-shadow:var(--glow);transition:transform .15s}
+.btn::after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 35%,rgba(255,240,200,.35) 50%,transparent 65%);transform:translateX(-130%);animation:sheen 4.2s ease-in-out infinite}
+@keyframes sheen{0%,58%{transform:translateX(-130%)}100%{transform:translateX(130%)}}
+.btn:active{transform:scale(.985)}
+.btn.line{background:#fff;color:var(--ink3);border:1px solid var(--line);box-shadow:none}
+.btn.line::after,.btn.soft::after{display:none}
+.btn.soft{background:var(--pl);color:var(--pink);box-shadow:none}
+.btn.sm{height:50px;font-size:.98rem}
+.btn[disabled]{opacity:.45;pointer-events:none}
+.duo{display:grid;grid-template-columns:1fr 2fr;gap:16px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.link{display:inline-flex;align-items:center;gap:4px;color:var(--pink);font-weight:700;font-size:.95rem}
+.link svg{width:17px;height:17px}
+
+/* 안내 박스 (처음이신가요?) */
+.notice{position:relative;background:var(--pl);border:1.5px solid #8fa8a4;border-radius:var(--r);padding:26px 60px 26px 28px;margin-bottom:22px}
+.notice>b{display:block;color:var(--pink);font-size:1.1rem;margin-bottom:8px}
+.notice p{color:var(--ink2);font-size:.95rem}
+.notice .x{position:absolute;top:18px;right:18px;width:36px;height:36px;display:grid;place-items:center;color:var(--pink)}
+
+/* ── 온보딩 (Proof) ── */
+.onb{max-width:760px;margin:0 auto}
+.onb-c{text-align:center;padding:40px 0 34px}
+.onb-ic{width:120px;height:120px;border-radius:50%;background:var(--pl);display:grid;place-items:center;margin:0 auto 34px;color:var(--p)}
+.onb-ic svg{width:44px;height:44px}
+.onb-n{color:var(--p);font-weight:800;margin-bottom:10px}
+.onb-c h3{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;margin-bottom:14px}
+.onb-c p{color:var(--ink2);max-width:28em;margin:0 auto}
+.dots{display:flex;justify-content:center;gap:8px;margin:34px 0 30px}
+.dots i{width:7px;height:7px;border-radius:9px;background:var(--line2);transition:width .3s}
+.dots i.on{width:26px;background:var(--p)}
+
+/* ── 홈 ── */
+.cont{display:flex;gap:22px;align-items:center}
+.ring{width:92px;height:92px;flex:none;position:relative}
+.ring svg{width:92px;height:92px;transform:rotate(-90deg)}
+.ring circle{stroke-width:9;fill:none}
+.ring b{position:absolute;inset:0;display:grid;place-items:center;font-size:1.15rem;font-weight:800;color:var(--pink)}
+.cont .t{flex:1;min-width:0}
+.cont small{color:var(--ink3);font-weight:600}
+.cont h3{font-size:1.3rem;font-weight:800;letter-spacing:-.03em;margin:2px 0 4px}
+.quick{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.qk{display:flex;flex-direction:column;gap:14px;padding:22px 20px;border-radius:22px;background:var(--tile);min-height:150px;transition:transform .15s}
+.qk:active{transform:scale(.98)}
+.qk .ic{width:46px;height:46px;border-radius:15px;background:#fff;color:var(--p);display:grid;place-items:center;box-shadow:0 2px 8px -4px rgba(40,30,90,.2)}
+.qk b{font-size:1.02rem;display:block}
+.qk span{color:var(--ink3);font-size:.86rem}
+.weak{display:flex;gap:18px;align-items:flex-start}
+.weak .ic{width:48px;height:48px;border-radius:16px;background:var(--warnl);color:var(--warn);display:grid;place-items:center;flex:none}
+
+/* ── 단원 목록 ── */
+.ulist{display:grid;gap:12px}
+.urow{display:flex;align-items:center;gap:18px;padding:22px 24px;border-radius:22px;background:var(--tile);width:100%;transition:transform .15s}
+.urow:active{transform:scale(.99)}
+.urow .n{width:50px;height:50px;border-radius:16px;background:#fff;color:var(--p);display:grid;place-items:center;font-weight:800;font-size:1.1rem;flex:none;box-shadow:0 2px 8px -4px rgba(40,30,90,.2)}
+.urow.done .n{background:var(--grad);color:#fff}
+.urow .t{flex:1;min-width:0}
+.urow .t b{display:block;font-size:1.08rem;letter-spacing:-.02em}
+.urow .t span{display:block;color:var(--ink3);font-size:.88rem;margin-top:2px}
+.urow .bar{width:70px;height:6px;border-radius:9px;background:var(--line2);overflow:hidden;flex:none}
+.urow .bar i{display:block;height:100%;background:var(--p);border-radius:9px}
+.urow .chev{color:var(--ink4)}
+
+/* ── 개념 강의 ── */
+.backbar{display:flex;align-items:center;gap:14px;margin-bottom:22px}
+.round{width:48px;height:48px;border-radius:50%;border:1px solid var(--line);background:#fff;display:grid;place-items:center;color:var(--ink2);flex:none}
+.backbar .t b{display:block;font-size:1.05rem}
+.backbar .t span{color:var(--ink3);font-size:.86rem}
+.steps{display:flex;gap:6px;margin:0 0 30px}
+.steps button{flex:1;height:6px;border-radius:9px;background:var(--line2);transition:background .3s}
+.steps button.seen{background:#b5c7c4}
+.steps button.on{background:var(--p)}
+.lec h1{font-size:1.9rem;font-weight:800;letter-spacing:-.04em;line-height:1.3;margin-bottom:18px}
+.blk{margin:0 0 30px}
+.bh{display:flex;align-items:center;gap:10px;margin-bottom:12px;font-weight:800;font-size:1.02rem}
+.bh .ic{width:34px;height:34px;border-radius:11px;background:var(--pl);color:var(--p);display:grid;place-items:center}
+.bh .ic svg{width:18px;height:18px}
+.bridge{background:var(--tile);border-radius:20px;padding:20px 22px;color:var(--ink2)}
+.core{position:relative;border-radius:22px;padding:22px 24px;background:var(--grad);color:#fff;font-weight:700;font-size:1.08rem;line-height:1.65;box-shadow:var(--glow);overflow:hidden}
+.core::after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.25) 50%,transparent 65%);transform:translateX(-130%);animation:sheen 5s ease-in-out infinite}
+.core .cl1{display:block;color:#f1d36b;font-size:.85rem;font-weight:800;margin-bottom:4px}
+.core .mk{color:#fff;text-decoration:underline;text-decoration-color:rgba(255,255,255,.5);text-underline-offset:4px}
+.prose p{color:var(--ink2);margin:0 0 16px}
+.prose p:last-child{margin-bottom:0}
+.prose b{color:var(--ink)}
+.prose ul,.prose ol{color:var(--ink2);margin:0 0 16px;padding-left:1.3em}
+.prose li{margin-bottom:8px;padding-left:2px}
+.prose h4{font-size:1rem;font-weight:800;margin:26px 0 10px;color:var(--ink)}
+.prose .say{border-left:3px solid var(--p);padding:4px 0 4px 16px;margin:0 0 16px;color:var(--ink)}
+.tw{overflow-x:auto;margin:4px 0 18px;border:1px solid var(--line);border-radius:18px;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;min-width:460px;font-size:.93rem}
+th,td{padding:13px 16px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--tile);font-weight:800;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.hl{background:#f2f6f5;font-weight:700}
+.dis{display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:10px}
+.dw{display:flex;flex-direction:column;gap:4px;padding:18px 20px;border-radius:20px;background:var(--tile)}
+.dw .w{font-size:1.2rem;line-height:1.5}
+.dw .pt{font-weight:700;font-size:.95rem}
+.dw .pt .plus{color:var(--ink4);margin:0 5px;font-weight:400}
+.dw .m{color:var(--ink3);font-size:.88rem}
+.ctx{background:var(--tile);border-radius:18px;padding:18px 20px;margin-bottom:18px}
+.ctxh{display:flex;align-items:center;gap:7px;font-weight:800;font-size:.88rem;color:var(--pink);margin-bottom:10px}
+.ctxh svg{width:17px;height:17px}
+.cl{padding:10px 0;border-top:1px dashed var(--line2)}
+.cl:first-of-type{border-top:0;padding-top:0}
+.ctag{display:block;font-size:.78rem;font-weight:700;color:var(--ink3);margin-bottom:2px}
+.cot{font-family:"Noto Sans CJK KR","Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",serif;font-size:1.05rem;line-height:1.85}
+.cot u{text-decoration-color:var(--p);text-decoration-thickness:2px;text-underline-offset:5px;color:var(--pink);font-weight:700}
+.cot .bx{border:1px solid var(--line2);border-radius:10px;padding:2px 8px}
+.ctr{color:var(--ink2);font-size:.9rem;margin-top:2px}
+.ctx .link{margin-top:12px}
+.fullp{margin-top:12px}
+.fullp .pass{margin-bottom:10px}
+.trap{display:flex;gap:16px;padding:22px 24px;border-radius:22px;background:var(--nol)}
+.trap .ic{width:40px;height:40px;border-radius:13px;background:#fff;color:var(--no);display:grid;place-items:center;flex:none}
+.trap div{color:var(--ink2);font-size:.96rem}
+.trap b{color:var(--no)}
+.tip{display:flex;gap:16px;padding:22px 24px;border-radius:22px;background:var(--okl)}
+.tip .ic{width:40px;height:40px;border-radius:13px;background:#fff;color:var(--ok);display:grid;place-items:center;flex:none}
+.tip div{color:var(--ink2);font-size:.96rem}
+
+/* ── OX ── */
+.ox{border:1px solid var(--line);border-radius:var(--r);padding:26px 28px;background:#fff;position:relative}
+.ox+.ox{margin-top:14px}
+.ox .lb{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 12px;border-radius:999px;background:var(--pl);color:var(--pink);font-size:.8rem;font-weight:800;margin-bottom:12px}
+.ox .lb.deep{background:var(--warnl);color:var(--warn)}
+.ox .q{font-size:1.06rem;font-weight:600;line-height:1.75}
+.oxb{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}
+.oxb button{height:66px;border-radius:20px;background:var(--track);display:grid;place-items:center;color:var(--ink2);transition:background .2s,color .2s,transform .12s}
+.oxb button svg{width:30px;height:30px;stroke-width:2.2}
+.oxb button:active{transform:scale(.97)}
+.oxb button.r{background:var(--okl);color:var(--ok)}
+.oxb button.w{background:var(--nol);color:var(--no)}
+.oxb button:disabled{cursor:default}
+.fb{margin-top:16px;padding:18px 20px;border-radius:18px;font-size:.96rem;color:var(--ink2);animation:inU .3s ease}
+.fb.ok{background:var(--okl)}
+.fb.no{background:var(--nol)}
+.fb strong{display:block;margin-bottom:4px;font-size:1rem}
+.fb.ok strong{color:var(--ok)}
+.fb.no strong{color:var(--no)}
+.shake{animation:shake .4s}
+@keyframes shake{20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
+.after{margin-top:22px;padding:24px 26px;border-radius:22px;animation:inU .35s ease}
+.after.good{background:var(--pl)}
+.after.bad{background:var(--warnl)}
+.after>b{display:block;font-size:1.05rem;margin-bottom:6px}
+.after.good b{color:var(--pink)}
+.after.bad b{color:var(--warn)}
+.after p{color:var(--ink2);font-size:.95rem}
+
+/* ── 실전 문제 ── */
+.exlist{display:grid;gap:12px}
+.exrow{display:flex;align-items:center;gap:18px;padding:20px 24px;border-radius:22px;background:var(--tile);width:100%}
+.exrow .no{width:50px;height:50px;border-radius:16px;background:#fff;display:grid;place-items:center;font-weight:800;color:var(--p);flex:none;box-shadow:0 2px 8px -4px rgba(40,30,90,.2)}
+.exrow .t{flex:1;min-width:0}
+.exrow .t b{display:block}
+.exrow .t span{color:var(--ink3);font-size:.86rem}
+.st{font-size:.8rem;font-weight:800;padding:5px 12px;border-radius:999px;flex:none}
+.st.o{background:var(--okl);color:var(--ok)}
+.st.x{background:var(--nol);color:var(--no)}
+.st.n{background:var(--track);color:var(--ink3)}
+.exhead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
+.timer{display:flex;align-items:center;gap:7px;height:40px;padding:0 16px;border-radius:999px;background:var(--track);font-weight:800;color:var(--ink2);font-variant-numeric:tabular-nums}
+.timer svg{width:18px;height:18px}
+.timer.run{background:var(--pl);color:var(--pink)}
+.qtxt{font-size:1.12rem;font-weight:700;line-height:1.7;margin-bottom:18px}
+.qtxt em{font-style:normal;text-decoration:underline;text-underline-offset:4px}
+.pass{border:1px solid var(--line2);border-radius:20px;padding:22px 24px;margin-bottom:16px;background:#fff}
+.pass .tg{font-weight:800;margin-bottom:6px}
+.pass .ot{font-family:"Noto Sans CJK KR","Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",serif;line-height:2;font-size:1.02rem}
+.pass u{text-decoration-color:var(--p);text-decoration-thickness:2px;text-underline-offset:5px}
+.pass .tr{color:var(--ink3);font-size:.9rem;margin-top:8px;line-height:1.7;display:block}
+.pass .src{display:block;text-align:right;color:var(--ink3);font-size:.85rem;margin-top:8px}
+.pass .bx{border:1px solid var(--line2);border-radius:14px;padding:4px 10px}
+.choices{display:grid;gap:10px}
+.ch{display:flex;gap:14px;align-items:flex-start;padding:18px 20px;border-radius:18px;background:var(--tile);width:100%;border:2px solid transparent;transition:background .2s,border-color .2s}
+.ch .k{width:30px;height:30px;border-radius:50%;background:#fff;display:grid;place-items:center;font-weight:800;font-size:.9rem;color:var(--ink2);flex:none;margin-top:1px}
+.ch .c{flex:1}
+.ch.pick{border-color:var(--p);background:var(--pl)}
+.ch.right{border-color:var(--ok);background:var(--okl)}
+.ch.right .k{background:var(--ok);color:#fff}
+.ch.wrong{border-color:var(--no);background:var(--nol)}
+.ch.wrong .k{background:var(--no);color:#fff}
+.ch:disabled{cursor:default}
+.ch .ex{display:block;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line2);color:var(--ink2);font-size:.92rem}
+.ch .ex .tag{font-weight:800;margin-right:6px}
+.ch .ex .tag.o{color:var(--ok)}
+.ch .ex .tag.x{color:var(--no)}
+.ch .ex .tag.n{color:var(--ink3)}
+
+/* 진행바 */
+.prog{display:flex;align-items:center;gap:14px;margin-bottom:18px;color:var(--ink3);font-size:.9rem;font-weight:700}
+.prog .bar{flex:1;height:8px;border-radius:9px;background:var(--track);overflow:hidden}
+.prog .bar i{display:block;height:100%;background:var(--grad);border-radius:9px;transition:width .45s cubic-bezier(.2,.8,.2,1)}
+
+/* 결과 */
+.res{text-align:center;padding:44px 24px}
+.res .big{font-size:3.4rem;font-weight:800;letter-spacing:-.05em;color:var(--p);line-height:1.1}
+.res p{color:var(--ink3);margin:12px 0 28px}
+
+/* ── 코치 ── */
+.stat3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.stat3 .tile b{display:block;font-size:1.6rem;font-weight:800;letter-spacing:-.04em;color:var(--ink)}
+.stat3 .tile span{color:var(--ink3);font-size:.86rem;font-weight:600}
+.acc{display:grid;gap:14px}
+.acc .r{display:grid;grid-template-columns:150px 1fr 54px;gap:14px;align-items:center}
+.acc .r span{font-weight:700;font-size:.95rem}
+.acc .r .bar{height:10px;border-radius:9px;background:var(--track);overflow:hidden}
+.acc .r .bar i{display:block;height:100%;border-radius:9px;background:var(--p)}
+.acc .r .bar i.low{background:var(--no)}
+.acc .r .bar i.mid{background:#f2a33a}
+.acc .r em{font-style:normal;text-align:right;font-weight:800;color:var(--ink2);font-size:.9rem}
+.advice{display:flex;gap:16px;padding:24px 26px;border-radius:22px;background:var(--tile)}
+.advice .ic{width:46px;height:46px;border-radius:15px;background:#fff;color:var(--p);display:grid;place-items:center;flex:none;box-shadow:0 2px 8px -4px rgba(40,30,90,.2)}
+.advice b{display:block;margin-bottom:4px}
+.advice p{color:var(--ink2);font-size:.95rem}
+
+/* ── 복습 (Qnote) ── */
+.today{border-radius:26px;padding:30px 32px;background:#56726f;color:#fff;position:relative;overflow:hidden}
+.today small{opacity:.85;font-weight:600}
+.today b{display:block;font-size:3rem;font-weight:800;line-height:1.2;letter-spacing:-.04em}
+.today span{opacity:.85}
+.nextrev{margin-top:30px}
+.nextrev .r{display:flex;justify-content:space-between;padding:12px 0;color:var(--ink3)}
+.nextrev .r b{color:var(--ink)}
+.ritem{padding:20px 22px;border-radius:20px;background:var(--tile);margin-bottom:10px}
+.ritem .s{font-size:.82rem;color:var(--pink);font-weight:800}
+.ritem .q{margin-top:4px;font-size:.96rem;color:var(--ink2)}
+.empty{text-align:center;padding:60px 20px}
+.empty b{display:block;font-size:1.15rem;margin-bottom:6px}
+.empty p{color:var(--ink3)}
+
+/* ── 더보기 (Qnote 설정) ── */
+.setcard h3{font-size:1.1rem;font-weight:800;margin-bottom:18px}
+.preview{background:var(--tile);border:1px solid var(--line);border-radius:18px;padding:18px 22px;margin-bottom:20px}
+.preview b{display:block}
+.preview span{color:var(--ink2)}
+.lab{color:var(--ink2);margin:0 0 10px}
+.tg{display:flex;align-items:center;gap:16px;margin-top:24px}
+.tg .t{flex:1}
+.tg .t b{display:block;font-weight:700}
+.tg .t span{color:var(--ink3);font-size:.88rem}
+.sw{width:58px;height:34px;border-radius:999px;background:var(--pl2);position:relative;flex:none;transition:background .25s}
+.sw::after{content:"";position:absolute;top:4px;left:4px;width:26px;height:26px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.15);transition:transform .25s cubic-bezier(.2,.8,.2,1)}
+.sw.on{background:var(--p)}
+.sw.on::after{transform:translateX(24px)}
+.sgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.sbtn{display:flex;align-items:center;gap:14px;height:84px;padding:0 26px;border-radius:22px;background:var(--tile);font-weight:700;font-size:1.05rem}
+.sbtn svg{color:var(--p);width:24px;height:24px}
+.sbtn.danger,.sbtn.danger svg{color:var(--no)}
+.foot{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 22px;margin-top:34px;color:var(--ink3);font-size:.88rem}
+
+/* ── 반짝임 ── */
+.spk{position:fixed;pointer-events:none;z-index:99;width:16px;height:16px}
+.spk::before{content:"";position:absolute;inset:0;background:var(--c);clip-path:polygon(50% 0,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0 50%,39% 39%)}
+@keyframes fly{0%{opacity:1;transform:translate(0,0) scale(.3) rotate(0)}70%{opacity:1}100%{opacity:0;transform:translate(var(--x),var(--y)) scale(1) rotate(180deg)}}
+.toast{position:fixed;left:50%;bottom:calc(110px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:#1d1b26;color:#fff;padding:13px 22px;border-radius:999px;font-weight:600;font-size:.92rem;z-index:80;animation:inU .3s ease;white-space:nowrap}
+
+/* ── 하단 탭 (Proof) ── */
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:40;background:rgba(251,250,246,.96);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+.tabs-in{max-width:1000px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);position:relative}
+.tab{display:flex;flex-direction:column;align-items:center;gap:4px;padding:14px 0 14px;color:var(--ink3);font-size:.8rem;font-weight:600;text-align:center}
+.tab svg{width:25px;height:25px;stroke-width:1.7}
+.tab.on{color:var(--p)}
+.tab.on svg{animation:hop .42s cubic-bezier(.2,.8,.2,1)}
+@keyframes hop{45%{transform:translateY(-4px)}}
+.ind{position:absolute;top:-1px;height:4px;width:52px;border-radius:0 0 4px 4px;background:var(--p);transition:left .36s cubic-bezier(.2,.8,.2,1)}
+
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+@media (max-width:760px){
+  main{padding-left:18px;padding-right:18px}
+  .top-in{padding:0 18px}
+  .ph h1{font-size:1.65rem}
+  .lec h1{font-size:1.55rem}
+  .card{padding:22px 20px}
+  .ox{padding:22px 20px}
+  .acc .r{grid-template-columns:96px 1fr 46px}
+  .sgrid{grid-template-columns:1fr}
+  .stat3 .tile b{font-size:1.3rem}
+  .duo{grid-template-columns:1fr 1.6fr}
+}
+</style>
+</head>
+<body>
+<header class="top"><div class="top-in">
+  <button class="logo" data-tab="home">Codex</button>
+  <div class="hr">
+    <button class="bell" id="bell" aria-label="알림"></button>
+    <div class="wallet" id="wallet"></div>
+  </div>
+</div></header>
+<main id="app"></main>
+<nav class="tabs"><div class="tabs-in" id="tabs"></div></nav>
+
+<script>
+/* ═════════ 아이콘 (선) ═════════ */
+const I={
+home:'<svg viewBox="0 0 24 24"><path d="M3.5 10.5 12 3.5l8.5 7"/><path d="M5.5 9v11h13V9"/></svg>',
+folder:'<svg viewBox="0 0 24 24"><path d="M3 6.5A1.5 1.5 0 0 1 4.5 5H9l2 2.5h8.5A1.5 1.5 0 0 1 21 9v9.5a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 18.5z"/></svg>',
+coach:'<svg viewBox="0 0 24 24"><path d="M12 20a8 8 0 1 0-7.1-4.3L4 20l4.3-.9A8 8 0 0 0 12 20z"/><path d="M8.5 10.5h7M8.5 13.5h4.5"/></svg>',
+repeat:'<svg viewBox="0 0 24 24"><path d="M17 3l3 3-3 3"/><path d="M4 11V9.5A3.5 3.5 0 0 1 7.5 6H20"/><path d="M7 21l-3-3 3-3"/><path d="M20 13v1.5a3.5 3.5 0 0 1-3.5 3.5H4"/></svg>',
+menu:'<svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>',
+bell:'<svg viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 1 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5a2.2 2.2 0 0 0 4 0"/></svg>',
+flame:'<svg viewBox="0 0 24 24"><path d="M12 3c1 3.5 5.5 5.5 5.5 10.5a5.5 5.5 0 0 1-11 0c0-2.3 1.1-3.9 2.2-5 .3 1.7 1.3 2.8 2.2 2.8C9.8 8 11 5.5 12 3z"/></svg>',
+book:'<svg viewBox="0 0 24 24"><path d="M5 4.5h9.5A2.5 2.5 0 0 1 17 7v13H7.5A2.5 2.5 0 0 1 5 17.5z"/><path d="M17 4.5h2v13"/></svg>',
+doc:'<svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="3"/><path d="M9 3.5v2h6v-2"/><path d="m9 13 2 2 4-4"/></svg>',
+ox:'<svg viewBox="0 0 24 24"><circle cx="7.5" cy="12" r="4"/><path d="m14 8 7 8M21 8l-7 8"/></svg>',
+cards:'<svg viewBox="0 0 24 24"><rect x="3" y="6" width="13" height="15" rx="2.5"/><path d="M8 3h10.5A2.5 2.5 0 0 1 21 5.5V16"/></svg>',
+back:'<svg viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></svg>',
+next:'<svg viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></svg>',
+close:'<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg>',
+o:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7.5"/></svg>',
+x:'<svg viewBox="0 0 24 24"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/></svg>',
+link:'<svg viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg>',
+target:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r=".8"/></svg>',
+search:'<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg>',
+alert:'<svg viewBox="0 0 24 24"><path d="M12 3.5 2.5 20h19z"/><path d="M12 10v4.5M12 17.5v.01"/></svg>',
+bulb:'<svg viewBox="0 0 24 24"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2V16h5v-.1c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z"/></svg>',
+key:'<svg viewBox="0 0 24 24"><circle cx="8" cy="15" r="4"/><path d="m11 12 8.5-8.5M16 7l2.5 2.5M14 9l2 2"/></svg>',
+scissors:'<svg viewBox="0 0 24 24"><circle cx="6" cy="7" r="2.5"/><circle cx="6" cy="17" r="2.5"/><path d="M8 8.5 20 18M8 15.5 20 6"/></svg>',
+clock:'<svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="7.5"/><path d="M12 9.5V13l2.5 2M10 2.5h4"/></svg>',
+chart:'<svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M21 20H3"/></svg>',
+user:'<svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="3.5"/><circle cx="12" cy="12" r="9"/><path d="M6 18.5c1.4-2.2 3.5-3.3 6-3.3s4.6 1.1 6 3.3"/></svg>',
+gear:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2.8v2.4M12 18.8v2.4M2.8 12h2.4M18.8 12h2.4M5.5 5.5l1.7 1.7M16.8 16.8l1.7 1.7M5.5 18.5l1.7-1.7M16.8 7.2l1.7-1.7"/></svg>',
+sun:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></svg>',
+trash:'<svg viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>',
+replay:'<svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.3-5.6"/><path d="M4 4v4h4"/></svg>',
+shuffle:'<svg viewBox="0 0 24 24"><path d="M16 4h4v4M20 4l-7 7M4 20l6-6M16 20h4v-4M20 20l-5.5-5.5M4 4l4.5 4.5"/></svg>',
+flag:'<svg viewBox="0 0 24 24"><path d="M5 21V4M5 4h11l-2 4 2 4H5"/></svg>'
+};
+
+/* {옛한글} 강조, **굵게** */
+const f=s=>(s||'').replace(/\{([^}]+)\}/g,'<span class="mk">$1</span>').replace(/\*\*([^*]+)\*\*/g,'<b>$1</b>');
+
+/* ═════════════════════════════════════
+   개념 데이터 (1타 강의식)
+   bridge: 전에 어디서 배웠는지 / core: 한 줄 / body: 차근차근
+   dis: 해부 / trap: 시험 함정 / tip: 외우는 법
+   basic: 확인 OX / deep: 심화·변형 OX
+   ═════════════════════════════════════ */
+const UNITS=[
+{id:'u1',title:'큰 그림 잡기',sub:'시대 구분 · 시대별 변화 한눈에',
+ advice:'자료 연도를 안 보고 푸는 습관이 있어요. 문제 펴자마자 연도에 동그라미 치고, "시대별 체크리스트" 표를 떠올린 다음 선지를 읽어 보세요.',
+ concepts:[
+ {id:'era',title:'국어사, 시대부터 나누고 시작해요',
+  bridge:'한국사 시간에 고대·고려·조선 나누잖아요? 국어도 똑같이 시대를 나눠요. 그리고 중세국어 문제는 열에 아홉이 "이 자료는 언제 거고, 그때는 뭐가 있었지?"에서 출발해요. 그래서 시대 구분이 1강이에요.',
+  core:'자료 밑에 붙은 연도부터 본다. 15~16세기면 중세, 17~19세기면 근대.',
+  body:`<p>국어사는 크게 다섯 덩어리로 나눠요. 시험에 나오는 건 사실상 <b>중세 후기(15~16세기)</b>와 <b>근대(17~19세기)</b> 두 개예요.</p>
+  <div class="tw"><table><tr><th>시대</th><th>언제</th><th>한마디로</th></tr>
+  <tr><td>고대</td><td>~통일 신라</td><td>향찰·이두. 거의 안 나와요</td></tr>
+  <tr><td>중세 전기</td><td>고려(10~14세기)</td><td>한글 이전. 넘어가도 돼요</td></tr>
+  <tr><td class="hl">중세 후기</td><td class="hl">15~16세기</td><td>훈민정음(1443). 방점, ㆍ·ㅿ·ㆁ, 어두 자음군, 이어적기</td></tr>
+  <tr><td class="hl">근대</td><td class="hl">17~19세기 말</td><td>임진왜란 이후. 방점·ㅿ·ㆁ 사라짐, 주격 '가' 퍼짐</td></tr>
+  <tr><td>현대</td><td>20세기~</td><td>1933 한글 맞춤법 통일안</td></tr></table></div>
+  <h4>문제 푸는 순서 3단계</h4>
+  <ol><li><b>연도 확인</b> → 머릿속에서 그 시대 특징 목록을 꺼내요.</li>
+  <li><b>현대어 풀이와 한 단어씩 맞대기</b> → 밑줄 단어가 풀이에서 뭐로 바뀌었는지 찾아요. 조사가 빠졌는지, 높임이 있는지 여기서 거의 다 보여요.</li>
+  <li><b>밑줄을 쪼개기</b> → 체언+조사, 어간+어미로 나눠요. 이게 되면 선지 판단이 끝나요.</li></ol>
+  <p class="say">"풀이를 안 보고 옛글만 째려보는 게 제일 큰 실수예요. 현대어 풀이는 출제자가 준 힌트예요."</p>`,
+  dis:[['1447','용비어천가','15세기 → 중세'],['1586 · 1587','한글 편지 · 소학언해','16세기 → 중세'],['1896','신정심상소학','19세기 말 → 근대']],
+  trap:'선지가 "<b>16세기와 19세기 모두</b> ~했다"처럼 두 시기를 묶으면 일단 의심하세요. 한쪽만 맞는 경우가 대부분이에요. 시험지 14번 ①, ③이 딱 이 구조.',
+  tip:'연표는 숫자 끝자리로: <b>47 용비 · 59 월석/훈언 · 81 두시 · 86 편지 · 87 소학 · 96 신정심상</b>.',
+  basic:[{q:'「신정심상소학」(1896)은 중세 국어 자료이다.',a:false,why:'1896년은 19세기 말이라 근대 국어예요.'}],
+  deep:[{q:'1586년에 쓰인 한글 편지는 근대 국어 자료이다.',a:false,why:'16세기니까 아직 중세예요. 근대는 17세기부터.'},
+        {q:'「두시언해」 초간본(1481)과 「용비어천가」(1447)는 같은 세기의 자료이다.',a:true,why:'둘 다 15세기예요.'}]},
+ {id:'timeline',title:'시대별 변화, 표 하나로 끝내기',
+  bridge:'앞에서 시대를 나눴죠? 이제 "그 시대엔 뭐가 있었냐"를 한 표에 모을 거예요. 비교형 문제(15세기 vs 19세기)는 이 표 하나로 풀려요. 뒤에서 하나씩 자세히 배우니까 지금은 지도만 본다고 생각하세요.',
+  core:'중세에 있다가 근대에 사라지는 것, 중세엔 없다가 근대에 생기는 것을 짝으로 기억한다.',
+  body:`<div class="tw"><table><tr><th>항목</th><th>15세기</th><th>16세기</th><th>근대(17~19세기)</th></tr>
+  <tr><td><b>방점</b></td><td>씀</td><td>혼란 → 말에 사라짐</td><td>없음</td></tr>
+  <tr><td><b>ㆍ 소리</b></td><td>있음</td><td>둘째 음절부터 ㅡ로</td><td>18세기 첫음절도 ㅏ로 (표기는 계속 남음)</td></tr>
+  <tr><td><b>ㅿ · ㆁ</b></td><td>씀</td><td>후반에 사라짐</td><td>없음</td></tr>
+  <tr><td><b>주격 '가'</b></td><td>없음</td><td>말에 처음 보임</td><td>퍼짐</td></tr>
+  <tr><td><b>적는 방식</b></td><td>이어적기 중심</td><td>끊어적기·거듭적기 섞임</td><td>거듭적기 많고 혼란</td></tr>
+  <tr><td><b>모음 조화</b></td><td>비교적 잘 지킴</td><td>흔들림</td><td>많이 무너짐</td></tr>
+  <tr><td><b>어두 자음군</b></td><td>있음</td><td>있음</td><td>된소리로 바뀜</td></tr>
+  <tr><td><b>띄어쓰기</b></td><td>없음</td><td>없음</td><td>19세기 말에 등장</td></tr>
+  <tr><td><b>-ᄉᆞᆸ- 계열</b></td><td>객체 높임</td><td>객체 높임 약해짐</td><td>상대 높임 쪽으로 → '-습니다'</td></tr></table></div>
+  <p>이 표를 외우라는 게 아니라, 문제를 풀 때마다 여기로 돌아와서 "아 이 칸이구나" 하고 확인하는 용도예요. 반복하면 저절로 외워져요.</p>`,
+  dis:[],
+  trap:'"ㆍ가 사라졌다"를 소리와 글자로 나눠서 생각해야 해요. <b>소리</b>는 16~18세기에 사라졌는데 <b>글자</b>는 1933년까지 썼어요. 그래서 1896년 자료에 {ᄒᆞ야}가 보여도 이상한 게 아니에요.',
+  tip:'근대에서 "<b>생긴 것</b>": 주격 가, 띄어쓰기, 거듭적기 / "<b>사라진 것</b>": 방점, ㅿ, ㆁ, ㆍ 소리, 모음 조화, 어두 자음군.',
+  basic:[{q:'15세기 문헌에는 단어 사이에 띄어쓰기가 되어 있다.',a:false,why:'띄어쓰기는 19세기 말에야 자리 잡아요.'}],
+  deep:[{q:'주격 조사 \'가\'는 16세기 말에 처음 보이기 시작하여 근대에 널리 쓰였다.',a:true,why:'그래서 1896년 자료에 {부엉이가}가 나와요.'},
+        {q:'19세기 말 자료에 ㆍ 글자가 보이는 것은 그때까지 ㆍ 소리가 남아 있었기 때문이다.',a:false,why:'소리는 이미 사라졌고, 표기 습관만 남은 거예요.'}]}
+]},
+{id:'u2',title:'표기법',sub:'이어적기 · 끊어적기 · 거듭적기 · 8종성법',
+ advice:'받침이 어디로 갔는지 손으로 직접 옮겨 보는 연습이 부족해요. 밑줄 단어를 볼 때마다 "원래 받침 → 어디에 적혔나"를 써 보세요.',
+ concepts:[
+ {id:'yeon',title:'이어적기 · 끊어적기 · 거듭적기',
+  bridge:'한글 맞춤법 1항 기억나요? "표준어를 <b>소리대로 적되, 어법에 맞도록</b> 함을 원칙으로 한다." 여기서 "어법에 맞도록"이 바로 끊어적기예요. 그런데 15세기엔 "소리대로"가 훨씬 셌어요.',
+  core:'받침을 뒤로 넘기면 이어적기, 제자리에 두면 끊어적기, 둘 다 하면 거듭적기.',
+  body:`<p>'깊은'을 소리 내 보세요. [기픈]이죠? 지금은 '깊은'이라고 쓰지만 15세기 사람들은 <b>들리는 대로</b> {기픈}이라고 썼어요. 받침 ㅍ이 뒤 모음으로 이어 넘어가서 <b>이어적기(연철)</b>라고 해요.</p>
+  <div class="tw"><table><tr><th>이름</th><th>어떻게</th><th>깊- + -은</th><th>있- + -으면</th></tr>
+  <tr><td><b>이어적기</b> (연철)</td><td>받침을 뒤로 넘김</td><td>{기픈}</td><td>이스면</td></tr>
+  <tr><td><b>끊어적기</b> (분철)</td><td>형태를 살려 제자리에</td><td>깊은</td><td>있으면</td></tr>
+  <tr><td><b>거듭적기</b> (중철)</td><td>받침에도 쓰고 뒤에도 씀</td><td>깁픈</td><td>{잇스면}</td></tr></table></div>
+  <p>거듭적기가 왜 생겼을까요? 이어적기에서 끊어적기로 넘어가는 <b>중간 단계</b>라서 그래요. "받침을 남기고 싶은데 소리도 살리고 싶다"는 마음이 둘 다 적게 만든 거예요. 그래서 16세기~근대 자료에 많이 보여요.</p>
+  <h4>흐름 정리</h4>
+  <p><b>15세기 이어적기 중심</b> → 16세기 끊어적기·거듭적기가 섞이기 시작 → 근대에 혼란(거듭적기 많음) → 현대 끊어적기.</p>
+  <p>참고로 15세기에도 「월인천강지곡」처럼 체언과 조사를 끊어 적은 문헌이 일부 있어요(눈에, 일을). "15세기엔 이어적기만 했다"는 지나친 말이에요.</p>`,
+  dis:[['{기픈}','깊- + -은','깊은 · 이어적기'],['{ᄇᆞᄅᆞ매}','{ᄇᆞᄅᆞᆷ} + 애','바람에 · 이어적기'],['{ᄆᆞᄋᆞᄆᆞᆯ}','{ᄆᆞᄋᆞᆷ} + {ᄋᆞᆯ}','마음을 · 16세기에도 이어적기'],['{잇스면}','잇- + -으면','있으면 · ㅅ이 두 번 → 거듭적기'],['{님믈}','님 + 을','임을 · ㅁ이 두 번 → 거듭적기']],
+  trap:'"(가)의 {ᄆᆞᄋᆞᄆᆞᆯ}, (나)의 {잇스면}을 보면 16세기와 19세기 모두 <b>연철</b>" → 틀림. {잇스면}은 ㅅ이 받침에도, 다음 글자에도 있으니 거듭적기예요. 시험지 14번 ③.',
+  tip:'<b>같은 자음이 두 번 보이면 거듭적기.</b> 넘어갔으면 이어, 제자리면 끊어.',
+  basic:[{q:'{잇스면}은 받침 ㅅ을 뒤 음절 첫소리에도 거듭 적은 거듭적기이다.',a:true,why:'있-+-으면 → 잇+스면. ㅅ이 두 번 나와요.'}],
+  deep:[{q:'{기픈}은 어간과 어미의 형태를 밝혀 적은 끊어적기이다.',a:false,why:'ㅍ이 어미 쪽으로 넘어간 이어적기예요.'},
+        {q:'{ᄆᆞᄋᆞᄆᆞᆯ}은 체언의 끝소리를 조사의 첫소리로 넘겨 적은 이어적기이다.',a:true,why:'ᄆᆞᄋᆞᆷ+ᄋᆞᆯ에서 ㅁ이 넘어갔어요.'},
+        {q:'15세기 문헌에서는 끊어적기가 전혀 나타나지 않는다.',a:false,why:'월인천강지곡처럼 일부 끊어 적은 문헌이 있어요.'}]},
+ {id:'jong8',title:'8종성법',
+  bridge:'중3 때 배운 <b>음절의 끝소리 규칙</b> 기억나요? 받침 소리는 ㄱㄴㄷㄹㅁㅂㅇ 일곱 개로만 난다는 거. 15세기엔 이걸 소리만이 아니라 <b>글자에도</b> 적용했어요.',
+  core:'받침에는 ㄱ · ㄴ · ㄷ · ㄹ · ㅁ · ㅂ · ㅅ · ㆁ 여덟 글자만 쓴다.',
+  body:`<p>지금은 받침에 ㅍ, ㅈ, ㅊ 다 쓰잖아요(깊고, 꽃). 15세기엔 받침에 소리 나는 대로 8개만 썼어요. 그런데 현대 7개에 <b>ㅅ이 하나 더</b> 있죠? 그때는 받침 ㅅ과 ㄷ 소리가 구별돼서 그래요.</p>
+  <h4>핵심은 "뒤에 뭐가 오냐"</h4>
+  <div class="tw"><table><tr><th>뒤에 오는 것</th><th>받침</th><th>예</th></tr>
+  <tr><td>자음 어미 / 아무것도 없음</td><td>8종성으로 바뀜</td><td>깊고 → {깁고}, 곶 → 곳, 닢 → 닙</td></tr>
+  <tr><td>모음 어미·조사</td><td>원래 받침이 살아서 넘어감</td><td>깊+은 → {기픈}, 곶+이 → 고지</td></tr></table></div>
+  <p>그래서 같은 '깊다'가 {깁고}로도, {기픈}으로도 나와요. 시험은 이 둘을 붙여 놓고 "자음 어미 앞에서 ㅍ이 ㅂ으로 적혔다"를 물어요.</p>
+  <h4>예외 하나</h4>
+  <p>「용비어천가」「월인천강지곡」은 원래 받침을 그대로 쓰기도 했어요. 이걸 <b>종성부용초성</b>(종성은 초성 글자를 다시 쓴다)이라고 해요. 시험지 7번 (가)에 {곶 됴코}가 나오죠? 8종성법대로라면 '곳'이어야 하는데 '곶'이에요.</p>
+  <h4>근대에는</h4>
+  <p>받침 ㄷ과 ㅅ 소리가 같아지면서 ㄷ 받침을 ㅅ으로 적는 일이 많아져요(믿고 → 밋고). 그래서 ㄷ이 빠진 <b>7종성</b>(ㄱㄴㄹㅁㅂㅅㆁ)이 돼요.</p>`,
+  dis:[['{깁고}','깊- + -고','자음 어미 앞 → ㅍ이 ㅂ'],['{기픈}','깊- + -은','모음 어미 앞 → ㅍ 그대로 넘어감'],['{곶} 됴코','곶 (용비어천가)','8종성 예외, 종성부용초성']],
+  trap:'"용비어천가니까 8종성법을 철저히 지켰다" → 틀림. 용비어천가는 대표적인 <b>예외</b> 문헌이에요.',
+  tip:'8종성 = 현대 7개 + <b>ㅅ</b>. "ㄱ ㄴ ㄷ ㄹ ㅁ ㅂ ㅅ ㆁ" 가나다 순서 그대로.',
+  basic:[{q:'(가)의 {기픈}과 (나)의 {깁고}를 비교하면, 어간 종성 ㅍ이 자음으로 시작하는 어미 앞에서 ㅂ으로 표기되었음을 알 수 있다.',a:true,why:'8종성법 때문이에요. 시험지 7번 ②.'}],
+  deep:[{q:'8종성법에서 받침으로 쓸 수 있는 글자에는 ㅈ이 포함된다.',a:false,why:'ㄱㄴㄷㄹㅁㅂㅅㆁ. ㅈ은 없어요.'},
+        {q:'용비어천가의 \'곶\'은 8종성법의 예외에 해당한다.',a:true,why:'종성부용초성으로 원래 받침을 그대로 썼어요.'}]}
+]},
+{id:'u3',title:'소리와 글자',sub:'사라진 글자 · 방점 · 어두 자음군 · 모음 조화',
+ advice:'"사라졌다"를 소리와 글자로 구분 안 하고 있어요. ㆍ는 소리 따로, 글자 따로 날짜를 외우고, 모음 조화는 양성·음성 칸부터 먼저 채워 보세요.',
+ concepts:[
+ {id:'lost',title:'사라진 글자 다섯',
+  bridge:'훈민정음 28자 중에 지금 안 쓰는 글자가 넷이죠(ㆍ ㅿ ㆁ ㆆ). 여기에 ㅸ까지 더해서 다섯 개가 시험에 나와요. 중학교 때 "제자 원리"로 배웠던 그 글자들이에요.',
+  core:'ㆍ ㅿ ㆁ ㅸ ㆆ — 무슨 소리였는지, 언제 사라졌는지를 세트로.',
+  body:`<div class="tw"><table><tr><th>글자</th><th>이름</th><th>어떤 소리</th><th>언제 사라짐</th></tr>
+  <tr><td class="mk">ㆍ</td><td>아래아</td><td>ㅏ와 ㅗ 사이쯤 양성 모음</td><td>소리 16·18세기 / 글자 1933</td></tr>
+  <tr><td class="mk">ㅿ</td><td>반치음</td><td>약한 ㅅ, 영어 z 비슷 ({아ᅀᆞ} 아우)</td><td>16세기 후반</td></tr>
+  <tr><td class="mk">ㆁ</td><td>옛이응</td><td>지금 받침 ㅇ [ŋ] 소리</td><td>16세기 말, ㅇ과 합쳐짐</td></tr>
+  <tr><td class="mk">ㅸ</td><td>순경음 비읍</td><td>입술을 살짝만 붙인 ㅂ</td><td>15세기 중엽 (ㅗ/ㅜ로)</td></tr>
+  <tr><td class="mk">ㆆ</td><td>여린히읗</td><td>목 막히는 소리, 주로 한자음·'ㅭ'</td><td>15세기 후반</td></tr></table></div>
+  <h4>ㆍ는 두 단계로 사라져요</h4>
+  <ol><li><b>16세기</b>: 둘째 음절 이하의 ㆍ가 ㅡ로 → {ᄒᆞᄅᆞ} → ᄒᆞ르</li>
+  <li><b>18세기</b>: 첫째 음절의 ㆍ가 ㅏ로 → ᄒᆞ르 → 하루</li></ol>
+  <p>그런데 <b>글자 ㆍ</b>는 사람들이 습관적으로 계속 썼어요. 1933년 한글 맞춤법 통일안에서 공식적으로 폐지될 때까지요.</p>
+  <h4>ㅸ의 변신</h4>
+  <p>{더ᄫᅳ니} → 더우니, {고ᄫᆞ니} → 고오니 → 고우니. ㅸ이 ㅗ/ㅜ로 바뀌었어요. 현대어 'ㅂ 불규칙 활용'(덥다-더워)이 바로 여기서 온 거예요.</p>`,
+  dis:[['{아ᅀᆞ}','아 + ᅀᆞ','아우 · 반치음'],['{더ᄫᅳ니}','덥- + -으니','더우니 · ㅸ → ㅂ 불규칙의 뿌리']],
+  trap:'"16세기와 19세기 모두 ㆍ를 계속 사용"만 떼어 보면 <b>표기상</b> 맞아요. 이런 선지는 뒷부분(띄어쓰기 등)에서 틀리게 만들어요. 앞만 보고 O 치면 안 돼요.',
+  tip:'"ㅸ는 15세기 중엽에 가장 먼저 사라졌다" → <b>ㅸ → ㆆ → ㅿ·ㆁ → ㆍ</b> 순서로 기억.',
+  basic:[{q:'19세기 말 자료에도 ㆍ 표기가 나타난다.',a:true,why:'소리는 사라졌어도 글자는 1933년 전까지 썼어요.'}],
+  deep:[{q:'ㆍ는 18세기에 둘째 음절 이하에서 먼저 ㅡ로 바뀌었다.',a:false,why:'둘째 음절 이하 → ㅡ는 16세기, 첫음절 → ㅏ가 18세기예요.'},
+        {q:'현대 국어의 ㅂ 불규칙 활용은 ㅸ의 변화와 관련이 있다.',a:true,why:'더ᄫᅳ니 → 더우니.'}]},
+ {id:'bangjeom',title:'방점',
+  bridge:'중국어 배울 때 성조 들어 봤죠? 같은 \'마\'도 높낮이에 따라 뜻이 달라지는 거. 15세기 우리말도 그랬어요. 그 높낮이를 글자 왼쪽에 <b>점</b>으로 표시한 게 방점이에요.',
+  core:'점 없음 = 평성, 점 1개 = 거성, 점 2개 = 상성. 16세기 말에 사라진다.',
+  body:`<div class="tw"><table><tr><th>점</th><th>이름</th><th>소리</th></tr>
+  <tr><td>없음</td><td>평성</td><td>가장 낮은 소리</td></tr>
+  <tr><td>·</td><td>거성</td><td>가장 높은 소리</td></tr>
+  <tr><td>:</td><td>상성</td><td>낮았다가 올라가는 소리 (길게 남)</td></tr>
+  <tr><td>점은 위 셋 중 하나</td><td>입성</td><td>ㄱ·ㄷ·ㅂ·ㅅ 받침으로 빨리 끝나는 소리</td></tr></table></div>
+  <h4>방점이 하는 일 1: 뜻 구별</h4>
+  <p>손(평성) = 손님, ·손(거성) = 손(手). 점 하나로 다른 단어가 돼요.</p>
+  <h4>방점이 하는 일 2: 문법 구별</h4>
+  <p>같은 '내'도 주격(내가)은 점이 있고, 관형격(나의)은 점이 없어요. '제', '네'도 마찬가지예요. 이건 대명사 강의에서 다시 써먹어요.</p>
+  <h4>지금 남은 흔적</h4>
+  <p>상성은 길게 나는 소리였어서 현대어 <b>긴소리</b>로 남았어요. :말(言) → [말ː], 말(馬) → [말].</p>`,
+  dis:[['·손 / 손','거성 / 평성','손(手) / 손님'],[':말 / 말','상성 / 평성','말씀[말ː] / 동물 말']],
+  trap:'방점은 <b>16세기 말</b>에 이미 혼란스러워지다가 사라져요. "17세기 문헌에서도 방점이 엄격하게 지켜졌다" → 틀림.',
+  tip:'<b>점 개수 = 0 · 1 · 2 = 평 · 거 · 상</b>. "평거상" 순서로.',
+  basic:[{q:'방점 1개는 거성으로, 가장 높은 소리를 나타낸다.',a:true,why:'0개 평성, 1개 거성, 2개 상성.'}],
+  deep:[{q:'상성은 현대 국어의 긴소리와 관련이 있다.',a:true,why:'낮다가 올라가는 소리라 길게 났어요.'},
+        {q:'방점은 17세기 문헌에서도 엄격하게 지켜졌다.',a:false,why:'16세기 말에 이미 사라져요.'}]},
+ {id:'eodu',title:'어두 자음군',
+  bridge:'지금은 ㄲ, ㄸ처럼 <b>같은</b> 자음만 겹쳐 쓰죠? 15세기엔 단어 맨 앞에 <b>다른</b> 자음 두세 개를 나란히 썼어요. 그리고 진짜로 그렇게 발음했어요.',
+  core:'단어 첫머리에 서로 다른 자음을 2~3개 함께 썼고, 실제로 각각 소리 냈다.',
+  body:`<div class="tw"><table><tr><th>종류</th><th>글자</th><th>예</th></tr>
+  <tr><td><b>ㅂ계</b></td><td class="mk">ㅳ ㅄ ㅶ ㅷ</td><td>{ᄠᅳᆮ}(뜻), {ᄡᆞᆯ}(쌀), {ᄡᅳ다}(쓰다), {ᄧᅡ다}(짜다)</td></tr>
+  <tr><td><b>ㅅ계</b></td><td class="mk">ㅺ ㅼ ㅽ</td><td>{ᄭᅮᆷ}(꿈), {ᄯᅡ}(땅), {ᄲᅧ}(뼈)</td></tr>
+  <tr><td><b>ㅄ계</b></td><td class="mk">ㅴ ㅵ</td><td>{ᄢᅳ다}(끼다), {ᄣᅢ}(때)</td></tr></table></div>
+  <h4>진짜 발음했다는 증거</h4>
+  <p>'찹쌀'을 보세요. 차 + {ᄡᆞᆯ} → 찹쌀. 쌀 앞에 ㅂ이 붙어 있죠? {ᄡᆞᆯ}의 ㅂ이 실제로 소리 났기 때문에 앞 글자 받침으로 남은 거예요. <b>좁쌀, 입때(이+{ᄣᅢ}), 볍씨</b>도 같은 흔적이에요.</p>
+  <p>근대 이후 이 소리들은 <b>된소리</b>로 바뀌었어요. 그래서 지금 '쌀, 꿈, 때'가 된 거예요.</p>
+  <h4>구별 요령</h4>
+  <p>맨 앞 글자만 보면 돼요. ㅂ으로 시작하면 ㅂ계, ㅅ으로 시작하면 ㅅ계, ㅂ+ㅅ 다음에 하나 더 붙으면 ㅄ계.</p>`,
+  dis:[['{ᄡᅮ메}','{ᄡᅳ-} + -움 + 에','쓰기에 · ㅄ (자음 2개)'],['{ᄡᅥ}','{ᄡᅳ-} + -어','써 · ㅄ (자음 2개)'],['찹쌀','차 + {ᄡᆞᆯ}','ㅂ이 받침으로 남은 흔적']],
+  trap:'"{ᄡᅮ메}와 {ᄡᅥ}에는 모두 어두에 두 개의 자음" → 맞음. ㅄ은 ㅂ+ㅅ 두 개예요. 개수를 세는 선지가 자주 나와요.',
+  tip:'<b>찹쌀 · 좁쌀 · 입때 · 볍씨</b> = 어두 자음군 증거 4종 세트.',
+  basic:[{q:'{ᄡᅮ메}와 {ᄡᅥ}에는 모두 어두에 두 개의 자음이 쓰였다.',a:true,why:'둘 다 ㅂ+ㅅ, ㅄ이에요. 시험지 9번 ⑤.'}],
+  deep:[{q:'{ᄯᅡ}의 어두 자음군은 ㅂ계에 속한다.',a:false,why:'ㅅ으로 시작하니까 ㅅ계예요.'},
+        {q:'\'찹쌀\'의 ㅂ은 중세 국어 어두 자음군의 흔적이다.',a:true,why:'차+ᄡᆞᆯ.'}]},
+ {id:'vh',title:'모음 조화',
+  bridge:'현대어에도 남아 있어요. "깎<b>아</b> / 꺾<b>어</b>", "졸<b>랑</b>졸랑 / 줄<b>렁</b>줄렁". 밝은 모음은 밝은 모음끼리, 어두운 모음은 어두운 모음끼리 어울리는 거. 15세기엔 이게 훨씬 철저했어요.',
+  core:'양성(ㆍ ㅏ ㅗ)은 양성끼리, 음성(ㅡ ㅓ ㅜ)은 음성끼리. 조사와 어미까지 맞췄다.',
+  body:`<div class="tw"><table><tr><th>양성</th><th>음성</th><th>중성</th></tr>
+  <tr><td class="mk">ㆍ ㅏ ㅗ</td><td class="mk">ㅡ ㅓ ㅜ</td><td class="mk">ㅣ</td></tr></table></div>
+  <p>짝을 보세요. <b>ㆍ↔ㅡ, ㅏ↔ㅓ, ㅗ↔ㅜ</b>. 이 짝을 알면 조사가 왜 두 개씩 있는지 이해돼요.</p>
+  <div class="tw"><table><tr><th>조사</th><th>양성 모음 뒤</th><th>음성 모음 뒤</th></tr>
+  <tr><td>목적격</td><td>{ᄋᆞᆯ} / {ᄅᆞᆯ}</td><td>을 / 를</td></tr>
+  <tr><td>보조사</td><td>{ᄋᆞᆫ} / {ᄂᆞᆫ}</td><td>은 / 는</td></tr>
+  <tr><td>관형격</td><td>{ᄋᆡ}</td><td>의</td></tr>
+  <tr><td>부사격</td><td>애</td><td>에</td></tr></table></div>
+  <p>예를 들어 {사ᄅᆞᆷ}은 ㆍ가 있으니 양성 → {사ᄅᆞᄆᆞᆯ}, {사ᄅᆞᄆᆡ}. {ᄭᅮᆷ}은 ㅜ니까 음성 → {ᄭᅮ믈}.</p>
+  <h4>왜 무너졌을까</h4>
+  <p>양성 모음의 대장 격인 <b>ㆍ 소리가 사라지면서</b> 짝이 흔들렸어요. ㆍ가 ㅡ로 바뀌면 양성이 음성이 되니까요. 그래서 근대로 갈수록 모음 조화가 깨져요.</p>`,
+  dis:[['{ᄇᆡᄅᆞᆯ}','{ᄇᆡ} + {ᄅᆞᆯ}','배를 · 1481년, 양성끼리 (지켜짐)'],['{쇼리를}','쇼리 + 를','소리를 · 1896년, ㅛ(양성) 뒤 \'를\'(음성) (무너짐)']],
+  trap:'"15세기엔 <b>예외 없이</b> 지켜졌다"는 과장이에요. 15세기에도 예외가 있었어요. 시험 선지는 보통 "<b>비교적</b> 잘 지켜지던"이라고 써요.',
+  tip:'조사 고르는 법: 앞말 <b>마지막 모음</b>을 본다 → 양성이면 ㆍ/ㅏ 쪽 조사, 음성이면 ㅡ/ㅓ 쪽 조사.',
+  basic:[{q:'(나)의 {ᄇᆡᄅᆞᆯ}과 (다)의 {쇼리를}을 비교하면, 모음 조화가 근대 국어에서 점차 파괴되었음을 알 수 있다.',a:true,why:'15세기는 양성끼리, 1896년은 양성 뒤에 음성. 시험지 7번 ④.'}],
+  deep:[{q:'중세 국어에서 ㆍ는 음성 모음에 속한다.',a:false,why:'ㆍ는 양성. 짝은 ㅡ(음성)예요.'},
+        {q:'모음 조화가 무너진 원인 중 하나는 ㆍ 소리의 소실이다.',a:true,why:'양성 모음 체계가 흔들렸어요.'}]}
+]},
+{id:'u4',title:'체언과 조사',sub:'ㅎ 종성 체언 · 주격 · 관형격 · 부사격 · 그 밖의 조사',
+ advice:'조사 문제에서 많이 틀려요. 해결법은 하나예요. 밑줄 단어를 "체언 + 조사"로 쪼갠 뒤, 현대어 풀이에서 그 조사가 뭐로 바뀌었는지 꼭 대조하세요.',
+ concepts:[
+ {id:'hnoun',title:'ㅎ 종성 체언',
+  bridge:'맞춤법 시간에 \'안팎, 살코기, 수탉, 암캐, 머리카락\' 왜 이렇게 쓰는지 배웠죠? "옛날에 ㅎ이 있었어서"라고. 그 ㅎ의 정체가 바로 이거예요.',
+  core:'혼자 있을 땐 ㅎ이 숨어 있다가, 조사를 만나면 ㅎ이 튀어나오는 명사.',
+  body:`<p>'나라'라는 명사가 사실은 <b>'나라ㅎ'</b>이었다고 생각하면 돼요. 평소엔 ㅎ이 안 보여요. 그런데 뒤에 조사가 붙으면 ㅎ이 나타나요. 이런 명사가 80개쯤 있었어요.</p>
+  <p><b>대표 단어</b>: 하ᄂᆞᆯㅎ(하늘), 나라ㅎ, 내ㅎ(시내), 안ㅎ, ᄯᅡㅎ(땅), 돌ㅎ, 길ㅎ, 우ㅎ(위), 뫼ㅎ(산), 수ㅎ(수컷), 암ㅎ, 하나ㅎ, 둘ㅎ, 셋ㅎ, 열ㅎ</p>
+  <h4>조사에 따라 세 가지 모습</h4>
+  <div class="tw"><table><tr><th>뒤에 오는 것</th><th>어떻게 되나</th><th>예</th></tr>
+  <tr><td>아무것도 없음 · 관형격 ㅅ</td><td>ㅎ이 안 보임</td><td>나라, 하ᄂᆞᆯ</td></tr>
+  <tr><td>모음 조사 (이, ᄋᆞᆯ, 애…)</td><td>ㅎ이 이어적기로 넘어감</td><td>{나라히}(나라가), {나라ᄒᆞᆯ}(나라를), {내히}(내가), {안해}(안에), {ᄯᅡ히}(땅이)</td></tr>
+  <tr><td>ㄱ · ㄷ 조사 (과, 도)</td><td>ㅎ과 합쳐져 거센소리</td><td>안ㅎ+과 → {안콰}, 하ᄂᆞᆯㅎ+도 → {하ᄂᆞᆯ토}</td></tr></table></div>
+  <h4>현대어에 남은 흔적</h4>
+  <p>안ㅎ+밖 → <b>안팎</b>, 살ㅎ+고기 → <b>살코기</b>, 수ㅎ+닭 → <b>수탉</b>, 암ㅎ+개 → <b>암캐</b>, 머리ㅎ+가락 → <b>머리카락</b>. ㅎ이 뒤 자음과 만나 거센소리가 된 거예요.</p>`,
+  dis:[['{내히}','내ㅎ + 이(주격)','시내가'],['{ᄯᅡ히}','ᄯᅡㅎ + 이(주격)','땅이'],['{안해}','안ㅎ + 애(부사격)','안에'],['{나라ᄒᆞᆯ}','나라ㅎ + {ᄋᆞᆯ}(목적격)','나라를']],
+  trap:'{내히}의 \'히\'를 접미사로 보거나, \'내\'를 대명사 \'나+ㅣ\'로 착각하면 안 돼요. 풀이에서 "내(川)가"인지 "내가(나)"인지 확인!',
+  tip:'<b>ㅎ 보이면 ㅎ 종성 체언 의심</b>: 명사 뒤에 히·해·ᄒᆞᆯ·콰·토가 붙어 있으면 거의 확정.',
+  basic:[{q:'(가)의 {내히}와 (나)의 {ᄯᅡ히}를 비교하면, ㅎ 종성 체언이 중세 국어에 나타났음을 알 수 있다.',a:true,why:'내ㅎ+이, ᄯᅡㅎ+이. 시험지 7번 ①.'}],
+  deep:[{q:'{안해}는 ㅎ 종성 체언 \'안ㅎ\'에 처소의 부사격 조사가 결합한 것이다.',a:true,why:'안ㅎ+애 = 안에. 시험지 10번 ②.'},
+        {q:'ㅎ 종성 체언은 뒤에 아무것도 오지 않을 때 ㅎ을 표기했다.',a:false,why:'단독일 땐 ㅎ이 안 보여요.'},
+        {q:'\'하ᄂᆞᆯㅎ\'에 조사 \'도\'가 붙으면 \'하ᄂᆞᆯ토\'가 된다.',a:true,why:'ㅎ+ㄷ → ㅌ.'}]},
+ {id:'nom',title:'주격 조사 이 / ㅣ / ∅',
+  bridge:'현대어 주격 조사 \'이/가\' 있죠? 여기서 <b>\'가\'를 지우고</b> 시작하세요. 15세기엔 \'가\'가 없었어요. \'이\' 하나가 앞말 끝소리에 따라 모양만 세 가지로 바꿨어요.',
+  core:'자음 뒤 \'이\', ㅣ 아닌 모음 뒤 \'ㅣ\'(앞 글자에 붙음), ㅣ나 ㅣ로 끝나는 모음 뒤 \'∅\'.',
+  body:`<div class="tw"><table><tr><th>앞말이 이렇게 끝나면</th><th>주격 조사</th><th>예</th></tr>
+  <tr><td>자음</td><td><b>이</b></td><td>{古聖이}, {사ᄅᆞ미}(사람+이)</td></tr>
+  <tr><td>ㅣ가 아닌 모음 (ㅏ ㅓ ㅗ ㅜ…)</td><td><b>ㅣ</b> — 앞 글자와 합쳐짐</td><td>나+ㅣ → {내}, 부텨+ㅣ → {부톄}, 쇼+ㅣ → {쇠}, 바+ㅣ → {배}, 저+ㅣ → {제}</td></tr>
+  <tr><td>한자 + 모음으로 끝남</td><td><b>ㅣ</b> — 따로 적음</td><td>{孔子ㅣ} (한자에는 붙일 수 없어서)</td></tr>
+  <tr><td>ㅣ 또는 ㅣ로 끝나는 이중 모음 (ㅐ ㅔ ㅚ ㅟ ㅢ)</td><td><b>∅</b> — 아무것도 안 붙음</td><td>{불휘}(뿌리가), 다리(다리가), {ᄒᆡ}(해가)</td></tr></table></div>
+  <h4>왜 ∅가 되냐면</h4>
+  <p>{불휘}는 ㅟ로 끝나요. ㅟ는 ㅜ+ㅣ라서 끝이 이미 ㅣ예요. 여기에 ㅣ를 또 붙이면 소리가 안 달라지니까 그냥 안 붙인 거예요. 이걸 <b>영형태(∅)</b>라고 해요. "생략"이랑은 달라요. 원래 그 자리에 오는 모양이 '없는 모양'인 거예요.</p>
+  <h4>'가'는 언제 생겼냐면</h4>
+  <p>16세기 말 편지에서 처음 보이고, 17세기 이후 퍼져요. 처음엔 'ㅣ' 뒤에서 주로 쓰였어요. 그래서 1896년 (다)에 {부엉이가}, {비둘기가}가 나와요. 중요한 건 'ㅣ'가 <b>'가'로 바뀐 게 아니라</b> '가'가 새로 생겼다는 점이에요.</p>`,
+  dis:[['{내}','나 + ㅣ','내가'],['{부톄}','부텨 + ㅣ','부처가'],['{孔子ㅣ}','孔子 + ㅣ','공자가'],['{불휘}','불휘 + ∅','뿌리가']],
+  trap:'"(가)의 {불휘}, (나)의 {내}에 나타난 주격 조사 \'ㅣ\'" → 틀림. {불휘}는 ∅예요. 시험지 7번 정답(⑤)이 바로 이거였어요.',
+  tip:'<b>자음 → 이 / 모음 → ㅣ / ㅣ로 끝 → ∅</b>. 앞말 마지막 소리 하나만 보면 끝.',
+  basic:[{q:'{불휘} 뒤에는 주격 조사 \'ㅣ\'가 결합하였다.',a:false,why:'ㅟ로 끝나서 주격은 ∅예요.'}],
+  deep:[{q:'{孔子ㅣ}의 \'ㅣ\'는 모음으로 끝난 한자 뒤에 쓰인 주격 조사이다.',a:true,why:'한자에 붙여 쓸 수 없어서 따로 적었어요.'},
+        {q:'{古聖이}는 자음으로 끝난 체언 뒤에 주격 조사 \'이\'가 쓰인 것이다.',a:true,why:'聖(셩)이 ㆁ 받침이에요. 시험지 10번 ①.'},
+        {q:'중세 국어의 주격 조사 \'ㅣ\'가 근대에 \'가\'로 형태가 바뀌었다.',a:false,why:'\'가\'는 새로 생긴 조사예요.'}]},
+ {id:'gen',title:'관형격 조사 ᄋᆡ/의 와 ㅅ',
+  bridge:'현대어 관형격 조사는 \'의\' 하나죠. 중세엔 <b>누구 것이냐</b>에 따라 골라 썼어요. 그리고 이 중 하나가 지금의 <b>사이시옷</b>이 돼요. 맞춤법 문제랑 연결되니까 꼭 잡아야 해요.',
+  core:'사람·동물(평칭)에는 ᄋᆡ/의, 사물이나 높여야 할 대상에는 ㅅ.',
+  body:`<div class="tw"><table><tr><th>앞말</th><th>관형격 조사</th><th>예</th></tr>
+  <tr><td>유정물(사람·동물) + 평칭</td><td>{ᄋᆡ} / 의 (모음 조화)</td><td>{ᄂᆞᄆᆡ}(남의), {사ᄅᆞᄆᆡ}, {쇼ᄋᆡ}(소의)</td></tr>
+  <tr><td>무정물(사물)</td><td>ㅅ</td><td>{나랏} 말ᄊᆞᆷ, {江ㅅ} 우ㅎ</td></tr>
+  <tr><td>유정물 + 높임 대상</td><td>ㅅ</td><td>{부텻} 말(부처님의), {님긊} 말ᄊᆞᆷ</td></tr></table></div>
+  <p>정리하면 "<b>살아 있고 + 안 높일 때</b>"만 {ᄋᆡ}/의, 나머지는 다 ㅅ이에요.</p>
+  <h4>사이시옷으로 이어져요</h4>
+  <p>ㅅ은 '나랏 말', '江ㅅ 우ㅎ'처럼 앞말이 뒷말을 꾸미는 구조에 들어갔어요. 이게 굳어서 합성어가 되면 ㅅ이 남아요. 믈+ㅅ+고기 → {믌고기} → 물고기[물꼬기]. 뒷말이 된소리가 나는 이유가 이 ㅅ이에요.</p>
+  <p>반대로 <b>소</b>는 동물이고 높일 대상도 아니니 {ᄋᆡ}를 썼어요({쇼ᄋᆡ} 고기). ㅅ이 끼어들 수 없었으니 '소고기'는 된소리가 안 나요.</p>
+  <h4>관형격 'ㅣ'도 있어요</h4>
+  <p>'나·너·저'에는 관형격으로 'ㅣ'가 붙어요. 내(나의), 네(너의), 제(저의). 주격 '내/네/제'와 모양이 똑같아서 방점과 해석으로 구별해요. 이건 대명사 강의에서 자세히.</p>`,
+  dis:[['{나랏} 말ᄊᆞᆷ','나라ㅎ + ㅅ','나라의 말 · 무정물'],['{부텻} 말','부텨 + ㅅ','부처님의 말 · 높임'],['{쇼ᄋᆡ} 고기','쇼 + {ᄋᆡ}','소의 고기 · 유정물 평칭']],
+  trap:'"소고기의 뒷말이 된소리로 나지 않는 이유는 중세에 관형격 ㅅ이 나타날 수 없었기 때문" → 맞음. 시험지 8번 ㅁ.',
+  tip:'<b>ㅅ = 사물 or 높임</b>. "살아 있는데 안 높이면 ᄋᆡ/의"만 외우면 나머지는 ㅅ.',
+  basic:[{q:'중세 국어에서 유정물 평칭 체언 뒤에는 관형격 조사 \'ㅅ\'이 주로 쓰였다.',a:false,why:'유정물 평칭은 ᄋᆡ/의, ㅅ은 무정물이나 높임 대상.'}],
+  deep:[{q:'\'부텻\'의 \'ㅅ\'은 높임의 대상인 유정물 뒤에 쓰인 관형격 조사이다.',a:true,why:'부처는 높임 대상이라 ㅅ.'},
+        {q:'\'소고기\'는 중세의 관형격 조사 \'ㅅ\'이 결합하여 만들어진 말이다.',a:false,why:'쇼는 유정물 평칭이라 ᄋᆡ를 써요. ㅅ이 들어갈 수 없었어요.'}]},
+ {id:'adv',title:'부사격 조사',
+  bridge:'현대어 \'에, 에게, 한테\'에 해당하는 조사예요. 모음 조화 강의에서 \'애/에\' 짝은 봤죠? 여기에 시험 단골인 <b>특이 처격</b>이 하나 더 있어요.',
+  core:'애/에/예가 기본, 정해진 몇몇 명사 뒤는 ᄋᆡ/의(특이 처격). 사람에게는 ᄋᆡ게/의게.',
+  body:`<div class="tw"><table><tr><th>형태</th><th>언제</th><th>예</th></tr>
+  <tr><td>애</td><td>양성 모음 뒤</td><td>{ᄇᆞᄅᆞ매}(바람에), {안해}(안에)</td></tr>
+  <tr><td>에</td><td>음성 모음 뒤</td><td>{누네}(눈에), {뒤헤}(뒤ㅎ+에)</td></tr>
+  <tr><td>예</td><td>ㅣ나 ㅣ로 끝나는 모음 뒤</td><td>{ᄇᆡ예}(배에), {ᄒᆡ예}(해에)</td></tr>
+  <tr class="hl"><td><b>{ᄋᆡ} / 의</b> (특이 처격)</td><td>정해진 몇몇 명사 뒤</td><td>{보ᄆᆡ}(봄에), {바ᄆᆡ}(밤에), {나ᄌᆡ}(낮에), {아ᄎᆞᄆᆡ}(아침에)</td></tr>
+  <tr><td>{ᄋᆡ게} / 의게</td><td>사람·동물에게</td><td>{비둘기의게}(비둘기에게)</td></tr>
+  <tr><td>ᄃᆞ려</td><td>~에게(말할 때)</td><td>{曾子ᄃᆞ려}(증자에게)</td></tr></table></div>
+  <h4>특이 처격 구별법</h4>
+  <p>특이 처격 {ᄋᆡ}/의는 관형격 {ᄋᆡ}/의와 <b>모양이 완전히 똑같아요</b>. 그래서 해석으로 갈라요. 풀이에서 "~에"면 부사격, "~의"면 관형격.</p>
+  <p>{보ᄆᆡ} 왯ᄂᆞᆫ → 봄<b>에</b> 와 있는 → 부사격이에요.</p>
+  <h4>근대 편지의 {ᄒᆞᆫ듸}</h4>
+  <p>1586년 편지 "자내ᄒᆞᆫ듸 가고져" → 풀이 "자네<b>한테</b> 가고자". 이 '듸'는 의존 명사 '데'가 아니라 '한테'로 이어지는 쪽이에요. 1896년 "다른 듸로만 가랴고"의 '듸'는 '데(곳)'라서 의존 명사고요. 같은 글자, 다른 정체.</p>`,
+  dis:[['{보ᄆᆡ}','봄 + {ᄋᆡ}','봄에 · 특이 처격'],['{ᄒᆡ예}','{ᄒᆡ} + 예','해에 · ㅣ 뒤라 예'],['{비둘기의게}','비둘기 + 의게','비둘기에게']],
+  trap:'{보ᄆᆡ}의 \'ᄋᆡ\'를 관형격으로 보면 함정에 빠져요. 그리고 (가)와 (나)의 \'듸\'를 둘 다 의존 명사라고 한 선지(14번 ②)도 틀린 선지예요.',
+  tip:'<b>봄 · 밤 · 낮 · 아침 · 집</b> + {ᄋᆡ} = 특이 처격. 시간·장소 명사가 많아요.',
+  basic:[{q:'(나)의 {보ᄆᆡ}에는 중세 국어의 부사격 조사 \'ᄋᆡ\'가 쓰였다.',a:true,why:'봄+ᄋᆡ = 봄에. 시험지 7번 ③.'}],
+  deep:[{q:'특이 처격 \'ᄋᆡ/의\'는 관형격 조사와 형태가 다르다.',a:false,why:'형태가 똑같아서 해석으로 구별해요.'},
+        {q:'(가)와 (나)의 \'듸\'는 모두 의존 명사로, 각각 앞말의 수식을 받고 있다.',a:false,why:'(가)는 \'한테\' 쪽, (나)만 \'데(곳)\' 의존 명사. 14번 ②.'}]},
+ {id:'etc',title:'목적격 · 보조사 · 접속 · 호격',
+  bridge:'나머지 조사를 한 번에 정리해요. 여기서 시험에 나오는 건 두 개예요. 목적어 자리에 오는 보조사 <b>{ᄋᆞ란}</b>, 그리고 마지막 명사에도 붙는 <b>접속 조사 와/과</b>.',
+  core:'ᄋᆞ란은 목적어 자리에도 오는 보조사, 접속 조사 와/과는 마지막 명사에도 붙는다.',
+  body:`<h4>목적격</h4>
+  <p>{ᄋᆞᆯ}/을(자음 뒤), {ᄅᆞᆯ}/를(모음 뒤), ㄹ(모음 뒤 줄임: {날} = 나를). 모음 조화로 고르는 거 기억하죠?</p>
+  <h4>보조사 {ᄋᆞ란} / 으란</h4>
+  <p>현대어 '~은/~는(대조)'이나 '~일랑'이에요. 특징은 <b>목적어 자리</b>에 자주 온다는 것.</p>
+  <p class="say">{오ᄉᆞ란} 밧고 = 옷 + {ᄋᆞ란} + 벗고 → "옷은 벗고". 옷을 벗는 거니까 '밧다(벗다)'의 목적어예요. 목적격 조사 대신 보조사가 붙은 거예요.</p>
+  <h4>접속 조사 와 / 과</h4>
+  <p>현대어는 "과실<b>과</b> 물을"이죠? 중세엔 "<b>果實와 믈와</b>"처럼 <b>마지막 명사에도</b> 와/과를 붙였어요. 그리고 그 뒤에 와야 할 목적격 조사는 흔히 빠져요.</p>
+  <p class="say">{果實와 믈와} 좌시고 = 과실과 물을 잡수시고. {믈와}는 목적어 자리지만 '와'는 <b>접속 조사</b>예요. 목적격 조사가 아니에요.</p>
+  <p>참고로 와/과 고르는 기준은 현대랑 달라요. 모음과 <b>ㄹ</b> 뒤에는 '와', 나머지 자음 뒤에는 '과'. 그래서 {믈와}(ㄹ 뒤 '와').</p>
+  <h4>호격</h4>
+  <p><b>하</b>(높임: {님금하} 임금이시여), 아·야(평칭), 여(감탄).</p>`,
+  dis:[['{오ᄉᆞ란}','옷 + {ᄋᆞ란}','옷은 · 보조사, 목적어'],['{믈와}','믈 + 와','물과(을) · 접속 조사'],['{님금하}','님금 + 하','임금이시여 · 높임 호격']],
+  trap:'"{믈와}: 목적격 조사를 사용하여 목적어로 쓰임" → 틀림. 목적어인 건 맞지만 조사는 접속 조사예요. 반만 맞는 선지 조심. 시험지 12번 ⑤.',
+  tip:'<b>ᄋᆞ란 = 은(대조)</b>, 목적어 자리 OK. <b>A와 B와</b> = 끝에도 와.',
+  basic:[{q:'{오ᄉᆞ란}은 보조사가 붙어 \'밧다\'의 목적어로 쓰였다.',a:true,why:'옷+ᄋᆞ란. 시험지 12번 정답.'}],
+  deep:[{q:'{믈와}는 목적격 조사를 사용하여 문장의 목적어로 쓰였다.',a:false,why:'\'와\'는 접속 조사. 목적격 조사는 생략.'},
+        {q:'\'님금하\'의 \'하\'는 높임의 호격 조사이다.',a:true,why:'임금이시여.'}]}
+]},
+{id:'u5',title:'대명사와 문장 성분',sub:'재귀 대명사 · 내/제 구별 · 보어 · 자릿수 · 조사 생략',
+ advice:'선지가 "주어다/목적어다"를 물으면 옛글이 아니라 현대어 풀이를 먼저 보세요. 풀이에서 "~를"이면 목적어, "~가 되다"면 보어예요.',
+ concepts:[
+ {id:'pron',title:'인칭 · 재귀 대명사, 그리고 내/제 구별',
+  bridge:'현대어에서 "그는 <b>자기</b> 방으로 갔다"의 \'자기\'가 재귀 대명사죠. 앞에 나온 3인칭을 다시 가리키는 말. 중세엔 이게 높임에 따라 두 개였어요.',
+  core:'재귀 대명사 \'저\'(평칭), \'ᄌᆞ갸\'(높임)는 앞에 나온 3인칭 주어를 다시 가리킨다.',
+  body:`<div class="tw"><table><tr><th></th><th>평칭</th><th>높임</th></tr>
+  <tr><td>1인칭</td><td>나, 우리</td><td>—</td></tr>
+  <tr><td>2인칭</td><td>너, 너희</td><td>{그듸}(그대)</td></tr>
+  <tr><td>재귀(3인칭)</td><td>저</td><td>{ᄌᆞ갸}(당신)</td></tr>
+  <tr><td>모르는 것</td><td colspan="2">누(누구), 므스/므슥(무엇), 어느, 어듸(어디)</td></tr></table></div>
+  <h4>{ᄌᆞ갸}가 누구를 가리키나</h4>
+  <p>재귀 대명사는 "그 사람 <b>자신</b>"이니까 <b>문장의 주어</b>를 다시 가리켜요.</p>
+  <p class="say">ᄒᆞᆫ 菩薩이 … 瞿曇婆羅門ᄋᆞᆯ 맛나샤 {ᄌᆞ갓} 오ᄉᆞ란 밧고 → "보살이 구담바라문을 만나서 <b>당신의</b> 옷은 벗고"</p>
+  <p>옷을 벗는 사람은 누구? 보살이에요. 그러니 {ᄌᆞ갓}(ᄌᆞ갸+ㅅ)은 <b>보살</b>을 가리켜요. 구담바라문은 목적어라서 재귀 대명사가 가리킬 수 없어요. 그리고 ㅅ이 붙은 것도 봐요. 높임 대상이라 관형격 ㅅ이에요.</p>
+  <h4>내 · 네 · 제 — 주격이냐 관형격이냐</h4>
+  <p>나·너·저 뒤에 주격 'ㅣ'가 붙어도 {내}, 관형격 'ㅣ'가 붙어도 {내}예요. 모양이 똑같죠. 구별법 두 가지:</p>
+  <ol><li><b>뒤를 보기</b>: 바로 뒤에 명사가 오면 관형격(나의), 서술어로 이어지면 주격(내가).</li>
+  <li><b>방점</b>: 주격은 점이 있고(·내, :네, :제), 관형격은 점이 없어요.</li></ol>
+  <p class="say">"ᄆᆞᄎᆞᆷ내 <b>제</b> ᄠᅳ들 시러 펴디 몯ᄒᆞᇙ 노미 하니라" → "끝내 <b>자기의</b> 뜻을 펴지 못할 사람이 많다". '제' 뒤에 명사 'ᄠᅳᆮ'이 오니까 <b>관형격</b>이에요. 주격이 아니에요!</p>`,
+  dis:[['{ᄌᆞ갓}','{ᄌᆞ갸} + ㅅ','당신의 · 보살을 가리킴'],['제 ᄠᅳ들','저 + ㅣ(관형격)','자기의 뜻을'],['내 본ᄃᆡ','나 + ㅣ(주격)','내가 본디']],
+  trap:'<b>시험지 9번 ②</b>: "(가)의 {배}, 제와 (나)의 {孔子ㅣ}는 모두 주격 조사 \'ㅣ\'" → 틀림. \'제 ᄠᅳ들\'의 \'제\'는 관형격이에요. 이게 9번 정답이에요. 그리고 12번 ③ "{ᄌᆞ갓}은 구담바라문을 가리킴"도 틀림.',
+  tip:'<b>내/네/제 바로 뒤에 명사 → 관형격.</b> 재귀 대명사 → 주어를 찾아라.',
+  basic:[{q:'{ᄌᆞ갓}은 \'구담바라문\'을 가리키는 재귀 대명사이다.',a:false,why:'옷을 벗는 주어, 보살을 가리켜요. 시험지 12번 ③.'}],
+  deep:[{q:'\'제 ᄠᅳ들 시러 펴디 몯ᄒᆞᇙ\'의 \'제\'는 주격 조사 \'ㅣ\'가 결합한 것이다.',a:false,why:'뒤에 명사 ᄠᅳᆮ이 와서 관형격(저의)이에요.'},
+        {q:'중세 국어에서 2인칭 대명사를 높일 때는 \'그듸\'를 썼다.',a:true,why:'그대.'}]},
+ {id:'comp',title:'보어 · 서술어 자릿수 · 조사 생략',
+  bridge:'고1 문장 성분 단원 그대로예요. 보어는 <b>\'되다, 아니다\'</b> 앞에 필요한 말, 서술어 자릿수는 서술어가 꼭 필요로 하는 성분의 개수. 중세라고 달라지지 않아요.',
+  core:'ᄃᆞ외다(되다) 앞은 보어. 맛디다(맡기다)는 세 자리. 중세에도 조사는 자주 빠졌다.',
+  body:`<h4>① 보어</h4>
+  <p class="say">ᄒᆞᆫ 菩薩이 王 {ᄃᆞ외야} 겨샤 → "한 보살이 왕(이) 되어 계시어"</p>
+  <p>주어는 누구? '菩薩이'. 그럼 王은? '되다' 앞에서 "무엇이" 되는지 채워 주는 <b>보어</b>예요. 보격 조사가 빠진 거고요. 주어 아니에요.</p>
+  <h4>② 서술어 자릿수</h4>
+  <p class="say">나라ᄒᆞᆯ 아ᅀᆞ {맛디시고} → "나라를 아우에게 맡기시고"</p>
+  <p>'맡기다'에 꼭 필요한 것: 누가(주어) + 무엇을(목적어) + 누구에게(부사어). 셋이니까 <b>세 자리 서술어</b>예요. {아ᅀᆞ}(아우)에 부사격 조사가 빠져 있어서 놓치기 쉬워요.</p>
+  <h4>③ 조사 생략</h4>
+  <p>중세에도 조사를 빼는 일이 정말 흔했어요. 밑줄 단어에 조사가 없으면 바로 현대어 풀이를 보세요. 거기에 빠진 조사가 써 있어요.</p>
+  <p class="say">{자내} 여히고 (1586년 편지) → "자네<b>를</b> 여의고"</p>
+  <p>'자내'는 주어가 아니라 <b>목적어</b>예요. 목적격 조사가 빠진 거예요. "의미상 주격 조사가 생략" → 틀림.</p>`,
+  dis:[['王 {ᄃᆞ외야}','王 + (보격 생략)','왕이 되어 · 보어'],['{아ᅀᆞ} {맛디시고}','아ᅀᆞ + (부사격 생략)','아우에게 맡기시고 · 세 자리'],['{자내} 여히고','자내 + (목적격 생략)','자네를 여의고 · 목적어']],
+  trap:'조사가 빠진 단어 = 시험 단골. 12번 ① "王: 주어" 틀림, ② "맛디시고: 두 자리" 틀림, 14번 ④ "자내: 주격 생략" 틀림. 셋 다 <b>풀이 대조</b> 한 번이면 피할 수 있었어요.',
+  tip:'<b>조사 없는 밑줄 → 풀이에서 그 단어 뒤 조사 확인.</b> ~를 → 목적어, ~에게 → 부사어, ~이 되다 → 보어.',
+  basic:[{q:'(가)의 {자내}는 의미상 주격 조사 \'ㅣ\'가 생략되었다.',a:false,why:'\'자네를 여의고\' → 목적어예요. 시험지 14번 ④.'}],
+  deep:[{q:'{맛디시고}는 주어 외에 목적어만을 필요로 하는 두 자리 서술어이다.',a:false,why:'\'아ᅀᆞ(아우에게)\'도 필요한 세 자리예요. 12번 ②.'},
+        {q:'\'王 ᄃᆞ외야\'의 \'王\'은 격 조사가 생략된 채 \'ᄃᆞ외야\'의 주어로 쓰였다.',a:false,why:'주어는 菩薩이, 王은 보어예요. 12번 ①.'}]}
+]},
+{id:'u6',title:'높임법',sub:'주체 -시- · 객체 -ᄉᆞᆸ- · 상대 -이-/-잇-',
+ advice:'높임 문제는 "누구를 높이냐"부터 틀려요. 주체 → 주어, 객체 → 목적어·부사어, 상대 → 듣는 사람. 이 세 줄을 선지 옆에 써 두고 푸세요.',
+ concepts:[
+ {id:'subj',title:'주체 높임 -시- / -샤-',
+  bridge:'현대어 "선생님께서 오<b>시</b>다"의 \'-시-\'. 주어를 높이는 그거 맞아요. 중세에도 똑같은데 모양이 하나 더 있어요.',
+  core:'주어를 높인다. 모음 어미 앞에서는 -샤-로 바뀌고 어미의 첫 모음이 떨어진다.',
+  body:`<div class="tw"><table><tr><th>뒤에 오는 어미</th><th>형태</th><th>예</th></tr>
+  <tr><td>자음으로 시작</td><td>-시-</td><td>{ᄒᆞ시고}, {맛디시고}, {가시니}</td></tr>
+  <tr><td>모음으로 시작 (-아/-어, -오-)</td><td>-샤- (뒤 모음 탈락)</td><td>ᄒᆞ-+-시-+-아 → {ᄒᆞ샤}, 나가-+-시-+-아 → {나아가샤}</td></tr></table></div>
+  <p>{ᄒᆞ샤}를 보면 '-아'가 안 보이죠? -샤-가 되면서 -아가 먹혀 버린 거예요. 그래서 {ᄒᆞ샤} = "하시어".</p>
+  <p>하는 일(주어 높이기)은 현대어와 <b>똑같아요</b>. 모양만 달라요.</p>`,
+  dis:[['{ᄒᆞ샤}','ᄒᆞ- + -샤- + (-아)','하시어'],['{맛디시고}','맛디- + -시- + -고','맡기시고']],
+  trap:'"{ᄒᆞ샤}: 주체를 높이는 선어말 어미가 쓰였다는 점에서 현대 국어와 같다" → 기능 기준이면 맞아요. 모양 기준으로 묻는지, 기능 기준으로 묻는지 선지 끝을 잘 읽기.',
+  tip:'<b>샤 = 시 + 아</b>. "샤" 보이면 주체 높임 + 연결 어미 -아가 숨어 있다.',
+  basic:[{q:'{ᄒᆞ샤}의 \'-샤-\'는 주체를 높이는 선어말 어미이다.',a:true,why:'-시-가 모음 어미 앞에서 -샤-로 바뀐 거예요.'}],
+  deep:[{q:'\'-샤-\' 뒤에서 어미 \'-아\'는 그대로 표기된다.',a:false,why:'-아가 탈락해요. ᄒᆞ샤.'}]},
+ {id:'obj',title:'객체 높임 -ᄉᆞᆸ- / -ᄌᆞᆸ- / -ᅀᆞᆸ-',
+  bridge:'현대어에서 객체 높임은 "할머니께 선물을 <b>드렸다</b>", "부모님을 <b>모시고</b>"처럼 단어로만 하죠? 중세엔 이걸 <b>선어말 어미</b>로 했어요. 시험지 13번이 바로 이거예요.',
+  core:'목적어·부사어가 가리키는 대상을 높인다. 어간 끝소리에 따라 세 모양, 모음 어미 앞에선 ㅂ이 ㅸ으로.',
+  body:`<h4>STEP 1. 누구를 높이나</h4>
+  <p><b>주어가 아니라</b> 목적어나 부사어가 가리키는 사람이에요. 문장에서 '~ᄭᅴ(께)', '~ᄅᆞᆯ' 붙은 사람을 찾으세요.</p>
+  <p class="say">大臣이 이 藥 ᄆᆡᇰᄀᆞ라 <b>大王ᄭᅴ</b> {받ᄌᆞᄫᆞᆫ대} → 대신이 약을 만들어 대왕께 바치어</p>
+  <p>바치는 사람(주어)은 大臣, 받는 사람(부사어)은 大王. 객체 높임 대상은 <b>大王</b>이에요.</p>
+  <h4>STEP 2. 어간 끝소리로 모양 고르기</h4>
+  <div class="tw"><table><tr><th>어간 끝소리</th><th>자음 어미 앞</th><th>모음 어미 앞</th><th>예</th></tr>
+  <tr><td>ㄱ ㅂ ㅅ ㅎ</td><td>{-ᄉᆞᆸ-}</td><td>{-ᄉᆞᄫᆞ-}</td><td>{돕ᄉᆞᆸ고}, {막ᄉᆞᄫᆞ니}</td></tr>
+  <tr><td>ㄷ ㅈ ㅊ</td><td>{-ᄌᆞᆸ-}</td><td>{-ᄌᆞᄫᆞ-}</td><td>{묻ᄌᆞᆸ고}, {듣ᄌᆞᄫᆞ며}</td></tr>
+  <tr><td>모음, ㄴ ㅁ ㄹ</td><td>{-ᅀᆞᆸ-}</td><td>{-ᅀᆞᄫᆞ-}</td><td>{보ᅀᆞᆸ고}, {請ᄒᆞᅀᆞᄫᆞ쇼셔}</td></tr></table></div>
+  <h4>STEP 3. 뒤에 모음 어미가 오면</h4>
+  <p>받침 ㅂ이 뒤 모음과 만나면서 ㅸ이 돼요. -ᄌᆞᆸ- + -ᄋᆞ며 → -ᄌᆞᄫᆞ며. 그래서 13번 ㉡: 듣- + 객체 높임 + -ᄋᆞ며 → <b>{듣ᄌᆞᄫᆞ며}</b>.</p>
+  <h4>왜 이렇게 나뉘냐면</h4>
+  <p>앞 소리와 부딪혔을 때 발음하기 편한 쪽으로 바뀐 거예요. ㄷㅈㅊ는 혀끝이 입천장에 닿는 소리라 ᄌ이 편하고, 모음·울림소리(ㄴㅁㄹ) 뒤에선 ㅅ이 약해져 ㅿ이 되고, 나머지는 ᄉ 그대로.</p>
+  <h4>근대에는</h4>
+  <p>객체 높임 기능이 약해지고 듣는 사람을 높이는 쪽(상대 높임)으로 옮겨 가요. 그게 오늘날 '-습니다'예요.</p>`,
+  dis:[['{받ᄌᆞᄫᆞᆫ대}','받- + {-ᄌᆞᄫᆞ-} + -ㄴ대','바치어 · 大王을 높임'],['{듣ᄌᆞᄫᆞ며}','듣- + {-ᄌᆞᄫᆞ-} + -며','들으며 · 부처를 높임'],['{請ᄒᆞᅀᆞᄫᆞ쇼셔}','請ᄒᆞ- + {-ᅀᆞᄫᆞ-} + -쇼셔','청하소서 · 부처를 높임']],
+  trap:'객체 높임 대상을 <b>주어</b>로 고르는 게 제일 흔한 실수예요. 13번 ④⑤가 大臣인 이유. 그리고 듣-은 ㄷ이니 ᄌ 계열, ᅀ 계열 아니에요.',
+  tip:'<b>ㄷㅈㅊ → ᄌ / 모음·ㄴㅁㄹ → ᅀ / 나머지 → ᄉ</b>. 모음 어미 앞이면 ㅂ → ㅸ.',
+  basic:[{q:'\'大臣이 이 藥 ᄆᆡᇰᄀᆞ라 大王ᄭᅴ 받ᄌᆞᄫᆞᆫ대\'에서 객체 높임의 대상은 大臣이다.',a:false,why:'약을 받는 大王(부사어)이 대상이에요.'}],
+  deep:[{q:'어간 \'듣-\'과 어미 \'-ᄋᆞ며\' 사이에 객체 높임 선어말 어미가 오면 \'듣ᄌᆞᄫᆞ며\'가 된다.',a:true,why:'ㄷ 뒤라 ᄌ 계열, 모음 어미 앞이라 ㅸ. 13번 ①.'},
+        {q:'어간 \'보-\' 뒤의 객체 높임 선어말 어미는 \'-ᄉᆞᆸ-\'으로 실현된다.',a:false,why:'모음 뒤라 -ᅀᆞᆸ-. 보ᅀᆞᆸ고.'},
+        {q:'객체 높임 선어말 어미는 문장의 주체를 높이는 데 쓰였다.',a:false,why:'목적어·부사어가 가리키는 대상을 높여요.'}]},
+ {id:'rel',title:'상대 높임 -이- / -잇-',
+  bridge:'현대어 "합니다 / 해요 / 해"처럼 <b>듣는 사람</b>에 따라 말끝이 달라지는 거, 상대 높임법이죠. 중세엔 세 단계였고, 아주 높일 때 선어말 어미 -이-/-잇-을 넣었어요. 프린트 3쪽 내용이에요.',
+  core:'청자를 높인다. 평서문엔 -이-, 의문문엔 -잇-. 등급은 ᄒᆞ라체 · ᄒᆞ야쎠체 · ᄒᆞ쇼셔체.',
+  body:`<div class="tw"><table><tr><th>등급</th><th>높임</th><th>평서</th><th>의문</th><th>명령</th></tr>
+  <tr><td>{ᄒᆞ라}체</td><td>아주 낮춤</td><td>-다</td><td>-녀/-냐, -뇨</td><td>-라</td></tr>
+  <tr><td>{ᄒᆞ야쎠}체</td><td>보통 높임</td><td>-ᄂᆡ</td><td>-ᄂᆞᆫ가 / {-ᄂᆞᆺ가}</td><td>-아쎠</td></tr>
+  <tr><td>{ᄒᆞ쇼셔}체</td><td>아주 높임</td><td>-ᄂᆞ<b>이</b>다</td><td>-ᄂᆞ니<b>잇</b>가/고</td><td>-쇼셔</td></tr></table></div>
+  <h4>-이- 와 -잇-</h4>
+  <p>{ᄒᆞ쇼셔}체 표지예요. <b>평서형 '-다' 앞</b>에선 -이-, <b>의문형 '-니-'와 '-가/-고' 사이</b>에선 -잇-. 모양만 봐도 문장 종류를 알 수 있어요.</p>
+  <h4>프린트 예문 정리</h4>
+  <ul><li>너희 大衆이 ᄀᆞ장 보아 後에 뉘웃붐 업게 {ᄒᆞ라} → 세존이 대중에게, 아주 낮춤</li>
+  <li>그듸 아바니미 {잇ᄂᆞ닛가} → 파라문이 처음 보는 호미의 딸에게, 보통 높임</li>
+  <li>王이 부텨를 {請ᄒᆞᅀᆞᄫᆞ쇼셔} → 수달이 왕에게, 아주 높임</li>
+  <li>하ᄂᆞᆯ히 駙馬 달애샤 두 孔雀일 {그리시니이다} → 평서형 -이-, 후대 왕을 아주 높임</li>
+  <li>아디 어려ᄫᅳᆫ 法을 브즈러니 {讚嘆ᄒᆞ시ᄂᆞ니잇고} → 의문형 -잇-, 사리불이 세존에게</li></ul>
+  <h4>용비어천가 125장</h4>
+  <p class="say">님금하 아ᄅᆞ쇼셔 洛水예 山行 가 이셔 하나빌 {미드니잇가} → 의문형 -잇-, 청자 '님금'을 높여요.</p>
+  <h4>근대의 변화</h4>
+  <p>1896년 {滋味잇ᄉᆞᆸᄂᆞ이다}: 원래 객체 높임이던 -ᄉᆞᆸ-이 이제 듣는 사람을 높이는 데 쓰여요. 여기에 -ᄂᆞ-+-이-+-다가 붙어서 나중에 '-습니다'가 돼요. 그리고 (다)의 {ᄒᆞ얏소}처럼 근대엔 '하오체(-소)'도 보여요.</p>`,
+  dis:[['{그리시니이다}','그리- + -시- + -니- + -이- + -다','그리신 것입니다 · 평서 -이-'],['{讚嘆ᄒᆞ시ᄂᆞ니잇고}','… + -ᄂᆞ- + -니- + -잇- + -고','찬탄하십니까 · 의문 -잇-'],['{잇ᄉᆞᆸᄂᆞ이다}','잇- + -ᄉᆞᆸ- + -ᄂᆞ- + -이- + -다','있습니다 · 근대 상대 높임']],
+  trap:'-이-는 평서, -잇-은 의문. 이걸 바꿔 놓은 선지가 나와요. 그리고 상대 높임 대상은 <b>듣는 사람</b>이지 주어가 아니에요.',
+  tip:'<b>"이"다 = 평서, "잇"가 = 의문</b>. ㅅ 받침 있으면 질문.',
+  basic:[{q:'(나)의 {잇ᄉᆞᆸᄂᆞ이다}를 통해 청자를 높이는 상대 높임법을 사용하고 있음을 알 수 있다.',a:true,why:'-이-가 상대 높임. 시험지 14번 정답 ⑤.'}],
+  deep:[{q:'선어말 어미 \'-잇-\'은 평서형 종결 어미 \'-다\' 앞에서 나타난다.',a:false,why:'평서는 -이-, -잇-은 의문형 앞.'},
+        {q:'{미드니잇가}의 \'-잇-\'은 청자인 \'님금\'을 높이기 위해 쓰였다.',a:true,why:'님금하 아ᄅᆞ쇼셔 → 청자가 임금. 10번 ⑤.'},
+        {q:'\'그듸 아바니미 잇ᄂᆞ닛가\'는 청자를 아주 높이는 ᄒᆞ쇼셔체이다.',a:false,why:'보통 높임 ᄒᆞ야쎠체예요.'}]}
+]},
+{id:'u7',title:'시제와 화자 표시',sub:'과거 ∅·-더- · 현재 -ᄂᆞ- · 미래 -리- · 선어말 어미 -오-',
+ advice:'"시제 표지가 없으면 시제도 없다"고 생각하는 습관이 보여요. 동사 + 표지 없음 = 과거. 이것 하나만 확실히 하세요.',
+ concepts:[
+ {id:'tense',title:'과거 · 현재 · 미래',
+  bridge:'현대어 시제: 과거 \'-었-\', 현재 \'-는-\', 미래 \'-겠-\'. 중세엔 \'-었-\'이 아직 없었어요(근대에 생겨요). 그럼 과거를 어떻게 나타냈을까요? 프린트 4쪽 내용이에요.',
+  core:'과거는 아무것도 안 쓰거나(∅) -더-, 현재는 -ᄂᆞ-, 미래는 -리-.',
+  body:`<div class="tw"><table><tr><th>시제</th><th>표지</th><th>예</th><th>풀이</th></tr>
+  <tr><td>과거</td><td><b>∅</b> (동사)</td><td>護持ᄒᆞ라 {ᄒᆞ시니이다}</td><td>하셨습니다</td></tr>
+  <tr><td>과거 회상</td><td>-더-</td><td>ᄯᆞᄅᆞᆯ 맛고져 {ᄒᆞ더이다}</td><td>하더이다</td></tr>
+  <tr><td>현재</td><td>-ᄂᆞ-</td><td>네 이제 ᄯᅩ {묻ᄂᆞ다}</td><td>묻는다</td></tr>
+  <tr><td>미래</td><td>-리-</td><td>分明히 너ᄃᆞ려 {닐오리라}</td><td>말하겠다</td></tr></table></div>
+  <h4>∅로 과거? 이게 핵심이에요</h4>
+  <p><b>동사</b>에 시제 표지가 하나도 없으면 과거로 해석해요. 이걸 부정법이라고 해요. 프린트에 "과거 시제 없어도 된다"고 필기한 게 이거예요. 반대로 <b>형용사</b>에 아무것도 없으면 현재예요.</p>
+  <p class="say">셤 안해 자싫 제 … {ᄌᆞᄆᆞ니이다} → "잠기었습니다". ᄌᆞᆷ-(잠기다, 동사)에 과거 표지가 없지만 과거로 해석돼요.</p>
+  <h4>-더-의 느낌</h4>
+  <p>"직접 보고 겪은 걸 떠올려 말하는" 느낌이에요. 현대어 '-더-'(하더라, 하더이다)랑 같아요.</p>`,
+  dis:[['{ᄒᆞ더이다}','ᄒᆞ- + -더- + -이- + -다','하더이다 · 과거 회상'],['{묻ᄂᆞ다}','묻- + -ᄂᆞ- + -다','묻는다 · 현재'],['{ᄌᆞᄆᆞ니이다}','ᄌᆞᆷ- + ∅ + -ᄋᆞ니- + -이- + -다','잠기었습니다 · 과거(∅)']],
+  trap:'"-더-가 없으니 과거가 아니다" → 틀린 추론. 동사는 ∅만으로도 과거예요.',
+  tip:'<b>동사 + 아무것도 없음 = 과거, 형용사 + 아무것도 없음 = 현재.</b>',
+  basic:[{q:'중세 국어에서는 동사에 시제 선어말 어미가 없어도 과거를 나타낼 수 있었다.',a:true,why:'부정법(∅).'}],
+  deep:[{q:'중세 국어에서 과거 시제는 반드시 \'-더-\'로만 표현되었다.',a:false,why:'∅로도 과거를 나타내요.'},
+        {q:'\'네 이제 ᄯᅩ 묻ᄂᆞ다\'에는 현재 시제 선어말 어미가 쓰였다.',a:true,why:'-ᄂᆞ-.'}]},
+ {id:'o',title:'화자 표시 -오- 와 모양 바뀐 어미들',
+  bridge:'이건 현대어에 없는 거라 처음 보면 낯설어요. 대신 원리는 단순해요. "<b>말하는 내가 주어야</b>"라고 표시하는 선어말 어미가 있었다, 끝.',
+  core:'주어가 1인칭(나)이면 -오-가 붙는다. -더-+-오- → -다-, -ᄂᆞ-+-오- → -노-.',
+  body:`<p>프린트에 '1인칭 선어말 어미'라고 필기한 그거예요. 공식 이름은 <b>화자 표시 선어말 어미 -오-/-우-</b>(의도법).</p>
+  <h4>시제 어미랑 만나면 모양이 바뀌어요</h4>
+  <div class="tw"><table><tr><th>합치기</th><th>결과</th><th>예</th><th>풀이</th></tr>
+  <tr><td>-더- + -오-</td><td><b>-다-</b></td><td>내 {롱담ᄒᆞ다라}</td><td>내가 농담하였다</td></tr>
+  <tr><td>-ᄂᆞ- + -오-</td><td><b>-노-</b></td><td>소리ᄲᅮᆫ {듣노라}</td><td>소리만 듣는다</td></tr>
+  <tr><td>-오- + -리-</td><td>-오리-</td><td>내 이제 {닐오리라}</td><td>내가 말하겠다</td></tr></table></div>
+  <p>세 문장 다 주어가 '내'(나)죠? 그래서 -오-가 들어간 거예요.</p>
+  <h4>'-다'가 '-라'로 바뀌는 이유</h4>
+  <p>-오-, -리-, -니-, 서술격 '이-' 뒤에서 종결 어미 '-다'가 '-라'로 바뀌어요. 그래서 닐오리<b>라</b>, 듣노<b>라</b>, 롱담ᄒᆞ다<b>라</b>.</p>
+  <h4>하나 더: 대상 표시</h4>
+  <p>관형절이 꾸미는 명사가 그 관형절의 <b>목적어</b>일 때도 -오-가 들어가요. "내 니ᄅᆞ논 말" = 내가 이르는 말(말을 이르다). 시험엔 주로 1인칭 쪽만 나와요.</p>`,
+  dis:[['{롱담ᄒᆞ다라}','롱담ᄒᆞ- + -다-(더+오) + -라','내가 농담하였다'],['{듣노라}','듣- + -노-(ᄂᆞ+오) + -라','듣는다'],['{닐오리라}','닐- + -오- + -리- + -라','말하겠다']],
+  trap:'{롱담ᄒᆞ다라}의 \'-다-\'를 평서형 종결 어미로 착각하지 마세요. 진짜 종결 어미는 맨 끝 \'-라\'예요.',
+  tip:'<b>주어가 \'내\'면 -오- 찾기.</b> 다(더+오), 노(ᄂᆞ+오).',
+  basic:[{q:'{롱담ᄒᆞ다라}의 \'-다-\'는 선어말 어미 \'-더-\'와 \'-오-\'가 결합한 것이다.',a:true,why:'주어가 1인칭 \'내\'라서 -오-가 붙었어요.'}],
+  deep:[{q:'\'소리ᄲᅮᆫ 듣노라\'의 \'-노-\'는 현재 시제 \'-ᄂᆞ-\'와 \'-오-\'가 결합한 것이다.',a:true,why:'ᄂᆞ+오 → 노.'},
+        {q:'화자 표시의 \'-오-\'는 주어가 3인칭일 때 주로 쓰인다.',a:false,why:'1인칭(나)일 때예요.'}]}
+]},
+{id:'u8',title:'문장과 어미',sub:'의문문 · 자주 나오는 어미 · 형태소 분석',
+ advice:'형태소 분석에서 어간 원형을 못 찾고 있어요. 이어적기를 "되돌리는" 연습이 필요해요. 받침이 넘어간 글자를 보면 앞 글자로 다시 끌어올려 보세요.',
+ concepts:[
+ {id:'q',title:'의문문 세 종류',
+  bridge:'현대어 의문문은 그냥 \'-니?, -까?\'인데, 중세엔 <b>질문의 종류</b>에 따라 어미가 달랐어요. 판정 의문문(예/아니오)과 설명 의문문(의문사 있는 질문), 중3 때 배운 그 구분이에요.',
+  core:'예/아니오로 답하면 -가(-아), 의문사가 있으면 -고(-오), 주어가 2인칭이면 -ㄴ다.',
+  body:`<div class="tw"><table><tr><th>종류</th><th>어미</th><th>예</th><th>풀이</th></tr>
+  <tr><td>판정 (예/아니오)</td><td>-가, -아</td><td>이 ᄯᆞ리 너의 {죵가}</td><td>이 딸이 너의 종이냐?</td></tr>
+  <tr><td>설명 (의문사 있음)</td><td>-고, -오</td><td>얻논 藥이 {므스것고}</td><td>얻는 약이 무엇이냐?</td></tr>
+  <tr><td>설명</td><td>-뇨(-니+오)</td><td>어느 ᄒᆡ예 {도라가려뇨}</td><td>어느 해에 돌아가려나?</td></tr>
+  <tr><td>2인칭 주어</td><td>-ㄴ다, -ㅭ다</td><td>네 엇뎨 {안다}</td><td>네가 어찌 아느냐?</td></tr></table></div>
+  <h4>판별 순서</h4>
+  <ol><li>주어가 '너/네'인가? → <b>-ㄴ다</b> (의문사가 있어도 이게 우선)</li>
+  <li>누·므스·어느·엇뎨 같은 의문사가 있나? → <b>-고 / -오</b></li>
+  <li>없으면 → <b>-가 / -아</b></li></ol>
+  <p>{죵가}, {므스것고}처럼 명사 뒤에 바로 붙는 것도 있어요(체언 의문문). 시험지 7번 (나)의 "어느 ᄒᆡ예 도라가려뇨"는 의문사 '어느'가 있어서 -뇨(오 계열)예요.</p>`,
+  dis:[['{도라가려뇨}','도라가- + -려- + -니- + -오','돌아가려나 · 의문사 어느'],['{죵가}','죵 + 가','종이냐 · 판정'],['{안다}','알- + -ㄴ다','아느냐 · 2인칭']],
+  trap:'"가 = 판정, 고 = 설명"을 바꿔 놓은 선지 조심. ㅏ는 Yes/No(예), ㅗ는 의문사(무엇·어디)로 연결해서 외우세요.',
+  tip:'<b>가(ㅏ) = 예/아니오, 고(ㅗ) = 무엇·어디, 너 = ㄴ다</b>.',
+  basic:[{q:'의문사가 있는 설명 의문문에는 주로 \'-고\' 계열 어미가 쓰였다.',a:true,why:'판정은 -가, 설명은 -고.'}],
+  deep:[{q:'\'어느 ᄒᆡ예 도라가려뇨\'는 판정 의문문이다.',a:false,why:'의문사 \'어느\'가 있는 설명 의문문이에요.'},
+        {q:'주어가 2인칭일 때는 \'-ㄴ다\' 형태의 의문형 어미가 쓰였다.',a:true,why:'네 엇뎨 안다.'}]},
+ {id:'ending',title:'자주 나오는 어미와 ㄱ 탈락',
+  bridge:'국어 문법에서 어미 종류(종결/연결/전성) 배웠죠? 중세 자료에서 자주 보이는 어미를 이 틀에 맞춰서 정리해요. 해석이 막힐 때 여기가 사전 역할을 해요.',
+  core:'ㅣ·ㄹ·서술격 이- 뒤에서 ㄱ이 떨어진다(-고 → -오). -니라, -ㄹᄊᆡ, -오ᄃᆡ는 꼭 알아 두기.',
+  body:`<h4>ㄱ 탈락</h4>
+  <p>ㅣ나 ㄹ, 서술격 조사 '이-' 뒤에서 어미의 ㄱ 소리가 약해져서 떨어져요. 그래서 '-고'가 <b>'-오'</b>, '-거늘'이 '-어늘', '-가'가 '-아'가 돼요.</p>
+  <p class="say">효도의 {비르소미오} → 비롯- + -옴(명사형) + 이-(서술격) + <b>-오</b>(← -고) → "효도의 시작이고"</p>
+  <p>그러니까 '-이오'에서 '이'는 서술격 조사, '오'는 <b>연결 어미</b>(-고)예요.</p>
+  <h4>자주 보는 어미 사전</h4>
+  <div class="tw"><table><tr><th>어미</th><th>종류</th><th>뜻</th><th>예</th></tr>
+  <tr><td>-니라</td><td>종결</td><td>-는 것이다, -다</td><td>{하니라}(많다), {ᄆᆞᄎᆞᆷ이니라}</td></tr>
+  <tr><td>-ㄹᄊᆡ</td><td>연결</td><td>-므로 (원인)</td><td>{그츨ᄊᆡ}(그치므로), {아니 뮐ᄊᆡ}(흔들리지 않으므로)</td></tr>
+  <tr><td>-오ᄃᆡ</td><td>연결</td><td>-되</td><td>{갈오ᄃᆡ}(가로되)</td></tr>
+  <tr><td>-ᄂᆞ니</td><td>연결/종결</td><td>-나니, -니</td><td>{가ᄂᆞ니}, {하ᄂᆞ니}</td></tr>
+  <tr><td>-고져</td><td>연결</td><td>-고자</td><td>{니ᄅᆞ고져}, {가고져}</td></tr>
+  <tr><td>-아ᅀᅡ</td><td>연결</td><td>-아야</td><td>{뷔어ᅀᅡ}(비어야)</td></tr></table></div>`,
+  dis:[['{비르소미오}','비롯- + -옴 + 이- + -오','시작이고 · -오는 연결 어미'],['{하니라}','하- + -니- + -라','많다 · 종결'],['{그츨ᄊᆡ}','긏- + {-을ᄊᆡ}','그치므로 · 원인']],
+  trap:'"(가)의 \'-니라\'는 종결형, (나)의 \'-이오\'는 연결형" → 맞는 진술이에요. \'-이오\'의 \'오\'를 종결 어미로 착각하지 마세요.',
+  tip:'<b>ᄊᆡ = 때문에</b>, <b>ᄃᆡ = 되</b>, <b>니라 = 끝</b>.',
+  basic:[{q:'{비르소미오}의 \'-오\'는 연결 어미 \'-고\'의 ㄱ이 탈락한 형태이다.',a:true,why:'서술격 조사 이- 뒤에서 -고 → -오.'}],
+  deep:[{q:'\'-ㄹᄊᆡ\'는 원인을 나타내는 연결 어미이다.',a:true,why:'-므로, -기 때문에.'},
+        {q:'{비르소미오}의 \'-오\'는 문장을 끝내는 종결 어미이다.',a:false,why:'연결 어미(-고)예요.'}]},
+ {id:'morph',title:'형태소 · 단어 쪼개기',
+  bridge:'고1 문법 "형태소와 단어" 그대로예요. <b>조사는 단어로 센다, 어미는 단어로 안 센다.</b> 이 규칙이 중세에도 똑같아요. 다른 건 딱 하나, 이어적기 때문에 원형이 숨어 있다는 것.',
+  core:'조사는 단어 O, 어미는 단어 X. 이어적기를 되돌려서 원형을 찾는다. -ㄹᄊᆡ는 한 덩어리.',
+  body:`<h4>원형 찾기 = 이어적기 되돌리기</h4>
+  <p>{기픈}에서 ㅍ이 어디서 왔을까요? 앞 글자 받침에서 넘어왔어요. 다시 끌어올리면 <b>깊- + -은</b>. "기프- + -ㄴ"이 아니에요.</p>
+  <p>{ᄉᆡ미}도 마찬가지. ㅁ을 끌어올리면 <b>{ᄉᆡᆷ} + 이</b>(샘이).</p>
+  <h4>11번 표 완성</h4>
+  <div class="tw"><table><tr><th>어절</th><th>형태소</th><th>단어</th><th>이유</th></tr>
+  <tr><td>{ᄉᆡ미}</td><td>{ᄉᆡᆷ} / 이</td><td>{ᄉᆡᆷ}, 이 (2)</td><td>체언 + 조사 → 조사도 단어</td></tr>
+  <tr><td>{기픈}</td><td>깊- / -은</td><td>기픈 (1)</td><td>어간 + 어미 → 한 단어</td></tr>
+  <tr><td>{ᄀᆞᄆᆞ래}</td><td>{ᄀᆞᄆᆞᆯ} / 애</td><td>{ᄀᆞᄆᆞᆯ}, 애 (2)</td><td>체언 + 조사</td></tr>
+  <tr><td>{그츨ᄊᆡ}</td><td>긏- / {-을ᄊᆡ}</td><td>그츨ᄊᆡ (1)</td><td>-을ᄊᆡ는 쪼개지 않는 연결 어미</td></tr></table></div>
+  <p>그래서 정답은 ⑤. ④는 '-을-', '-ᄊᆡ'로 쪼개 놔서 틀렸어요.</p>
+  <h4>숫자 세기 팁</h4>
+  <p>형태소 문제는 항상 <b>①체언/어간 ②조사/어미</b>로 먼저 두 동강 낸 다음, 어미 쪽에 선어말 어미가 숨어 있는지 확인하세요(-시-, -ᄂᆞ-, -더-, -오-…).</p>`,
+  dis:[['{ᄉᆡ미}','{ᄉᆡᆷ} + 이','샘이 · 형태소 2, 단어 2'],['{기픈}','깊- + -은','깊은 · 형태소 2, 단어 1'],['{ᄀᆞᄆᆞ래}','{ᄀᆞᄆᆞᆯ} + 애','가뭄에 · 형태소 2, 단어 2'],['{그츨ᄊᆡ}','긏- + {-을ᄊᆡ}','그치므로 · 형태소 2, 단어 1']],
+  trap:'{-을ᄊᆡ}를 \'-을-\' + \'-ᄊᆡ\'로 나눈 선지 → 틀림. 그리고 \'기프-\'처럼 원형을 잘못 잡은 선지도 틀림.',
+  tip:'<b>받침 넘어간 글자 → 앞으로 끌어올리기</b>. 조사면 단어 +1.',
+  basic:[{q:'{기픈}은 \'기프-\'와 \'-ㄴ\'으로 분석된다.',a:false,why:'깊- + -은. 이어적기로 ㅍ이 넘어간 거예요.'}],
+  deep:[{q:'{그츨ᄊᆡ}는 어간 \'긏-\'과 연결 어미 \'-을ᄊᆡ\'로 이루어져 있다.',a:true,why:'11번 ⑤의 ㉣.'},
+        {q:'{ᄀᆞᄆᆞ래}는 형태소 2개, 단어 1개로 이루어져 있다.',a:false,why:'ᄀᆞᄆᆞᆯ+애, 조사도 단어라 단어 2개.'}]}
+]},
+{id:'u9',title:'단어 만들기',sub:'사동 · 명사형 -옴/-움 · 현대 사이시옷',
+ advice:'사이시옷 문제에서 "결론은 맞는데 이유가 틀린" 보기에 자주 걸려요. 네 가지 조건을 체크리스트로 하나씩 지워 가며 확인하세요.',
+ concepts:[
+ {id:'caus',title:'사동 표현',
+  bridge:'현대어 사동: "먹<b>이</b>다, 웃<b>기</b>다"(짧은 사동), "먹게 <b>하</b>다"(긴 사동). 중세에도 똑같이 두 가지가 있었어요.',
+  core:'접미사(-이- -히- -기- -오- -우- -ㅣ-)로 하는 짧은 사동, \'-게 ᄒᆞ다\'로 하는 긴 사동.',
+  body:`<div class="tw"><table><tr><th>종류</th><th>방법</th><th>예</th></tr>
+  <tr><td>짧은 사동</td><td>사동 접미사</td><td>{머기다}(먹이다), {살이다}(살리다), {ᄆᆞᆯ키다}(맑히다), {ᄒᆡ다}(ᄒᆞ+ㅣ, 시키다)</td></tr>
+  <tr><td>긴 사동</td><td>-게 ᄒᆞ다</td><td>{便安킈 ᄒᆞ고져}(편안하게 하고자), {현뎌케 홈}(드러나게 함)</td></tr></table></div>
+  <h4>훈민정음 언해의 {ᄒᆡᅇᅧ}</h4>
+  <p class="say">사ᄅᆞᆷ마다 {ᄒᆡᅇᅧ} 수ᄫᅵ 니겨 → "사람마다 <b>하여금</b> 쉽게 익혀"</p>
+  <p>ᄒᆞ- + -ㅣ-(사동 접미사) + -어 → ᄒᆡ여. "하게 하여, 시켜"라는 뜻이에요. 현대어 '하여금'의 조상이에요.</p>
+  <h4>{현뎌케}는 왜 '케'?</h4>
+  <p>현뎌ᄒᆞ- + -게 → 현뎌ᄒᆞ게 → ᄒᆞ의 ㆍ가 빠지고 ㅎ이 ㄱ과 합쳐 '케'. 현대어 '간편케, 편안케'랑 같은 줄임이에요.</p>`,
+  dis:[['{ᄒᆡᅇᅧ}','ᄒᆞ- + -ㅣ- + -어','하게 하여 · 짧은 사동'],['{현뎌케} 홈','현뎌ᄒᆞ- + -게 + ᄒᆞ- + -옴','드러나게 함 · 긴 사동']],
+  trap:'\'케\'를 보면 \'ᄒᆞ게\'의 줄임인지 먼저 의심. 그러면 긴 사동이 보여요. 9번 ④는 맞는 선지.',
+  tip:'<b>ᄒᆡ여 = 하여금</b>, <b>~케 ᄒᆞ다 = ~하게 하다</b>.',
+  basic:[{q:'{ᄒᆡᅇᅧ}와 {현뎌케 홈}은 모두 사동의 의미를 나타낸다.',a:true,why:'짧은 사동, 긴 사동. 9번 ④.'}],
+  deep:[{q:'\'便安킈 ᄒᆞ고져\'는 사동 접미사에 의한 짧은 사동이다.',a:false,why:'-게 ᄒᆞ다, 긴 사동이에요.'}]},
+ {id:'nmz',title:'명사형 어미 -옴/-움',
+  bridge:'현대어 명사형 어미 \'-(으)ㅁ, -기\' 배웠죠? "공부<b>함</b>, 쓰<b>기</b>". 중세엔 \'-ㅁ\' 대신 <b>-옴/-움</b>이었어요. 모음 조화 따라 고르고요.',
+  core:'중세 명사형 어미는 -옴/-움. 파생 접미사는 -ᄋᆞᆷ/-음. 모양으로 구별한다.',
+  body:`<div class="tw"><table><tr><th></th><th>명사형 어미 (서술성 O)</th><th>파생 접미사 (완전 명사)</th></tr>
+  <tr><td>모양</td><td><b>-옴 / -움</b></td><td>-ᄋᆞᆷ / -음</td></tr>
+  <tr><td>예</td><td>{우룸}(울기, 우는 것)</td><td>{우름}(울음, 명사)</td></tr>
+  <tr><td>예</td><td>{거로미}(걷기가)</td><td>{거름}(걸음)</td></tr></table></div>
+  <p>현대어에선 '울음'(명사)과 '욺'(명사형)이 모양이 비슷해서 헷갈리지만, 중세엔 <b>모음이 달라서</b> 바로 구별돼요.</p>
+  <h4>시험지에 나온 것</h4>
+  <ul><li>{ᄡᅮ메} = ᄡᅳ- + -움 + 에 → 쓰기에 (ㅡ는 -움 앞에서 탈락)</li>
+  <li>{비르소미오} = 비롯- + -옴 + 이- + -오 → 시작이고</li>
+  <li>{홈} = ᄒᆞ- + -옴 → 함</li></ul>`,
+  dis:[['{ᄡᅮ메}','{ᄡᅳ-} + -움 + 에','쓰기에'],['{홈}','ᄒᆞ- + -옴','함']],
+  trap:'현대어 \'-음\'과 모양이 다르다는 게 그대로 선지가 돼요. "명사형 어미 -음이 쓰였다" → 중세면 틀림.',
+  tip:'<b>옴/움 = 어미, ᄋᆞᆷ/음 = 접미사</b>. ㅗ·ㅜ 들어가면 어미.',
+  basic:[{q:'{ᄡᅮ메}에는 명사형 어미 \'-움\'이 쓰였다.',a:true,why:'ᄡᅳ-+-움+에.'}],
+  deep:[{q:'중세 국어에서 \'우룸\'과 \'우름\'은 모두 파생 명사이다.',a:false,why:'우룸(-움)은 명사형, 우름(-음)이 파생 명사.'}]},
+ {id:'sai',title:'현대 사이시옷 규정',
+  bridge:'관형격 ㅅ 강의에서 "ㅅ이 사이시옷의 조상"이라고 했죠? 8번은 그 연결고리를 현대 맞춤법(제30항)으로 묻는 문제예요. 중세 몰라도 규정만 알면 풀려요.',
+  core:'합성어 + 고유어 하나 이상 + 앞말이 모음으로 끝남 + (된소리 / ㄴ 덧남 / ㄴㄴ 덧남). 넷 다 맞아야 적는다.',
+  body:`<h4>체크리스트 4개</h4>
+  <div class="tw"><table><tr><th>조건</th><th>통과 예</th><th>탈락 예</th></tr>
+  <tr><td>① 합성어</td><td>나무+잎</td><td>해님 (해+접미사 -님 → 파생어)</td></tr>
+  <tr><td>② 고유어 하나 이상</td><td>江+가 (가는 고유어)</td><td>대가, 초점 (한자어+한자어)<br>예외 6개: <b>곳간 셋방 숫자 찻간 툇간 횟수</b></td></tr>
+  <tr><td>③ 앞말이 모음으로 끝남</td><td>바다+가 → 바닷가</td><td>물고기, 강가 (물·강이 자음 끝)</td></tr>
+  <tr><td>④ 소리 현상</td><td>햇빛[핻삗](된소리), 잇몸[인몸](ㄴ 덧남), 깻잎[깬닙](ㄴㄴ 덧남)</td><td>머리말[머리말] (아무 현상 없음)</td></tr></table></div>
+  <h4>8번 보기 하나씩</h4>
+  <ul><li><b>ㄱ 해님 — X</b>. [해님]으로 나서 'ㄴㄴ 덧남'이 없어요. 파생어인 건 맞는데 앞부분이 틀려요.</li>
+  <li><b>ㄴ 잇몸, 아랫니 — O</b>. 이+몸 [인몸], 아래+니 [아랜니]. 뒷말 첫소리 ㄴ·ㅁ 앞에서 ㄴ 덧남.</li>
+  <li><b>ㄷ 물고기 — X</b>. [물꼬기]로 된소리 나요. 사이시옷을 못 쓰는 진짜 이유는 '물'이 <b>자음으로 끝나서</b>.</li>
+  <li><b>ㄹ 강가 — X</b>. 江(한자어)+가(고유어)라 한자어 합성어가 아니에요. 진짜 이유는 역시 '강'이 자음 끝.</li>
+  <li><b>ㅁ 소고기 — O</b>. 쇼는 유정물 평칭 → 중세에 관형격 ㅅ 불가.</li></ul>
+  <p>정답 ③ ㄴ, ㅁ.</p>`,
+  dis:[['잇몸','이 + 몸','[인몸] · ㄴ 덧남'],['아랫니','아래 + 니','[아랜니] · ㄴ 덧남'],['물고기','물 + 고기','[물꼬기] · 자음 끝이라 못 씀']],
+  trap:'<b>결론은 맞고 이유가 틀린 보기</b>가 단골이에요. ㄷ, ㄹ처럼 "사이시옷 안 씀"은 맞는데 그 이유를 엉뚱하게 댄 거예요. 이유까지 따지세요.',
+  tip:'<b>합 · 고 · 모 · 소</b> — 합성어, 고유어, 모음 끝, 소리 현상.',
+  basic:[{q:'\'물고기\'는 음운론적 현상이 나타나지 않으므로 사이시옷을 표기하지 않는다.',a:false,why:'[물꼬기] 된소리가 나요. 앞말이 자음으로 끝나서 못 쓰는 거예요.'}],
+  deep:[{q:'\'강가\'는 한자어로 이루어진 합성어이므로 사이시옷이 나타나지 않는다.',a:false,why:'\'가\'는 고유어. 자음 끝이 이유.'},
+        {q:'\'잇몸\'은 앞말이 모음으로 끝나고 \'ㄴ\' 소리가 덧나므로 사이시옷을 적는다.',a:true,why:'[인몸].'},
+        {q:'\'해님\'은 \'ㄴㄴ\' 소리가 덧나지만 파생어라 사이시옷을 쓰지 않는다.',a:false,why:'해님은 [해님], 덧나는 소리가 없어요.'}]}
+]}
+];
+
+/* ═════════ 실전 기출 (시험지 그대로) ═════════
+   새 문제 추가: 아래 배열에 같은 모양으로 넣으면 됨 */
+const EXAMS=[
+{no:7,neg:1,pts:4.8,q:'(가)~(다)를 탐구한 내용으로 <em>적절하지 않은</em> 것은?',
+ pass:`<div class="pass"><div class="tg">(가)</div><div class="ot"><u>불휘</u> <u>기픈</u> 남ᄀᆞᆫ ᄇᆞᄅᆞ매 아니 뮐ᄊᆡ 곶 됴코 여름 하ᄂᆞ니<br>ᄉᆡ미 기픈 므른 ᄀᆞᄆᆞ래 아니 그츨ᄊᆡ <u>내히</u> 이러 바ᄅᆞ래 가ᄂᆞ니</div><span class="tr">뿌리가 깊은 나무는 바람에 아니 움직이므로 꽃이 좋고 열매가 많으니 / 샘이 깊은 물은 가뭄에 아니 그치므로 내가 이루어져 바다에 가느니</span><span class="src">「용비어천가」(1447)</span></div>
+ <div class="pass"><div class="tg">(나)</div><div class="ot"><u>보ᄆᆡ</u> 왯ᄂᆞᆫ 萬里옛 나그내ᄂᆞᆫ 亂이 긋거든 어느 ᄒᆡ예 도라가려뇨<br>즈믄 묏 안해 <u>ᄇᆡᄅᆞᆯ</u> 이어 ᄒᆡ 디거늘 거츤 <u>믌ᄀᆞᇫᄋᆡ</u> ᄆᆡ요라<br><u>내</u> 본ᄃᆡ ᄇᆞᄅᆞ매 브텨 ᄃᆞᆫ니노니 이제 ᄯᅩ 어듸 가 이시료<br>밤 中에 버들 ᄉᆞ랑ᄒᆞ노니 乾坤애 이 <u>ᄯᅡ히</u> <u>깁고</u> 險阻ᄒᆞ도다</div><span class="tr">봄에 와 있는 만리의 나그네는, 난이 그치면 어느 해에 돌아가려나? / 천 봉우리 산 안에 배를 띄우고, 해 지거늘 거친 물가에 매도다 / 내가 본디 바람에 불려 다니니 이제 또 어디 가 있을 것인가? / 밤중에 벗을 생각하니 하늘과 땅에 이 땅이 깊고 험하도다</span><span class="src">「두시언해」(1481)</span></div>
+ <div class="pass"><div class="tg">(다)</div><div class="ot">第十五課 <u>부엉이가</u> 비둘기의게 우슴을 보앗더라<br>비둘기가 부엉이의 移居ᄒᆞ랴ᄂᆞᆫ 貌樣을 보고 어ᄃᆡ 갈 터이뇨 무르니 부엉이 對答ᄒᆞ야 갈오ᄃᆡ 이 地方 사ᄅᆞᆷ은 내 우름 <u>쇼리를</u> 미워ᄒᆞᄂᆞᆫ 故로 나ᄂᆞᆫ 다른 地方으로 올무랴 ᄒᆞ노라 ᄒᆞ니 …</div><span class="src">「신정심상소학」(1896)</span></div>`,
+ ch:['(가)의 \'{내히}\'와 (나)의 \'{ᄯᅡ히}\'를 비교해 보면, \'ㅎ\' 종성 체언이 중세 국어에서 나타났음을 알 수 있다.','(가)의 \'{기픈}\'과 (나)의 \'{깁고}\'를 비교해 보면, 중세 국어에서는 어간 종성의 \'ㅍ\'이 자음으로 시작하는 어미 앞에서 \'ㅂ\'으로 표기되었음을 알 수 있다.','(나)의 \'{보ᄆᆡ}\'와 \'{믌ᄀᆞᇫᄋᆡ}\'를 비교해 보면, 현대 국어와 달리 중세 국어에서 부사격 조사 \'ᄋᆡ\'가 쓰였음을 알 수 있다.','(나)의 \'{ᄇᆡᄅᆞᆯ}\'과 (다)의 \'{쇼리를}\'을 비교해 보면, 중세 국어에서 비교적 잘 지켜지던 모음 조화가 근대 국어에서 점차 파괴되었음을 알 수 있다.','(가)의 \'{불휘}\', (나)의 \'{내}\'에 나타난 중세 국어의 주격 조사 \'ㅣ\'는 (다)의 \'{부엉이가}\'에 나타난 주격 조사 \'가\'의 형태로 점차 바뀌었음을 알 수 있다.'],
+ ans:5,
+ ex:['내ㅎ+이, ᄯᅡㅎ+이. ㅎ 종성 체언 맞아요.','깁고(자음 앞 ㅂ) vs 기픈(모음 앞 ㅍ). 8종성법 맞아요.','봄에, 물가에 → 특이 처격 ᄋᆡ. 맞아요.','양성끼리(ᄇᆡᄅᆞᆯ) → 양성 뒤 음성(쇼리를). 맞아요.','두 군데가 틀려요. ① {불휘}는 ㅟ로 끝나서 주격이 ∅예요. \'ㅣ\'가 아니에요. ② \'ㅣ\'가 \'가\'로 바뀐 게 아니라 \'가\'가 새로 생긴 거예요.'],
+ links:['hnoun','jong8','adv','vh','nom']},
+{no:8,pts:4,q:'다음을 읽고 추론한 내용으로 적절한 것만을 &lt;보기>에서 있는 대로 고른 것은?',
+ pass:`<div class="pass"><div class="ot" style="font-family:inherit;line-height:1.85;font-size:.97rem">사이시옷은 역사적으로 중세 국어의 관형격 조사와 관련이 있다. 중세 국어에서 관형격 조사는 대체로 선행하는 체언이 유정물일 경우 \'ᄋᆡ/의/ㅣ\'가 사용되었고, 무정물이거나 유정물이어도 존칭일 경우 \'ㅅ\'이 사용되었다. 가령 \'빗믈←비+ㅅ+믈\'과 \'믌고기←믈+ㅅ+고기\'는 앞의 명사 어근이 뒤의 명사 어근을 수식하거나 한정하는 방식으로 결합한 합성어여서 관형격 조사 \'ㅅ\'이 나타났다. 현대 국어에서는 관형격 조사로 \'의\'만 사용되며, \'ㅅ\'은 관형격 조사의 지위를 상실하고 주로 합성 명사에 흔적만을 남기고 있다.<br><br>그런데 현대 국어에서는 \'빗물\'처럼 \'ㅅ\'이 표기상 나타나는 경우도 있고, \'물고기\'처럼 \'ㅅ\'이 표기상 나타나지 않는 경우도 있다. 한글 맞춤법에서는 순우리말이 포함된 합성어로서 앞말이 모음으로 끝난 경우 \'햇빛[해삗/핻삗]\'처럼 뒷말의 첫소리가 된소리로 나거나, \'빗물[빈물]\'처럼 뒷말의 첫소리 \'ㄴ, ㅁ\' 앞에서 \'ㄴ\' 소리가 덧나거나, \'댓잎[댄닙]\'처럼 뒷말의 첫소리 모음 앞에서 \'ㄴㄴ\' 소리가 덧나는 단어에는 사이시옷을 받치어 적도록 규정하였다. 따라서 \'물고기\'처럼 역사적으로 관형격 조사 \'ㅅ\'이 있었던 말이라고 하더라도 앞말이 자음으로 끝나는 경우는 사이시옷을 받치어 적을 수 없다. 또 합성어가 아닌 경우나 앞에서 제시된 음운론적 현상들이 나타나지 않는 경우에도 사이시옷이 나타나지 않는다.</div></div>
+ <div class="pass"><div class="tg">&lt;보기&gt;</div><div class="ot" style="font-family:inherit;line-height:1.85;font-size:.97rem">ㄱ. 현대 국어의 \'해님\'은 \'ㄴㄴ\'소리가 덧나는 현상이 나타나지만 어근에 접미사가 결합한 파생어이므로 사이시옷을 표기하지 않는다.<br>ㄴ. 현대 국어의 \'잇몸\'과 \'아랫니\'는 앞말이 모음으로 끝나고 \'ㄴ\' 소리가 덧나는 현상이 나타나는 단어이므로 사이시옷을 표기하고 있다.<br>ㄷ. 현대 국어의 \'물고기\'는 역사적으로 관형격 조사 \'ㅅ\'이 있는 말이지만 윗글에서 제시된 음운론적 현상이 나타나지 않으므로 사이시옷을 표기하지 않는다.<br>ㄹ. 현대 국어에서 \'강가에 나가 고기를 잡았다\'의 \'강가\'는 뒷말의 첫소리가 된소리로 나고 있지만 한자어로 이루어진 합성어이므로 사이시옷이 나타나지 않는다.<br>ㅁ. 현대 국어에서 \'소고기\'의 뒷말의 첫소리가 된소리로 나지 않는 이유는 중세 국어 시기 때 단어 형성 과정에서 관형격 조사 \'ㅅ\'이 나타날 수 없었기 때문이다.</div></div>`,
+ ch:['ㄱ, ㄷ','ㄱ, ㄹ','ㄴ, ㅁ','ㄴ, ㄷ, ㄹ','ㄴ, ㄹ, ㅁ'],
+ ans:3,
+ ex:['ㄱ은 틀려요. 해님은 [해님], ㄴㄴ 덧남이 없어요.','ㄱ, ㄹ 둘 다 틀려요.','ㄴ(잇몸·아랫니 ㄴ 덧남) O, ㅁ(쇼는 유정물 평칭 → ㅅ 불가) O. 정답.','ㄷ은 [물꼬기] 된소리가 나니 "현상이 없다"가 틀림. ㄹ은 \'가\'가 고유어라 틀림.','ㄹ이 틀려요. 강가는 江+가(고유어), 못 쓰는 이유는 자음 끝.'],
+ links:['sai','gen']},
+{no:9,neg:1,pts:4.4,q:'밑줄 친 부분에 대한 설명으로 <em>적절하지 않은</em> 것은?',
+ pass:`<div class="pass"><div class="tg">(가)</div><div class="ot">나랏 말ᄊᆞ미 中國에 달아 文字와로 서르 <u>ᄉᆞᄆᆞᆺ디</u> 아니ᄒᆞᆯᄊᆡ 이런 젼ᄎᆞ로 어린 百姓이 니르고져 홇 <u>배</u> 이셔도 ᄆᆞᄎᆞᆷ내 <u>제</u> ᄠᅳ들 시러 펴디 몯ᄒᆞᇙ 노미 <u>하니라</u> 내 이ᄅᆞᆯ 爲ᄒᆞ야 어엿비 너겨 새로 스믈여듧 字ᄅᆞᆯ ᄆᆡᇰᄀᆞ노니 사ᄅᆞᆷ마다 <u>ᄒᆡᅇᅧ</u> 수ᄫᅵ 니겨 날로 <u>ᄡᅮ메</u> 便安킈 ᄒᆞ고져 ᄒᆞᇙ ᄯᆞᄅᆞ미니라</div><span class="src">「훈민정음 언해본」(1459) · 방점 생략</span></div>
+ <div class="pass"><div class="tg">(나)</div><div class="ot"><u>孔子ㅣ</u> 曾子ᄃᆞ려 닐러 ᄀᆞᆯᄋᆞ샤ᄃᆡ 몸이며 얼굴이며 머리털이며 ᄉᆞᆯ흔 父母ᄭᅴ 받ᄌᆞ온 거시라 敢히 헐워 상히오디 아니홈이 효도의 <u>비르소미오</u> 몸을 셰워 道ᄅᆞᆯ 行ᄒᆞ야 일홈을 後世예 베퍼 <u>ᄡᅥ</u> 父母를 <u>현뎌케 홈</u>이 효도의 ᄆᆞᄎᆞᆷ이니라 / 유익ᄒᆞᆫ 이 세 가짓 <u>벋</u>이오 해로온 이 세 가짓 벋이니 …</div><span class="src">「소학언해」(1587) · 방점 생략</span></div>
+ <div class="tw"><table><tr><th></th><th>(가)</th><th>(나)</th><th>내용 설명</th></tr>
+ <tr><td>①</td><td class="mk">ᄉᆞᄆᆞᆺ디</td><td class="mk">벋</td><td>모두 8종성법의 받침 표기법이 사용되었다.</td></tr>
+ <tr><td>②</td><td class="mk">배, 제</td><td class="mk">孔子ㅣ</td><td>모두 주격 조사 \'ㅣ\'가 사용되었다.</td></tr>
+ <tr><td>③</td><td class="mk">하니라</td><td class="mk">비르소미오</td><td>(가)의 \'-니라\'는 종결형 어미가, (나)의 \'-이오\'는 연결형 어미가 사용되었다.</td></tr>
+ <tr><td>④</td><td class="mk">ᄒᆡᅇᅧ</td><td class="mk">현뎌케 홈</td><td>모두 사동의 의미를 표현한다.</td></tr>
+ <tr><td>⑤</td><td class="mk">ᄡᅮ메</td><td class="mk">ᄡᅥ</td><td>모두 어두에 두 개의 자음이 사용되었다.</td></tr></table></div>`,
+ ch:['①','②','③','④','⑤'],
+ ans:2,
+ ex:['ᄉᆞᄆᆞᆾ-의 ㅊ이 ㅅ으로, 벋은 ㄷ 받침. 둘 다 8종성 안에 있어요.','\'배\'(바+ㅣ)와 \'孔子ㅣ\'는 주격이 맞아요. 그런데 \'<b>제</b> ᄠᅳ들\'의 \'제\'는 뒤에 명사 ᄠᅳᆮ이 오는 <b>관형격</b>(저의 뜻을)이에요. 그래서 "모두 주격"이 틀려요. 정답.','-니라 종결, -이오의 \'-오\'는 -고의 ㄱ 탈락 연결 어미. 맞아요.','ᄒᆞ+ㅣ(사동 접미사)+어, 현뎌ᄒᆞ게 ᄒᆞ다(긴 사동). 맞아요.','둘 다 ㅄ(ㅂ+ㅅ). 맞아요.'],
+ links:['jong8','pron','ending','caus','eodu']},
+{no:11,pts:4,q:'&lt;보기>는 윗글의 [ ]를 형태소와 단어로 구분한 것이다. ㉠~㉣에 들어갈 내용으로 적절한 것은?',
+ pass:`<div class="pass"><div class="ot">불휘 기픈 남ᄀᆞᆫ ᄇᆞᄅᆞ매 아니 뮐ᄊᆡ 곶 됴코 여름 하ᄂᆞ니<br><span class="bx">ᄉᆡ미 기픈 므른 ᄀᆞᄆᆞ래 아니 그츨ᄊᆡ</span> 내히 이러 바ᄅᆞ래 가ᄂᆞ니</div><span class="src">「용비어천가」 제2장</span></div>
+ <div class="tw"><table><tr><th></th><th>형태소</th><th>단어</th></tr><tr><td class="mk">ᄉᆡ미</td><td>(생략)</td><td>㉠</td></tr><tr><td class="mk">기픈</td><td>㉡</td><td>(생략)</td></tr><tr><td class="mk">ᄀᆞᄆᆞ래</td><td>(생략)</td><td>㉢</td></tr><tr><td class="mk">그츨ᄊᆡ</td><td>㉣</td><td>(생략)</td></tr></table></div>`,
+ ch:['㉠ ᄉᆡ미 / ㉡ 깊-, -은 / ㉢ ᄀᆞᄆᆞᆯ, -애 / ㉣ 긏-, -을-, -ᄊᆡ','㉠ ᄉᆡ미 / ㉡ 기프-, -ㄴ / ㉢ ᄀᆞᄆᆞ, -래 / ㉣ 긏-, -을ᄊᆡ','㉠ ᄉᆡᆷ, 이 / ㉡ 기프-, -ㄴ / ㉢ ᄀᆞᄆᆞ, -래 / ㉣ 긏-, -을-, -ᄊᆡ','㉠ ᄉᆡᆷ, 이 / ㉡ 깊-, -은 / ㉢ ᄀᆞᄆᆞᆯ, -애 / ㉣ 긏-, -을-, -ᄊᆡ','㉠ ᄉᆡᆷ, 이 / ㉡ 깊-, -은 / ㉢ ᄀᆞᄆᆞᆯ, -애 / ㉣ 긏-, -을ᄊᆡ'],
+ ans:5,
+ ex:['㉠: 조사 \'이\'도 단어라 둘로 나눠야 해요. ㉣도 틀림.','㉠ 안 나눔, ㉡ 원형 잘못(기프-), ㉢ ᄀᆞᄆᆞᆯ을 잘못 끊음.','㉡ ㉢ ㉣ 다 틀림.','㉣에서 -을ᄊᆡ를 쪼갰어요. -을ᄊᆡ는 연결 어미 하나.','ᄉᆡᆷ+이(단어 2), 깊-+-은, ᄀᆞᄆᆞᆯ+애(단어 2), 긏-+-을ᄊᆡ. 정답.'],
+ links:['morph','yeon']},
+{no:12,pts:3.6,q:'㉠~㉤에 대한 설명으로 적절한 것은?',
+ pass:`<div class="pass"><div class="ot">ᄒᆞᆫ 菩薩이 <u>㉠王</u> ᄃᆞ외야 겨샤 나라ᄒᆞᆯ 아ᅀᆞ <u>㉡맛디시고</u> 道理 ᄇᆡ호라 나아가샤 瞿曇婆羅門ᄋᆞᆯ 맛나샤 <u>㉢ᄌᆞ갓</u> <u>㉣오ᄉᆞ란</u> 밧고 瞿曇ᄋᆡ 오ᄉᆞᆯ 니브샤 深山애 드러 果實와 <u>㉤믈와</u> 좌시고</div><span class="tr">한 보살이 왕 되어 계시어 나라를 아우에게 맡기시고 도리 배우러 나아가시어 구담바라문을 만나셔서 당신의 옷은 벗고 구담의 옷을 입으시어 깊은 산에 들어 과일과 물을 자시고</span><span class="src">「월인석보」 권1</span></div>`,
+ ch:['㉠: 격 조사가 생략되어 \'ᄃᆞ외야\'의 주어로 쓰이고 있다.','㉡: 주어 외에 목적어를 필요로 하는 두 자리 서술어이다.','㉢: \'구담바라문\'을 가리키는 재귀 대명사이다.','㉣: 보조사가 붙어 \'밧다\'의 목적어로 쓰이고 있다.','㉤: 목적격 조사를 사용하여 문장의 목적어로 쓰이고 있다.'],
+ ans:4,
+ ex:['주어는 菩薩이. 王은 \'되다\' 앞의 보어예요.','아ᅀᆞ(아우에게)라는 부사어도 필요한 세 자리 서술어.','옷을 벗는 주어, 보살을 가리켜요.','옷 + 보조사 ᄋᆞ란 → 옷은 벗고. 목적어. 정답.','\'와\'는 접속 조사. 목적격 조사는 생략됐어요.'],
+ links:['comp','comp','pron','etc','etc']},
+{no:13,pts:4.8,q:'&lt;보기>의 ㉠과 ㉡에 들어갈 말로 바르게 짝지어진 것은?',
+ pass:`<div class="pass"><div class="ot" style="font-family:inherit;line-height:1.85;font-size:.97rem">중세 국어에서는 객체를 높이기 위해 선어말 어미를 사용했는데, 이 선어말 어미는 음운 조건에 따라 다음과 같이 다양한 형태로 실현되었다.</div>
+ <div class="tw" style="margin-top:12px"><table><tr><th>어간 말음 조건</th><th>형태</th><th>용례</th></tr><tr><td>ㄱ, ㅂ, ㅅ, ㅎ일 때</td><td class="mk">-ᄉᆞᆸ-</td><td class="mk">돕ᄉᆞᆸ고</td></tr><tr><td>ㄷ, ㅈ, ㅊ일 때</td><td class="mk">-ᄌᆞᆸ-</td><td class="mk">묻ᄌᆞᆸ고</td></tr><tr><td>모음이나 ㄴ, ㅁ, ㄹ일 때</td><td class="mk">-ᅀᆞᆸ-</td><td class="mk">보ᅀᆞᆸ고</td></tr></table></div>
+ <div class="ot" style="font-family:inherit;line-height:1.85;font-size:.97rem">객체 높임 선어말 어미 뒤에 모음으로 시작하는 어미가 오면, 객체 높임 선어말 어미는 \'-ᄉᆞᄫᆞ-, -ᄌᆞᄫᆞ-, -ᅀᆞᄫᆞ-\'로 실현되었다.<br><br>• 아래 문장에서 객체 높임의 대상은 ( ㉠ )이다.<br>— 大臣이 이 藥 ᄆᆡᇰᄀᆞ라 大王ᄭᅴ <span class="mk">받ᄌᆞᄫᆞᆫ대</span> [대신이 이 약을 만들어 대왕께 바치어]<br>• 어간 \'듣-\'과 어미 \'-ᄋᆞ며\' 사이에 객체 높임 선어말 어미가 결합하면 다음과 같이 활용했다.<br>— 내 아래브터 부텻긔 이런 마ᄅᆞᆯ 몯 ( ㉡ ) [내가 예전부터 부처께 이런 말을 못 들으며]</div></div>`,
+ ch:['㉠ 大王 / ㉡ {듣ᄌᆞᄫᆞ며}','㉠ 大王 / ㉡ {듣ᄉᆞᄫᆞ며}','㉠ 大王 / ㉡ {듣ᅀᆞᄫᆞ며}','㉠ 大臣 / ㉡ {듣ᅀᆞᄫᆞ며}','㉠ 大臣 / ㉡ {듣ᄌᆞᄫᆞ며}'],
+ ans:1,
+ ex:['약을 받는 大王이 객체. 듣-은 ㄷ이라 ᄌ 계열, 모음 어미 앞이라 ㅸ → 듣ᄌᆞᄫᆞ며. 정답.','ㄷ 뒤는 ᄌ 계열이에요. ᄉ 계열은 ㄱㅂㅅㅎ 뒤.','ᅀ 계열은 모음·ㄴㅁㄹ 뒤.','大臣은 주어. 객체 높임 대상이 아니에요.','大臣은 주어예요.'],
+ links:['obj']},
+{no:14,pts:4.4,q:'(가)와 (나)에 대한 자료 탐구 내용으로 적절한 것은?',
+ pass:`<div class="pass"><div class="tg">(가)</div><div class="ot"><u>자내</u>여히고아므려내살셰업ᄉᆞ니수이자내ᄒᆞᆫ<u>듸</u>가고져ᄒᆞ니날ᄃᆞ려가소자내향ᄒᆡ<u>ᄆᆞᄋᆞᄆᆞᆯ</u>ᄎᆞᆺ싱니ᄌᆞᆯ주리업ᄉᆞ니</div><span class="tr">자네 여의고 아무래도 내 살 수가 없으니 빨리 자네한테 가고자 하니 날 데려가소. 자네 향한 마음을 이승에서 잊을 줄이 없으니.</span><span class="src">\'아내가 남편에게 쓴 한글 편지\'(1586)</span></div>
+ <div class="pass"><div class="tg">(나)</div><div class="ot">… 如舊히 ᄯᅩ 미워ᄒᆞᆷ을 免치 못ᄒᆞ리라 ᄒᆞ얏소 이 니야기는 ᄎᆞᆷ 滋味<u>잇ᄉᆞᆸᄂᆞ이다</u> 여러분 즁에도 自家의 악ᄒᆞᆫ 일은 곳치지 안코 다른 <u>듸</u>로만 가랴고 ᄒᆞᄂᆞ니 <u>잇스면</u> 이는 亦是 이 비둘기의게 우슴을 보오리다</div><span class="src">「신정심상소학」(1896)</span></div>`,
+ ch:['(가)와 (나)를 통해 16세기와 19세기에는 모두 \'ㆍ\'를 계속 사용하였고, 단어나 문장 간에 띄어쓰기를 사용했다는 것을 알 수 있군.','(가)와 (나)의 \'듸\'는 모두 의존 명사로, 각각 앞말의 수식을 받고 있군.','(가)의 \'{ᄆᆞᄋᆞᄆᆞᆯ}\', (나)의 \'{잇스면}\'을 통해 볼 때 16세기와 19세기 모두 연철 표기를 사용하고 있군.','(가)의 \'{자내}\'는 의미상 주격 조사 \'ㅣ\'가 생략되었다는 것을 알 수 있군.','(나)의 \'{잇ᄉᆞᆸᄂᆞ이다}\'를 통해 청자를 높이는 상대 높임법을 사용하고 있군.'],
+ ans:5,
+ ex:['16세기 편지는 띄어쓰기가 없어요.','(가)는 \'자네한테\'의 \'한테\' 쪽, (나)만 \'데(곳)\' 의존 명사.','{잇스면}은 거듭적기(중철). 연철 아님.','\'자네를 여의고\' → 목적어. 목적격 조사 생략.','-이-로 청자(독자)를 높여요. 정답.'],
+ links:['space','adv','yeon','comp','rel']}
+];
+
+
+/* ═════════ 평가원·교육청 기출 (152~171) ═════════ */
+const P=(tg,ot,tr,src)=>`<div class="pass">${tg?`<div class="tg">${tg}</div>`:''}<div class="ot">${ot}</div>${tr?`<span class="tr">${tr}</span>`:''}${src?`<span class="src">${src}</span>`:''}</div>`;
+const PT=(html)=>`<div class="pass"><div class="ot" style="font-family:inherit;line-height:1.85;font-size:.97rem">${html}</div></div>`;
+const HUN=(u)=>`나랏 ${u[0]} 中國에 달아 文字와로 서르 ᄉᆞᄆᆞᆺ디 아니ᄒᆞᆯᄊᆡ 이런 젼ᄎᆞ로 ${u[1]} 百姓이 니르고져 홇 배 이셔도 ${u[2]} 제 ᄠᅳ들 시러 펴디 몯ᄒᆞᇙ ${u[3]} ${u[4]} 내 이ᄅᆞᆯ 爲ᄒᆞ야 ${u[5]} 너겨 새로 스믈여듧 字ᄅᆞᆯ ${u[6]} 사ᄅᆞᆷ마다 ᄒᆡᅇᅧ ${u[7]} 니겨 날로 ᄡᅮ메 便安킈 ᄒᆞ고져 홇 ${u[8]}`;
+const NEW_EX=[
+{no:152,src:'2014 예비평가',pos:1,q:'&lt;보기>를 읽고, 중세 국어와 현대 국어의 의미 변화를 탐구한 내용으로 <em>적절한</em> 것은?',
+ pass:P('&lt;보기>',HUN(['<u>㉠말ᄊᆞ미</u>','<u>㉡어린</u>','ᄆᆞᄎᆞᆷ내','<u>㉢노미</u>','<u>㉣하니라</u>','<u>㉤어엿비</u>','ᄆᆡᇰᄀᆞ노니','수ᄫᅵ','ᄯᆞᄅᆞ미니라']),'우리나라의 말이 중국과 달라 문자와 서로 통하지 아니하여서 이런 까닭으로 어리석은 백성이 말하고자 하는 바가 있어도 마침내 제 뜻을 능히 펴지 못하는 사람이 많다. 내가 이것을 위하여 가엾게 여겨 새로 스물여덟 자를 만드니, 모든 사람들로 하여금 쉽게 익혀 날마다 쓰는 데 편하게 하고자 할 따름이다.','「훈민정음」 언해, 세조 5년(1459)'),
+ ch:['㉠의 ‘말ᄊᆞᆷ’은 ‘말’을 뜻하였는데, 현대 국어의 ‘말씀’은 남의 말을 높여 이르거나 자기 말을 낮추어 이르는 말을 뜻하니까 의미 확대의 예야.','㉡의 ‘어리다’는 ‘어리석다’를 뜻하였는데, 현대 국어의 ‘어리다’는 ‘나이가 적다’를 뜻하니까 의미 축소의 예야.','㉢의 ‘놈’은 ‘사람’을 뜻하였는데, 현대 국어의 ‘놈’은 남자를 낮잡는 의미로 쓰이니까 의미 확대의 예야.','㉣의 ‘하다’는 ‘많다’를 뜻하였는데, 현대 국어의 ‘하다’는 ‘사람이나 동물, 물체 따위가 행동이나 작용을 이루다’란 뜻이니까 의미 축소의 예야.','㉤의 ‘어엿브다’는 ‘가엾다’를 뜻하였는데, 현대 국어의 ‘예쁘다’는 ‘모양이 작거나 섬세하여 눈으로 보기에 좋다’란 뜻이니까 의미 이동의 예야.'],
+ ans:5,ex:['말 일반 → 높이거나 낮추는 말로 좁아졌으니 의미 <b>축소</b>예요.','어리석다 → 나이가 적다, 뜻 자체가 바뀐 의미 <b>이동</b>이에요.','사람 일반 → 남자를 낮잡는 말로 좁아졌으니 <b>축소</b>예요.','‘많다’ 뜻의 하다는 사라진 말이고, 지금의 하다는 ᄒᆞ다에서 온 다른 단어예요. 축소의 예가 될 수 없어요.','가엾다 → 예쁘다, 다른 뜻으로 옮겨 간 의미 이동. 정답.'],
+ links:['sem','sem','sem','sem','sem']},
+{no:153,src:'2014 6월 평가원',q:'&lt;보기>의 ㉠과 ㉡에 속하는 사례를 바르게 제시한 것은?',
+ pass:PT('모음 ‘ㆍ’는 중세 국어 이후 크게 두 단계의 변화를 겪었다. 제1 단계 변화에서는 <u>㉠단어의 둘째 음절 이하에 놓인 모음 ‘ㆍ’가 ‘ㅡ’로 변화하였다.</u> 이 변화가 일어나고 난 뒤 제2 단계 변화에서는 <u>㉡첫째 음절에 놓인 모음 ‘ㆍ’가 ‘ㅏ’로 변화하였다.</u> 단어에 따라 이러한 변화에 예외가 보이기도 하지만 대체로 이 두 단계의 변화를 겪어 ‘ㆍ’는 모음 체계에서 사라지게 되었다.'),
+ ch:['㉠ {마ᄂᆞᆯ} > 마늘 / ㉡ {ᄒᆞᆰ} > 흙','㉠ {사ᄉᆞᆷ} > 사슴 / ㉡ {ᄀᆞ장} > 가장','㉠ {ᄒᆞ나} > 하나 / ㉡ {오ᄂᆞᆯ} > 오늘','㉠ {사ᄅᆞᆷ} > 사람 / ㉡ {ᄃᆞ리} > 다리','㉠ {아ᄃᆞᆯ} > 아들 / ㉡ {다ᄉᆞᆺ} > 다섯'],
+ ans:2,ex:['ᄒᆞᆰ > 흙은 첫음절 ㆍ가 ㅡ로 바뀐 예외라 ㉡이 아니에요.','사ᄉᆞᆷ > 사슴(둘째 음절 ㆍ → ㅡ), ᄀᆞ장 > 가장(첫음절 ㆍ → ㅏ). 정답.','ᄒᆞ나는 첫음절 변화(㉡), 오ᄂᆞᆯ은 둘째 음절 변화(㉠). 자리가 거꾸로예요.','사ᄅᆞᆷ > 사람은 둘째 음절인데 ㅏ가 된 예외라 ㉠이 아니에요.','다ᄉᆞᆺ > 다섯은 둘째 음절 ㆍ가 ㅓ로 바뀐 거라 ㉡이 아니에요.'],
+ links:['lost','lost','lost','lost','lost']},
+{no:154,src:'2014 9월 평가원',q:'&lt;보기 1>의 (가), (나)에 따른 표기의 사례를 &lt;보기 2>의 ㉠~㉣에서 찾아 바르게 짝지은 것은?',
+ pass:P('&lt;보기 1>','(가) ㅇ를 입시울쏘리 아래 니ᅀᅥ 쓰면 입시울 가ᄇᆡ야ᄫᆞᆫ 소리 ᄃᆞ외ᄂᆞ니라<br>(나) 첫소리ᄅᆞᆯ 어울워 ᄡᅳᇙ디면 ᄀᆞᆯᄫᅡ 쓰라','(가) ㅇ를 순음 아래 이어 쓰면 순경음이 된다. (나) 초성 글자를 합하여 사용할 때에는 나란히 써라.')+P('&lt;보기 2>',HUN(['말ᄊᆞ미','어린','<u>㉠ᄆᆞᄎᆞᆷ내</u>','노미','하니라','어엿비','<u>㉡ᄆᆡᇰᄀᆞ노니</u>','<u>㉢수ᄫᅵ</u>','<u>㉣ᄯᆞᄅᆞ미니라</u>'])),
+ ch:['(가) ㉠ / (나) ㉡','(가) ㉠ / (나) ㉢','(가) ㉡ / (나) ㉣','(가) ㉢ / (나) ㉡','(가) ㉢ / (나) ㉣'],
+ ans:5,ex:['㉠ ᄆᆞᄎᆞᆷ내에는 순경음이 없어요.','㉠에 순경음이 없고, ㉢은 (가) 쪽이에요.','㉡의 ㆁ은 순경음이 아니에요.','(가)는 맞지만 ㉡의 ㆁ은 병서가 아니라 이체자예요.','㉢ 수ᄫᅵ의 ㅸ(연서), ㉣ ᄯᆞᄅᆞ미니라의 ㅼ(병서). 정답.'],
+ links:['cho','cho','cho','cho','cho']},
+{no:155,src:'2014 수능',neg:1,q:'&lt;보기>의 (가)를 바탕으로 (나)를 이해한 것으로 <em>적절하지 않은</em> 것은?',
+ pass:PT('(가) 15세기 국어의 음운과 표기의 특징<br>㉠ 자음 ‘ㅿ’과 ‘ㅸ’이 존재하였다.<br>㉡ 초성에 오는 ‘ㅳ’은 ‘ㅂ’과 ‘ㄷ’이, ‘ㅄ’은 ‘ㅂ’과 ‘ㅅ’이 모두 발음되었다.<br>㉢ 종성에서 ‘ㄷ’과 ‘ㅅ’이 다르게 발음되었다.<br>㉣ 평성, 거성, 상성의 성조를 방점으로 구분하였다.<br>㉤ 연철 표기(이어적기)를 하였다.')+P('(나)',HUN(['말ᄊᆞ미','어린','ᄆᆞᄎᆞᆷ내','노미','하니라','<b>:어엿·비</b>','ᄆᆡᇰᄀᆞ노니','<b>:수ᄫᅵ</b>','ᄯᆞᄅᆞ미니라']).replace('제 ᄠᅳ들','제 <b>·ᄠᅳ·들</b>').replace('ᄒᆡᅇᅧ','<b>:ᄒᆡ·ᅇᅧ</b>').replace('ᄡᅮ메','<b>·ᄡᅮ·메</b>'),'','방점은 굵은 단어에만 표시'),
+ ch:['㉠을 보니, ‘{:수ᄫᅵ}’에는 오늘날에는 없는 자음이 들어 있군.','㉡을 보니, ‘{·ᄠᅳ·들}’의 ‘ㅳ’에서는 두 개의 자음이 발음되었군.','㉢을 보니, ‘{:어엿·비}’에서 둘째 음절의 종성은 ‘ㄷ’으로 발음되었군.','㉣을 보니, ‘{:ᄒᆡ·ᅇᅧ}’의 첫 음절과 둘째 음절은 성조가 달랐군.','㉤을 보니, ‘{·ᄡᅮ·메}’에는 연철 표기가 적용되었군.'],
+ ans:3,ex:['ㅸ은 지금 없는 자음. 맞아요.','ㅳ은 ㅂ, ㄷ 둘 다 소리 났어요. 맞아요.','받침이 ㅅ으로 적혀 있고, 그때는 ㄷ과 ㅅ이 받침에서 다르게 소리 났으니 <b>ㅅ</b>으로 발음된 거예요. 정답.',':ᄒᆡ(상성, 점 둘)와 ·ᅇᅧ(거성, 점 하나), 성조가 달라요. 맞아요.','ᄡᅳ- + -움 + 에가 이어 적혔어요. 맞아요.'],
+ links:['lost','eodu','jong8','bangjeom','yeon']},
+{no:156,src:'2015 6월 평가원',q:'&lt;보기 1>을 참고하여 &lt;보기 2>의 ㉠과 ㉡에 알맞은 것을 고른 것은?',
+ pass:PT('현대 국어의 관형격 조사는 ‘의’만 있지만, 중세 국어의 관형격 조사는 ‘ᄋᆡ, 의, ㅅ, ㅣ’가 있었다. 이 중 ‘ᄋᆡ, 의, ㅅ’은 결합하는 명사의 특징에 따라 구분되어 사용되었다.')+`<div class="tw"><table><tr><th>명사의 의미 특징</th><th>끝 음절 모음</th><th>관형격 조사</th></tr><tr><td>사람이나 동물</td><td>양성 모음</td><td class="mk">ᄋᆡ</td></tr><tr><td>사람이나 동물</td><td>음성 모음</td><td class="mk">의</td></tr><tr><td>사람이면서 높임의 대상</td><td>양성/음성</td><td class="mk">ㅅ</td></tr><tr><td>사람도 동물도 아님</td><td>양성/음성</td><td class="mk">ㅅ</td></tr></table></div>`+P('예','ᄂᆞᆷ+ᄋᆡ : <u>ᄂᆞᄆᆡ</u> ᄠᅳ들 거스디 아니ᄒᆞ거든<br>거붑+의 : <u>거부븨</u> 터리 ᄀᆞᆮ고<br>大王+ㅅ : <u>大王ㅅ</u> 말ᄊᆞ미ᅀᅡ 올커신마ᄅᆞᆫ<br>나모+ㅅ : <u>나못</u> 여름 먹ᄂᆞ니','남의 뜻 거스르지 아니하거든 / 거북의 털과 같고 / 대왕의 말씀이야 옳으시지만 / 나무의 열매 먹으니')+P('&lt;보기 2>','父母ㅣ <span class="bx">아ᄃᆞᆯ+㉠</span> 마ᄅᆞᆯ 드르샤<br>다ᄉᆞᆺ <span class="bx">술위+㉡</span> 글워ᄅᆞᆯ 닐굴 디니라','부모가 아들의 말을 들으시어 / 다섯 수레의 글을 읽어야 할 것이다'),
+ ch:['㉠ {ᄋᆡ} / ㉡ ㅅ','㉠ ㅅ / ㉡ {ᄋᆡ}','㉠ 의 / ㉡ ㅅ','㉠ ㅅ / ㉡ 의','㉠ {ᄋᆡ} / ㉡ 의'],
+ ans:1,ex:['아ᄃᆞᆯ: 사람, 높임 아님, 양성(ㆍ) → ᄋᆡ. 술위(수레): 사물 → ㅅ. 정답.','아ᄃᆞᆯ은 높임 대상이 아니라 ㅅ이 못 와요.','아ᄃᆞᆯ은 양성이라 의가 아니라 ᄋᆡ.','둘 다 틀려요.','술위는 사물이라 ㅅ.'],
+ links:['gen','gen','gen','gen','gen']},
+{no:157,src:'2015 9월 평가원',neg:1,q:'&lt;보기>의 중세 국어 자료에 나타나는 특징을 탐구한 내용으로 <em>적절하지 않은</em> 것은?',
+ pass:P('&lt;보기>','뒤헤는 <u>모딘</u> 도ᄌᆞᆨ 알ᄑᆡᆫ 어드ᄫᅳᆫ 길헤 <u>업던</u> 번게를 <u>하ᄂᆞᆯ히</u> ᄇᆞᆯ기시니<br>뒤헤는 모딘 즁ᄉᆡᇰ 알ᄑᆡᆫ 기픈 <u>모새</u> <u>열ᄫᅳᆫ</u> 어르믈 하ᄂᆞᆯ히 구티시니','뒤에는 모진 도적 앞에는 어두운 길에 없던 번개를 하늘이 밝히시니 / 뒤에는 모진 짐승 앞에는 깊은 못에 엷은 얼음을 하늘이 굳히시니','「용비어천가」'),
+ ch:['‘모딘’이 현대 국어의 ‘모진’에 대응하는 것을 보니 구개음화 현상이 나타나지 않았군.','‘업던’이 현대 국어의 ‘없던’에 대응하는 것을 보니 이어 적기를 하였군.','‘{하ᄂᆞᆯ히}’를 보니 현대 국어에 쓰이지 않는 모음 ‘ㆍ’가 쓰였군.','‘모새’가 현대 국어의 ‘못에’에 대응하는 것을 보니 모음 조화가 지켜졌군.','‘{열ᄫᅳᆫ}’을 보니 현대 국어에 쓰이지 않는 자음 ‘ㅸ’이 쓰였군.'],
+ ans:2,ex:['ㄷ + ㅣ 그대로, 구개음화 X. 맞아요.','없- + -던은 자음 어미 앞이라 넘길 받침이 없어요. ㅄ이 ㅂ으로 적힌 건 8종성법 때문이지 이어적기가 아니에요. 정답.','하ᄂᆞᆯ의 ㆍ. 맞아요.','못 + 애, ㅗ와 ㅏ 양성끼리. 맞아요.','열ᄫᅳᆫ의 ㅸ. 맞아요.'],
+ links:['read2','jong8','lost','vh','lost']},
+{no:158,src:'2015 수능',neg:1,q:'[가]에 들어갈 내용으로 <em>적절하지 않은</em> 것은?',
+ pass:P('학습 자료','<u>㉠부텻</u> 말ᄊᆞᄆᆞᆯ <u>㉡듣ᄌᆞᄫᆞᄃᆡ</u><br>닐굽 <u>㉢거르믈</u> 거르샤 <u>㉣니ᄅᆞ샤ᄃᆡ</u><br>니르고져 홇 <u>㉤배</u> 이셔도','부처의 말씀을 듣되 / 일곱 걸음을 걸으시며 이르시되 / 이르고자 할 바가 있어도')+PT('학습 활동: ㉠~㉤을 현대 국어와 비교한 후 공통점과 차이점을 정리해 보자. ( [가] )'),
+ ch:['㉠: 관형격 조사로 ‘ㅅ’이 쓰였다는 점에서 현대 국어와 차이가 있다.','㉡: 객체를 높이는 선어말 어미가 쓰였다는 점에서 현대 국어와 차이가 있다.','㉢: 어근의 원형을 밝혀 적었다는 점에서 현대 국어와 공통적이다.','㉣: 주체를 높이는 선어말 어미가 쓰였다는 점에서 현대 국어와 공통적이다.','㉤: 모음으로 끝나는 체언에 주격 조사 ‘ㅣ’가 결합했다는 점에서 현대 국어와 차이가 있다.'],
+ ans:3,ex:['부텨 + ㅅ, 높임 대상 관형격. 맞아요.','듣- + -ᄌᆞᄫᆞ-, 객체 높임. 맞아요.','거름 + 을 → 거르믈, 이어적기라 원형을 밝혀 적지 않았어요. 정답.','-샤-, 주체 높임은 현대와 같아요. 맞아요.','바 + ㅣ → 배. 맞아요.'],
+ links:['gen','obj','yeon','subj','nom']},
+{no:159,src:'2016 6월 평가원',q:'&lt;보기 1>을 참고할 때, &lt;보기 2>의 ㉠~㉢에 들어갈 말로 적절한 것은?',
+ pass:`<div class="tw"><table><tr><th>뒤따르는 조사</th><th>ㅎ 종성 체언의 실현 양상</th></tr><tr><td>모음으로 시작</td><td>ㅎ을 뒤 모음에 이어 적음 · <span class="mk">ᄯᅡ히</span> (ᄯᅡㅎ+이)</td></tr><tr><td>ㄱ, ㄷ으로 시작</td><td>ㅎ이 ㄱ, ㄷ과 어울려 ㅋ, ㅌ · <span class="mk">ᄯᅡ토</span> (ᄯᅡㅎ+도)</td></tr><tr><td>관형격 조사 ‘ㅅ’</td><td>ㅎ이 나타나지 않음 · <span class="mk">ᄯᅡᆺ</span> (ᄯᅡㅎ+ㅅ)</td></tr></table></div>`+`<div class="tw"><table><tr><th>중세 국어</th><th>현대 국어</th></tr><tr><td>㉠ (나라ㅎ+ᄋᆞᆯ) 아ᅀᆞ 맛디고</td><td>나라를 아우에게 맡기고</td></tr><tr><td>㉡ (길ㅎ+ㅅ) 네거리예</td><td>길의 네거리에</td></tr><tr><td>㉢ (안ㅎ+과) 밧</td><td>안과 밖</td></tr></table></div>`,
+ ch:['{나라ᄒᆞᆯ} / {긼} / {안콰}','{나라ᄒᆞᆯ} / {긿} / {안과}','{나라ᄒᆞᆯ} / {긿} / {안콰}','{나라ᄋᆞᆯ} / {긿} / {안과}','{나라ᄋᆞᆯ} / {긼} / {안콰}'],
+ ans:1,ex:['나라ㅎ+ᄋᆞᆯ → 나라ᄒᆞᆯ, 길ㅎ+ㅅ → ㅎ 안 나타나 긼, 안ㅎ+과 → 안콰. 정답.','ㅅ 앞에선 ㅎ이 안 나타나요. 안과도 틀려요(ㅎ+ㄱ → ㅋ).','㉡ 틀림.','ㅎ이 이어 적혀야 하고, ㉡ ㉢도 틀림.','나라ᄒᆞᆯ이어야 해요.'],
+ links:['hnoun','hnoun','hnoun','hnoun','hnoun']},
+{no:160,src:'2016 9월 평가원',neg:1,q:'&lt;자료&gt;에 나타난 중세 국어의 특징을 탐구한 내용으로 <em>적절하지 않은</em> 것은?',
+ pass:P('&lt;자료&gt;','<b>五欲ᄋᆞᆫ 누네 됴ᄒᆞᆫ 빗 보고져</b> <b>귀예</b> 됴ᄒᆞᆫ 소리 듣고져 고해 됴ᄒᆞᆫ 내 맏고져 이베 <b>됴ᄒᆞᆫ</b> 맛 <b>먹고져</b> 모매 됴ᄒᆞᆫ 옷 닙고져 ᄒᆞᆯ 씨라','오욕은 눈에 좋은 빛 보고자, 귀에 좋은 소리 듣고자, 코에 좋은 냄새 맡고자, 입에 좋은 맛 먹고자, 몸에 좋은 옷 입고자 하는 것이다.','「석보상절」'),
+ ch:['‘{五欲ᄋᆞᆫ}’이 ‘오욕은’에 대응되는 것을 보니, 보조사 ‘ᄋᆞᆫ’이 있었군.','‘{누네 됴ᄒᆞᆫ 빗 보고져}’가 ‘눈에 좋은 빛 보고자’에 대응되는 것을 보니, ‘{누네 됴ᄒᆞᆫ 빗}’은 목적어로 쓰였군.','‘귀예’가 ‘귀에’에 대응되는 것을 보니, 부사격 조사 ‘예’가 있었군.','‘{됴ᄒᆞᆫ}’이 ‘좋은’에 대응되는 것을 보니, ‘{됴ᄒᆞᆫ}’은 용언의 관형사형이었군.','‘먹고져’가 ‘먹고자’에 대응되는 것을 보니, ‘-고져’는 종결 어미로 쓰였군.'],
+ ans:5,ex:['五欲 + ᄋᆞᆫ, 보조사. 맞아요.','‘보고져’의 대상이라 목적어. 맞아요.','귀 + 예, 부사격. 맞아요.','둏- + -ᄋᆞᆫ, 관형사형. 맞아요.','-고져 뒤로 ‘ᄒᆞᆯ 씨라’가 이어지니 문장을 끝내지 않아요. 연결 어미예요. 정답.'],
+ links:['etc','comp','adv','ending','ending']},
+{no:161,src:'2016 수능',neg:1,q:'&lt;보기>를 바탕으로 중세 국어의 특징을 탐구한 내용으로 <em>적절하지 않은</em> 것은?',
+ pass:P('&lt;보기>','王이 니ᄅᆞ샤ᄃᆡ 大師 <u>㉠ᄒᆞ샨</u> 일 아니면 뉘 혼 거시잇고 <u>㉡仙人이</u> ᄉᆞᆯᄫᅩᄃᆡ 大王하 이 <u>㉢南堀ㅅ</u> 仙人이 ᄒᆞᆫ ᄯᆞᄅᆞᆯ 길어 내니 양ᄌᆡ 端正ᄒᆞ야 <u>㉣世間애</u> <u>㉤쉽디</u> 몯ᄒᆞ니 그 ᄯᆞᆯ ᄒᆞᇙ <u>㉥時節에</u> 자최마다 <u>㉦蓮花ㅣ</u> 나ᄂᆞ니이다','왕이 이르시되 “대사 하신 일 아니면 누가 한 것입니까?” 선인이 아뢰되 “대왕이시여, 이 남굴의 선인이 한 딸을 길러내니 모습이 단정하여 세상에 (모습을 드러내기가) 쉽지 못하니 그 딸 움직일 시절에 자취마다 연꽃이 납니다.”','「석보상절」'),
+ ch:['㉠에서는 주체인 ‘대사’를 높이기 위한 선어말 어미가 쓰였군.','㉡의 ‘이’와 ㉦의 ‘ㅣ’는 격 조사의 종류가 달라서 서로 다른 형태로 나타난 것이군.','㉢을 보니 ‘ㅅ’은 현대 국어의 ‘의’에 해당하는 관형격 조사로 쓰였군.','㉣과 ㉥을 보니 모음 조화에 따라 형태를 달리하는 부사격 조사가 있었군.','㉤과 현대 국어의 ‘쉽지’를 비교해 보니 ‘-디’에서는 구개음화가 확인되지 않는군.'],
+ ans:2,ex:['ᄒᆞ- + -샤-, 대사를 높여요. 맞아요.','둘 다 <b>주격</b> 조사예요. 종류는 같고, 앞말이 자음(人)이냐 모음(花)이냐에 따라 모양만 달라진 거예요. 정답.','南堀 + ㅅ, 무정물 뒤 관형격. 맞아요.','世間애(양성) / 時節에(음성), 모음 조화로 갈린 부사격. 맞아요.','쉽디 → 쉽지, 구개음화 X. 맞아요.'],
+ links:['subj','nom','gen','vh','read2']},
+{no:162,src:'2017 6월 평가원',neg:1,q:'탐구 활동과 자료에 대한 이해로 <em>적절하지 않은</em> 것은?',
+ pass:PT('<b>&lt;대화 1&gt; 요약</b><br>‘좁다’는 좁고·좁아, ‘돕다’는 돕고·도와로 활용한다. ‘벗다’는 벗어, ‘젓다’는 저어로 활용한다. 어간 끝이 같은데 왜 다를까?<br><br><b>&lt;자료&gt; 요약</b><br>15세기 중엽에 ‘좁다’는 좁고·조바처럼 어간이 늘 ‘좁-’이었지만, ‘돕다’는 자음 어미 앞에서 ‘돕-’, 모음 어미 앞에서 ‘<span class="mk">도ᄫᅡ</span>’처럼 ‘<span class="mk">도ᄫ-</span>’였다. ‘벗다’는 벗고·버서로 늘 ‘벗-’이었지만, ‘젓다’는 ‘젓고’와 ‘<span class="mk">저ᅀᅥ</span>’처럼 ‘<span class="mk">저ᅀ-</span>’이 있었다. 음절 끝에는 8개 소리만 올 수 있어서 ‘돕고’, ‘젓고’는 ㅸ, ㅿ이 ㅂ, ㅅ으로 바뀐 것을 적은 것이다.<br>ㅸ은 15세기 중엽 이후 ㅏ, ㅓ 앞에서는 반모음 w로(<span class="mk">도ᄫᅡ</span>>도와, <span class="mk">더ᄫᅥ</span>>더워), ㆍ, ㅡ 앞에서는 ㅗ, ㅜ로 바뀌었고(<span class="mk">도ᄫᆞ시니</span>>도오시니, <span class="mk">셔ᄫᅳᆯ</span>>셔울), 음절 끝에서는 그대로 ㅂ이었다. ㅿ은 16세기 중엽에 사라졌고(<span class="mk">아ᅀᆞ</span>>아ᄋᆞ, <span class="mk">저ᅀᅥ</span>>저어), 음절 끝에서는 그대로 ㅅ이었다.<br><br><b>&lt;대화 2&gt; 요약</b><br>‘굽다-구워’, ‘짓다-지어’도 같은 이유로 지금 불규칙 활용을 한다.<br><span class="sub">긴 지문이라 원문을 줄였어요.</span>'),
+ ch:['현대 국어의 ‘도와’, ‘저어’와 같은 활용형은 어간의 형태가 달라지는 불규칙 활용에 해당하는군.','15세기 국어의 ‘{도ᄫᅡ}’가 현대 국어에서 ‘도와’로 나타나는 것은 ‘ㅸ’이 어간 끝에서 ‘ㅂ’으로 바뀐 결과이군.','15세기 국어의 ‘{저ᅀᅥ}’가 현대 국어에서 ‘저어’로 나타나는 것은 ‘ㅿ’의 소실로 어간의 끝 ‘ㅿ’이 없어진 결과이군.','15세기 국어의 ‘돕고’와 현대 국어의 ‘돕고’는, 자음으로 시작하는 어미 앞에서 어간의 모양이 달라지지 않았군.','15세기 국어의 ‘젓고’와 현대 국어의 ‘젓고’는, 자음으로 시작하는 어미 앞에서 어간의 모양이 달라지지 않았군.'],
+ ans:2,ex:['어간 모양이 바뀌니 불규칙. 맞아요.','ㅸ은 모음 앞에서 ㅂ이 아니라 <b>반모음 w</b>로 바뀌었어요. 정답.','ㅿ이 없어져서 저어. 맞아요.','자음 어미 앞은 그때나 지금이나 돕-. 맞아요.','자음 어미 앞은 젓-. 맞아요.'],
+ links:['irreg','irreg','irreg','irreg','irreg']},
+{no:164,src:'2014 3월 교육청',q:'&lt;보기>에서 ㉠~㉣에 들어갈 목적격 조사로 옳은 것은?',
+ pass:PT('15세기 국어의 모음 중 ‘ㆍ, ㅏ, ㅗ’는 양성 모음, ‘ㅡ, ㅓ, ㅜ’는 음성 모음, ‘ㅣ’는 중성 모음에 해당한다. 당시에는 체언과 조사가 결합할 때 모음 조화가 엄격하게 지켜졌다. 15세기 국어에서 목적격 조사는 ‘<span class="mk">ᄋᆞᆯ</span>, 을, <span class="mk">ᄅᆞᆯ</span>, 를’이 있다. 이들 가운데 어떤 것이 선택되는가는 체언이 자음으로 끝나느냐 모음으로 끝나느냐와 함께 체언과의 모음 조화에 따라서 결정되었다.')+`<div class="tw"><table><tr><th>중세 국어</th><th>현대 국어</th><th>중세 국어</th><th>현대 국어</th></tr><tr><td><span class="mk">사ᄅᆞᆷ</span>+㉠</td><td>사람+을</td><td>누+㉢</td><td>누구+를</td></tr><tr><td>천하+㉡</td><td>천하+를</td><td><span class="mk">ᄠᅳᆮ</span>+㉣</td><td>뜻+을</td></tr></table></div>`,
+ ch:['{ᄋᆞᆯ} / {ᄅᆞᆯ} / 를 / 을','{ᄋᆞᆯ} / {ᄅᆞᆯ} / 을 / 를','을 / {ᄋᆞᆯ} / 를 / {ᄅᆞᆯ}','을 / 를 / {ᄅᆞᆯ} / {ᄋᆞᆯ}','{ᄅᆞᆯ} / {ᄋᆞᆯ} / 을 / 를'],
+ ans:1,ex:['사ᄅᆞᆷ(양성, 받침 O) ᄋᆞᆯ / 천하(양성, 받침 X) ᄅᆞᆯ / 누(음성, 받침 X) 를 / ᄠᅳᆮ(음성, 받침 O) 을. 정답.','㉢ ㉣이 바뀌었어요. 받침 없으면 를, 있으면 을.','사ᄅᆞᆷ은 양성이라 을이 아니에요.','처음부터 틀려요.','사ᄅᆞᆷ은 받침이 있어 ᄅᆞᆯ이 못 와요.'],
+ links:['vh','vh','vh','vh','vh']},
+{no:165,src:'2014 4월 교육청',neg:1,q:'&lt;보기>의 ㉠~㉤에 나타난 중세 국어의 특징으로 <em>옳지 않은</em> 것은?',
+ pass:P('&lt;보기>','千世 우희 미리 定ᄒᆞ샨 漢水北에 累仁開國ᄒᆞ샤 卜年이 <u>㉠ᄀᆞᇫ업스시니</u><br>聖神이 니ᅀᆞ샤도 敬天勤民ᄒᆞ샤ᅀᅡ 더욱 <u>㉡구드시리이다</u><br><u>㉢님금하</u> 아ᄅᆞ쇼셔 <u>㉣洛水예</u> 山行 가 이셔 하나빌 <u>㉤미드니잇가</u>','천 세 전에 미리 정하신 한강 북쪽에, 여러 대 어진 덕을 쌓아 나라를 여시어 왕조가 끝이 없으시니, 성신이 대를 이으시어도 하늘을 공경하고 백성을 부지런히 다스리셔야 더욱 굳건하실 것입니다. 임금이시여, 아소서. 낙수에 사냥 가 있으면서 할아버지를 믿으시겠습니까?','「용비어천가」 제125장'),
+ ch:['㉠: 현대 국어에는 쓰이지 않는 자음과 모음이 사용되었다.','㉡: 선어말 어미 ‘-이-’는 듣는 이를 높이기 위해 사용되었다.','㉢: 조사 ‘하’는 부르는 대상을 높이는 역할을 하였다.','㉣: ‘예’는 장소를 나타내는 부사격 조사로 사용되었다.','㉤: 어간의 받침을 어간의 종성과 어미의 초성으로 겹쳐 표기하였다.'],
+ ans:5,ex:['ᄀᆞᇫ업스시니의 ㅿ, ㆍ. 맞아요.','-이-는 상대 높임. 맞아요.','하는 높임 호격. 맞아요.','洛水 + 예, 부사격. 맞아요.','믿- + -으니-에서 ㄷ을 넘겨 적은 <b>이어적기</b>예요. 겹쳐 적었다면 ‘믿드니잇가’였겠죠. 정답.'],
+ links:['lost','rel','etc','adv','yeon']},
+{no:166,src:'2014 7월 교육청',neg:1,q:'&lt;보기>를 읽고 중세 국어의 의문문에 대해 탐구한 내용으로 <em>적절하지 않은</em> 것은?',
+ pass:PT('의문문에는 청자에게 가부를 묻는 판정 의문문과 구체적인 설명을 요구하는 설명 의문문이 있다. 중세 국어의 경우, 판정 의문문에는 ‘-가’, ‘-녀’ 등의 어미가 쓰이고, 설명 의문문에는 ‘-고’, ‘-뇨’ 등의 어미가 쓰인다. 주어가 2인칭인 경우에는 ‘-ㄴ다’의 특수한 의문형 어미가 쓰인다.<br><br>ㄱ. 이 <span class="mk">ᄯᆞ리</span> 너희 <b class="mk">죵가</b> (이 딸이 너희들의 종이냐?)<br>ㄴ. 이제 <b class="mk">엇더ᄒᆞ고</b> (이제 어떠하냐?)<br>ㄷ. 네 <b class="mk">모ᄅᆞ던다</b> (너는 모르느냐?)<br>ㄹ. 네 엇뎨 <b class="mk">안다</b> (너는 어떻게 아느냐?)'),
+ ch:['‘ㄱ’의 ‘이’ 대신 ‘엇던’이 쓰이면, ‘죵가’를 ‘죵고’로 바꿔야겠군.','‘ㄴ’의 ‘엇더’ 대신 ‘평안’이 쓰이면, ‘{ᄒᆞ고}’를 ‘{ᄒᆞ가}’로 바꿔야겠군.','‘ㄴ’과 ‘ㄹ’은 청자에게 구체적인 설명을 요구하는 의문문이군.','‘ㄷ’의 ‘너’ 대신 3인칭인 ‘그’가 쓰이면, ‘{모ᄅᆞ던다}’를 ‘{모ᄅᆞ던고}’로 바꿔야겠군.','‘ㄷ’과 ‘ㄹ’을 보니, 주어가 2인칭인 경우의 의문형 어미는 판정 의문문과 설명 의문문에 따른 구분이 없군.'],
+ ans:4,ex:['의문사 ‘엇던’이 들어가면 설명 의문문 → -고. 맞아요.','‘평안’이면 예/아니오 질문 → -가. 맞아요.','엇더, 엇뎨가 있는 설명 의문문. 맞아요.','3인칭이면 -ㄴ다를 못 쓰고, ‘그는 모르느냐’는 예/아니오 질문이라 -고가 아니라 <b>-가</b>가 와야 해요. 정답.','2인칭이면 판정이든 설명이든 -ㄴ다. 맞아요.'],
+ links:['q','q','q','q','q']},
+{no:167,src:'2014 10월 교육청',q:'&lt;보기 1>을 바탕으로 &lt;보기 2>의 ㉠~㉤을 바르게 분류한 것은?',
+ pass:PT('국어의 표기법은 이어 적기에서 끊어 적기가 확대되는 방향으로 변하여 왔다. 이어 적기란 형태소를 소리 나는 대로 이어 적는 방식이고, 끊어 적기란 각 형태소들을 분리하여 적는 방식이다. 한편 근대 국어에는 앞 음절의 종성으로 적고 뒤 음절의 초성으로도 적는 과도기적 방식이 나타났는데 이를 거듭 적기라 한다.')+P('&lt;보기 2>','부엉이 對答ᄒᆞ야 갈오ᄃᆡ 이 地方 사ᄅᆞᆷ은 내 <u>㉠우름</u> 쇼ᄅᆡ를 미워ᄒᆞᄂᆞᆫ 故로 나ᄂᆞᆫ 다른 地方으로 올무랴 ᄒᆞ노라 ᄒᆞ니 비둘기 <u>㉡우서</u> 갈오ᄃᆡ ᄌᆞ네 우ᄂᆞᆫ 쇼ᄅᆡ를 곳치지 안코 居處만 옴기면 如舊히 ᄯᅩ <u>㉢미워ᄒᆞᆷ을</u> 免치 못ᄒᆞ리라 ᄒᆞ얏소 이 니야기ᄂᆞᆫ ᄎᆞᆷ 滋味잇ᄉᆞᆸᄂᆞ이다 여러분 즁에도 自家의 악ᄒᆞᆫ <u>㉣일은</u> 곳치지 안코 다른 ᄃᆡ로만 가랴고 ᄒᆞᄂᆞ니 <u>㉤잇스면</u> 이ᄂᆞᆫ 亦是 이 비둘기의게 우슴을 보오리다','부엉이가 대답하여 가로되 “이 지방 사람은 내 울음소리를 미워하는 까닭에 나는 다른 지방으로 옮기려 한다.”라고 하니 비둘기가 웃어 가로되 “자네가 우는 소리를 고치지 않고 거처만 옮기면 여전히 또 미워함을 피하지 못할 것이다.”라고 하였다. … 다른 데로만 가려고 하는 이가 있으면 이것 역시 이 비둘기에게 웃음을 살 것입니다.','「신정심상소학」(1896)'),
+ ch:['이어 ㉠, ㉡ / 끊어 ㉢, ㉣ / 거듭 ㉤','이어 ㉠, ㉢ / 끊어 ㉡, ㉣ / 거듭 ㉤','이어 ㉡, ㉢ / 끊어 ㉠, ㉤ / 거듭 ㉣','이어 ㉡, ㉤ / 끊어 ㉠, ㉢ / 거듭 ㉣','이어 ㉢, ㉣ / 끊어 ㉡, ㉤ / 거듭 ㉠'],
+ ans:1,ex:['우름(울-+-음), 우서(웃-+-어)는 이어, 미워ᄒᆞᆷ을·일은은 끊어, 잇스면은 ㅅ이 두 번이라 거듭. 정답.','㉡ 우서는 이어, ㉢은 끊어. 자리가 바뀌었어요.','㉠은 이어, ㉣은 끊어, ㉤이 거듭.','㉤은 거듭, ㉣은 끊어.','㉠ 우름은 이어적기.'],
+ links:['yeon','yeon','yeon','yeon','yeon']},
+{no:168,src:'2015 3월 교육청',neg:1,q:'㉠~㉤을 현대 국어와 비교한 내용으로 <em>적절하지 않은</em> 것은?',
+ pass:P('&lt;보기>','<u>㉠부톄</u> 目連이ᄃᆞ려 <u>㉡니ᄅᆞ샤ᄃᆡ</u><br>耶輸ㅣ <u>㉢부텻</u> 使者 왯다 <u>㉣드르시고</u><br>내 ᄯᆞᆯ 勝鬘이 聰明ᄒᆞ니 부텨옷 <u>㉤보ᅀᆞᄫᆞ면</u>','부처가 목련에게 이르시되 / 야수가 부처의 사자가 왔다는 말을 들으시고 / 내 딸 승만이 총명하니 부처만 뵈면','「석보상절」'),
+ ch:['㉠: 모음으로 끝나는 체언에 주격 조사 ‘ㅣ’가 결합했다는 점에서 현대 국어와 차이가 있다.','㉡: 고유어에서 두음 법칙이 적용되었다는 점에서 현대 국어와 공통적이다.','㉢: 관형격 조사로 ‘ㅅ’이 쓰였다는 점에서 현대 국어와 차이가 있다.','㉣: 주체를 높이는 선어말 어미가 쓰였다는 점에서 현대 국어와 공통적이다.','㉤: 객체를 높이는 선어말 어미가 쓰였다는 점에서 현대 국어와 차이가 있다.'],
+ ans:2,ex:['부텨 + ㅣ → 부톄. 맞아요.','니ᄅᆞ샤ᄃᆡ는 ㄴ이 ㅣ 앞에 그대로 있어요. 두음 법칙이 <b>적용 안 된</b> 모습이에요. 정답.','부텨 + ㅅ. 맞아요.','듣- + -으시-. 맞아요.','보- + -ᅀᆞᄫᆞ-, 부텨를 높임. 맞아요.'],
+ links:['nom','read2','gen','subj','obj']},
+{no:169,src:'2015 4월 교육청',neg:1,q:'&lt;보기>의 ㉠~㉤에서 알 수 있는 중세 국어의 특징으로 <em>적절하지 않은</em> 것은?',
+ pass:P('&lt;보기>','<u>㉠雙鵰ㅣ</u> ᄒᆞᆫ 사래 <u>㉡ᄢᅦ니</u> 絶世英才를 邊人이 拜伏<u>㉢ᄒᆞᅀᆞᄫᆞ니</u><br>雙鵲이 ᄒᆞᆫ <u>㉣사래</u> <u>㉤디니</u> 曠世奇事를 北人이 稱頌ᄒᆞᅀᆞᄫᆞ니','두 마리 독수리가 한 살에 꿰이니, 절세의 영재를 변방의 사람들이 절하며 복종하니 / 두 마리 까치가 한 살에 떨어지니, 세상에 없는 기이한 일을 북녘 사람들이 칭송하니','「용비어천가」 제23장'),
+ ch:['㉠을 보니 모음으로 끝난 체언 뒤에 목적격 조사로 ‘ㅣ’가 사용되었군.','㉡을 보니 음절의 초성에서 두 개 이상의 자음이 사용되었군.','㉢을 보니 ‘ㅿ’, ‘ㅸ’, ‘ㆍ’ 등 현대 국어에서는 사용되지 않는 문자가 사용되었군.','㉣에서 양성 모음 ‘ㅏ’와 ‘ㅐ’가 어울리는 것을 보니 모음 조화가 지켜졌군.','㉤에서 ‘ㅣ’ 앞의 ‘ㄷ’이 ‘ㅈ’으로 변하지 않은 것을 보니 구개음화 현상이 나타나지 않았군.'],
+ ans:1,ex:['雙鵰ㅣ는 ‘두 마리 독수리가’, 주어예요. ㅣ는 <b>주격</b> 조사. 정답.','ᄢᅦ니의 ㅴ, 첫소리에 자음 셋. 맞아요.','ᄒᆞᅀᆞᄫᆞ니의 ㅿ ㅸ ㆍ. 맞아요.','살 + 애, ㅏ와 ㅐ(양성) 어울림. 맞아요.','디니 → 지니, 구개음화 X. 맞아요.'],
+ links:['nom','eodu','lost','vh','read2']},
+{no:170,src:'2015 7월 교육청',neg:1,q:'[가]에 들어갈 내용으로 <em>적절하지 않은</em> 것은?',
+ pass:PT('중세 국어의 ‘<span class="mk">ᄉᆞᆸ/ᄌᆞᆸ/ᅀᆞᆸ</span>’은 객체 높임의 의미를 나타내는 선어말 어미이다. 주체 높임은 선어말 어미 ‘-시-’, 상대 높임은 선어말 어미 ‘-이-’를 사용하여 나타냈다. 또한 높임의 뜻을 가진 어휘로 높임이 실현되기도 했다.')+P('학습 자료','聖子ᄅᆞᆯ 내<u>㉠시</u>니<u>㉡이</u>다<br>世尊ㅅ 安否 묻<u>㉢ᄌᆞᆸ</u>고<br><u>㉣진지</u> 오ᄅᆞᆯ 제 반ᄃᆞ시','(하늘이) 聖子(성자)를 내셨습니다. / 世尊(세존)의 安否(안부)를 여쭙고 / 진지 올릴 때 반드시'),
+ ch:['㉠: 주체인 ‘聖子(성자)’를 높이는 ‘-시-’가 쓰인다는 점에서 현대 국어와 같다.','㉡: 상대를 높이는 ‘-이-’가 쓰인다는 점에서 현대 국어와 차이가 있다.','㉢: 객체를 높이는 ‘{-ᄌᆞᆸ-}’이 쓰인다는 점에서 현대 국어와 차이가 있다.','㉣: ‘밥’을 높여서 이르는 말을 사용하고 있다는 점에서 현대 국어와 같다.','㉠+㉡: 주체와 상대에 대한 높임이 함께 나타난다는 점에서 현대 국어와 같다.'],
+ ans:1,ex:['이 문장의 주어는 <b>하늘</b>이에요. 聖子는 내어진 대상, 즉 객체예요. -시-가 높이는 건 하늘. 정답.','-이-, 상대 높임 선어말 어미. 맞아요.','-ᄌᆞᆸ-, 현대는 ‘여쭙다’ 같은 어휘로 해요. 맞아요.','진지. 맞아요.','-시-와 -이-가 함께. 현대 ‘-셨습니다’도 마찬가지. 맞아요.'],
+ links:['subj','rel','obj','obj','rel']},
+{no:171,src:'2016 7월 교육청',neg:1,q:'&lt;보기>의 중세 국어 자료에서 나타난 특징을 탐구한 내용으로 <em>적절하지 않은</em> 것은?',
+ pass:P('&lt;보기>','나라히 破亡ᄒᆞ니 뫼콰 ᄀᆞᄅᆞᆷᄲᅮᆫ 잇고<br>잣 안 <b>보ᄆᆡ 플와</b> 나모ᄲᅮᆫ 기펫도다<br>時節을 感嘆호니 고지 눉므를 <b>ᄲᅳ리게</b> ᄒᆞ고<br>여희여슈믈 슬후니 새 <b>ᄆᆞᅀᆞᄆᆞᆯ</b> 놀래ᄂᆞ다<br>烽火ㅣ 석 <b>ᄃᆞᄅᆞᆯ</b> 니ᅀᅥ시니<br>지븻 音書ᄂᆞᆫ 萬金이 ᄉᆞ도다','나라가 망하니 산과 강만 있고 / 성 안의 봄에 풀과 나무만이 깊어 있도다 / 시절을 감탄하니 꽃이 눈물을 뿌리게 하고 / 헤어져 있음을 슬퍼하니 새가 마음을 놀라게 한다 / 봉화가 석 달을 이어지니 / 집의 편지는 만금보다 값지도다','초간본 「분류두공부시언해」 · 방점 생략'),
+ ch:['‘{보ᄆᆡ}’는 현대 국어의 ‘봄에’에 대응하는 것을 보니 끊어 적기를 하였군.','‘{·플·와}’가 현대 국어의 ‘풀과’에 대응하는 것을 보니 방점이 쓰였군.','‘{ᄲᅳ리게}’가 현대 국어의 ‘뿌리게’에 대응하는 것을 보니 단어의 첫머리에 서로 다른 자음이 함께 사용되었군.','‘{ᄆᆞᅀᆞᄆᆞᆯ}’이 현대 국어의 ‘마음을’에 대응하는 것을 보니 현대 국어에서 사용되지 않는 ‘ㅿ’, ‘ㆍ’가 사용되었군.','‘{ᄃᆞᄅᆞᆯ}’이 현대 국어의 ‘달을’에 대응하는 것을 보니 모음 조화가 지켜졌군.'],
+ ans:1,ex:['봄 + ᄋᆡ에서 ㅁ을 넘겨 적은 <b>이어적기</b>예요. 끊어 적었다면 ‘봄ᄋᆡ’. 정답.','원문에 ·플·와 방점이 찍혀 있어요. 맞아요.','ᄲᅳ리게의 ㅽ. 맞아요.','ㅿ, ㆍ. 맞아요.','ᄃᆞᆯ + ᄋᆞᆯ, 양성끼리. 맞아요.'],
+ links:['yeon','bangjeom','eodu','lost','vh']}
+];
+EXAMS.push(...NEW_EX);
+
+/* 시험지 선지 OX 모음 (출처 표시) */
+const DRILL=[
+ ['7번 ①','(가)의 {내히}와 (나)의 {ᄯᅡ히}를 비교해 보면, ㅎ 종성 체언이 중세 국어에서 나타났음을 알 수 있다.',true,'내ㅎ+이, ᄯᅡㅎ+이.','hnoun'],
+ ['7번 ②','(가)의 {기픈}과 (나)의 {깁고}를 비교해 보면, 어간 종성 ㅍ이 자음으로 시작하는 어미 앞에서 ㅂ으로 표기되었음을 알 수 있다.',true,'8종성법.','jong8'],
+ ['7번 ③','(나)의 {보ᄆᆡ}와 {믌ᄀᆞᇫᄋᆡ}를 비교해 보면, 중세 국어에서 부사격 조사 \'ᄋᆡ\'가 쓰였음을 알 수 있다.',true,'봄에, 물가에 → 특이 처격.','adv'],
+ ['7번 ④','(나)의 {ᄇᆡᄅᆞᆯ}과 (다)의 {쇼리를}을 비교해 보면, 비교적 잘 지켜지던 모음 조화가 근대 국어에서 점차 파괴되었음을 알 수 있다.',true,'양성 뒤 \'를\'(음성).','vh'],
+ ['7번 ⑤','(가)의 {불휘}, (나)의 {내}에 나타난 주격 조사 \'ㅣ\'는 (다)의 {부엉이가}의 \'가\'의 형태로 점차 바뀌었다.',false,'{불휘}는 ∅. 그리고 \'가\'는 새로 생긴 조사예요.','nom'],
+ ['8번 ㄱ','\'해님\'은 \'ㄴㄴ\' 소리가 덧나는 현상이 나타나지만 파생어이므로 사이시옷을 표기하지 않는다.',false,'해님은 [해님]. 덧남이 없어요.','sai'],
+ ['8번 ㄴ','\'잇몸\'과 \'아랫니\'는 앞말이 모음으로 끝나고 \'ㄴ\' 소리가 덧나는 단어이므로 사이시옷을 표기한다.',true,'[인몸], [아랜니].','sai'],
+ ['8번 ㄷ','\'물고기\'는 음운론적 현상이 나타나지 않으므로 사이시옷을 표기하지 않는다.',false,'된소리는 나요. 앞말이 자음 끝이라 못 써요.','sai'],
+ ['8번 ㄹ','\'강가\'는 한자어로 이루어진 합성어이므로 사이시옷이 나타나지 않는다.',false,'\'가\'는 고유어.','sai'],
+ ['8번 ㅁ','\'소고기\'의 뒷말이 된소리로 나지 않는 이유는 중세에 관형격 조사 \'ㅅ\'이 나타날 수 없었기 때문이다.',true,'쇼는 유정물 평칭 → ᄋᆡ.','gen'],
+ ['9번 ①','(가)의 {ᄉᆞᄆᆞᆺ디}, (나)의 {벋}에는 모두 8종성법의 받침 표기법이 사용되었다.',true,'ㅅ, ㄷ 모두 8종성 안.','jong8'],
+ ['9번 ②','(가)의 {배}, {제}와 (나)의 {孔子ㅣ}에는 모두 주격 조사 \'ㅣ\'가 사용되었다.',false,'\'제 ᄠᅳ들\'의 제는 관형격. 9번 정답.','pron'],
+ ['9번 ③','(가)의 \'-니라\'는 종결형 어미가, (나)의 {비르소미오}의 \'-이오\'는 연결형 어미가 사용되었다.',true,'-고 → -오.','ending'],
+ ['9번 ④','(가)의 {ᄒᆡᅇᅧ}, (나)의 {현뎌케 홈}은 모두 사동의 의미를 표현한다.',true,'짧은 사동 / 긴 사동.','caus'],
+ ['9번 ⑤','(가)의 {ᄡᅮ메}, (나)의 {ᄡᅥ}는 모두 어두에 두 개의 자음이 사용되었다.',true,'둘 다 ㅄ.','eodu'],
+ ['10번 ①','{古聖이}는 자음으로 끝난 체언 뒤에 주격 조사 \'이\'가 사용되었다.',true,'聖(셩)은 ㆁ 받침.','nom'],
+ ['10번 ②','{안해}는 \'ㅎ\'이 붙은 특별한 체언에 처소를 나타내는 부사격 조사가 사용되었다.',true,'안ㅎ+애.','hnoun'],
+ ['10번 ⑤','{미드니잇가}의 선어말 어미 \'-잇-\'은 \'님금\'을 높이기 위해 사용되었다.',true,'청자 님금, 의문형 상대 높임.','rel'],
+ ['11번','{그츨ᄊᆡ}는 \'긏-\', \'-을-\', \'-ᄊᆡ\'의 세 형태소로 분석된다.',false,'긏- + -을ᄊᆡ.','morph'],
+ ['11번','{ᄉᆡ미}는 형태소 \'ᄉᆡᆷ\'과 \'이\'로 나뉘며, 단어로도 두 개이다.',true,'조사는 단어.','morph'],
+ ['12번 ①','\'王\'은 격 조사가 생략되어 \'ᄃᆞ외야\'의 주어로 쓰이고 있다.',false,'주어는 菩薩이, 王은 보어.','comp'],
+ ['12번 ②','{맛디시고}는 주어 외에 목적어를 필요로 하는 두 자리 서술어이다.',false,'부사어도 필요 → 세 자리.','comp'],
+ ['12번 ③','{ᄌᆞ갓}은 \'구담바라문\'을 가리키는 재귀 대명사이다.',false,'보살을 가리켜요.','pron'],
+ ['12번 ④','{오ᄉᆞ란}은 보조사가 붙어 \'밧다\'의 목적어로 쓰이고 있다.',true,'옷+ᄋᆞ란.','etc'],
+ ['12번 ⑤','{믈와}는 목적격 조사를 사용하여 문장의 목적어로 쓰이고 있다.',false,'\'와\'는 접속 조사.','etc'],
+ ['13번 ㉠','\'大臣이 이 藥 ᄆᆡᇰᄀᆞ라 大王ᄭᅴ 받ᄌᆞᄫᆞᆫ대\'에서 객체 높임의 대상은 大王이다.',true,'부사어 大王ᄭᅴ.','obj'],
+ ['13번 ㉡','어간 \'듣-\'과 어미 \'-ᄋᆞ며\' 사이에 객체 높임 선어말 어미가 결합하면 {듣ᅀᆞᄫᆞ며}가 된다.',false,'ㄷ 뒤는 ᄌ 계열 → 듣ᄌᆞᄫᆞ며.','obj'],
+ ['14번 ①','16세기와 19세기에는 모두 ㆍ를 계속 사용하였고, 띄어쓰기를 사용했다.',false,'16세기 편지는 띄어쓰기가 없어요.','space'],
+ ['14번 ②','(가)와 (나)의 \'듸\'는 모두 의존 명사로, 각각 앞말의 수식을 받는다.',false,'(가)는 \'한테\' 쪽.','adv'],
+ ['14번 ③','(가)의 {ᄆᆞᄋᆞᄆᆞᆯ}, (나)의 {잇스면}을 통해 볼 때 16세기와 19세기 모두 연철 표기를 사용한다.',false,'잇스면은 거듭적기.','yeon'],
+ ['14번 ④','(가)의 {자내}는 의미상 주격 조사 \'ㅣ\'가 생략되었다.',false,'자네를 → 목적어.','comp'],
+ ['14번 ⑤','(나)의 {잇ᄉᆞᆸᄂᆞ이다}를 통해 청자를 높이는 상대 높임법을 사용하고 있다.',true,'-이- 상대 높임.','rel']
+].map(([src,q,a,why,link],i)=>({id:'d:'+i,src,q,a,why,link}));
+/* 10번 ③④는 정답 확인 전이라 빼 둠 */
+
+
+/* ═════════ 추가 단원: 옛글 빨리 읽기 · 훈민정음 제자 원리 ═════════ */
+const U_READ={id:'uread',title:'옛글 빨리 읽기',sub:'처음 보는 지문도 10초 안에 뜻 잡기',
+ advice:'해석이 막혀서 선지 판단이 늦어지고 있어요. 지문 읽기 전에 ‘ㆍ → ㅏ/ㅡ, 자음군 → 된소리, 디 → 지, 받침 올리기’ 네 가지만 머릿속으로 돌려 보세요.',
+ concepts:[
+ {id:'read1',title:'글자 바꿔 읽기',
+  bridge:'옛글이 외계어처럼 보이는 건 대부분 글자 몇 개 때문이에요. 이 글자들을 지금 글자로 바꾸는 요령만 알면 처음 보는 지문도 뜻이 금방 잡혀요. 고전시가 읽을 때도 그대로 써먹을 수 있어요.',
+  core:'ㆍ는 첫음절이면 ㅏ, 나머지는 ㅡ. 어두 자음군은 뒤 자음의 된소리. ㅿ·ㅸ은 소리를 지우고 읽는다.',
+  body:`<div class="tw"><table><tr><th>보이는 것</th><th>이렇게 읽기</th><th>예</th></tr>
+  <tr><td>ㆍ (첫음절)</td><td><b>ㅏ</b></td><td>{ᄃᆞᆯ} → 달, {ᄆᆞᄋᆞᆷ} → 마음</td></tr>
+  <tr><td>ㆍ (둘째 음절부터)</td><td>주로 <b>ㅡ</b></td><td>{ᄀᆞᅀᆞᆯ} → 가을, {말ᄊᆞᆷ} → 말씀</td></tr>
+  <tr><td>어두 자음군 (ㅺ ㅄ ㅼ ㅽ…)</td><td><b>뒤 자음의 된소리</b></td><td>{ᄭᅮᆷ} → 꿈, {ᄡᅳ고} → 쓰고, {ᄠᅳᆮ} → 뜻</td></tr>
+  <tr><td>ㅿ</td><td>소리 없이</td><td>{ᄆᆞᅀᆞ매} → 마으메 → 마음에</td></tr>
+  <tr><td>ㅸ</td><td>오/우 쪽으로</td><td>{더ᄫᅳ니} → 더우니, {수ᄫᅵ} → 쉬이</td></tr>
+  <tr><td>이중 모음</td><td>단모음으로</td><td>{죠션} → 조선, {쟈근} → 자근</td></tr></table></div>
+  <h4>바꾼 다음엔 꼭 받침 올리기</h4>
+  <p>글자를 바꿨는데도 어색하면 이어적기 때문이에요. {쟈근 거시} → 자근 거시 → 받침을 올려 <b>작은 것이</b>. 이건 ‘받침 처리’ 강의에서 이어서 해요.</p>
+  <p class="say">주의! ㆍ를 ‘첫 ㅏ, 뒤 ㅡ’로 읽는 건 <b>해석용 요령</b>이에요. 실제 변화에는 예외가 있어서({ᄒᆞᆰ} → 흙, {사ᄅᆞᆷ} → 사람), 시험에서 변화 단계를 물을 땐 그 예외가 함정이 돼요.</p>`,
+  dis:[['{ᄒᆞᄅᆞ}','ㆍ → ㅏ, ㆍ → ㅡ','하르 → 하루'],['{ᄀᆞᅀᆞᆯ}','ㆍ → ㅏ, ㅿ 무음','가을'],['{ᄢᅳ다}','ㅴ → ㄲ','끼다'],['{ᄲᅳ리게}','ㅽ → ㅃ','뿌리게 (기출 171번)'],['{ᄆᆞᅀᆞᄆᆞᆯ}','ㆍ → ㅏ, ㅿ 무음','마음을 (기출 171번)'],['{죠션}','이중 모음 → 단모음','조선'],['{쟈근 거시}','쟈 → 자, 받침 올리기','작은 것이']],
+  trap:'기출 153번: ㆍ 변화 단계를 묻는 문제에서 {ᄒᆞᆰ} → 흙(첫음절인데 ㅡ), {사ᄅᆞᆷ} → 사람(둘째 음절인데 ㅏ) 같은 <b>예외</b>가 오답으로 깔려 있었어요.',
+  tip:'<b>첫 ㅏ 뒤 ㅡ, 자음군은 뒤 글자 된소리, ㅿ·ㅸ은 지우고 읽기.</b>',
+  basic:[{q:'‘ᄆᆞᅀᆞ매’는 ‘마음에’로 해석할 수 있다.',a:true,why:'ㆍ → ㅏ, ㅿ 무음, 받침 올리기.'}],
+  deep:[{q:'‘ᄡᅳ고’의 ‘ㅄ’은 앞 자음 ㅂ의 된소리로 읽는다.',a:false,why:'뒤 자음 ㅅ의 된소리 → 쓰고.'},{q:'둘째 음절 이하의 ㆍ는 주로 ㅡ로 바꿔 읽는다.',a:true,why:'말ᄊᆞᆷ → 말씀.'}]},
+ {id:'read2',title:'아직 안 일어난 변화 되돌리기',
+  bridge:'음운 변동 시간에 구개음화, 두음 법칙 배웠죠? 이 변화들 상당수가 중세 <b>이후</b>에 일어났어요. 그래서 옛글엔 변하기 전 모습이 그대로 적혀 있어요. 우리가 그 변화를 한 번 걸어 주면 지금 말이 나와요.',
+  core:'디·텨는 지·처로, 첫 ㄴ+ㅣ는 ㅇ으로, ㅁㅂㅍ 뒤 ㅡ는 ㅜ로, ㅅㅈㅊ 뒤 ㅡ는 ㅣ로 바꿔 읽는다.',
+  body:`<div class="tw"><table><tr><th>아직 안 일어난 변화</th><th>옛글</th><th>바꿔 읽기</th></tr>
+  <tr><td><b>구개음화</b><br>ㄷ·ㅌ + ㅣ 계열 → ㅈ·ㅊ</td><td>{모딘}, {고텨}, {됴ᄒᆞᆫ}, {텬디}</td><td>모진, 고쳐, 좋은, 천지</td></tr>
+  <tr><td><b>두음 법칙</b><br>첫 ㄴ + ㅣ 계열 → ㅇ, 첫 ㄹ → ㄴ</td><td>{녀름}, {니ᄅᆞ샤ᄃᆡ}, 로인, 량심</td><td>여름, 이르시되, 노인, 양심</td></tr>
+  <tr><td><b>원순 모음화</b><br>ㅁ·ㅂ·ㅍ + ㅡ → ㅜ</td><td>{믈}, {블}, {플}</td><td>물, 불, 풀</td></tr>
+  <tr><td><b>전설 모음화</b><br>ㅅ·ㅈ·ㅊ + ㅡ → ㅣ</td><td>{즌}, {거츤}</td><td>진, 거친</td></tr>
+  <tr><td><b>단모음화</b></td><td>{죠션}, {물졍}</td><td>조선, 물정</td></tr></table></div>
+  <p>이 변화들은 대체로 근대에 일어나요. 원순 모음화는 17세기 후반, 구개음화는 17~18세기, 전설 모음화는 19세기쯤이에요. 그러니까 <b>중세 자료에서는 전부 ‘안 일어난 모습’</b>이 정상이에요.</p>
+  <h4>기출에서 이렇게 나왔어요</h4>
+  <ul><li>157번 {모딘} → 모진: 구개음화 X (맞는 선지)</li>
+  <li>161번 {쉽디} → 쉽지: 구개음화 X (맞는 선지)</li>
+  <li>168번 {니ᄅᆞ샤ᄃᆡ}: “두음 법칙이 적용되었다” → <b>틀린 선지(정답)</b></li>
+  <li>169번 {디니} → 지니: 구개음화 X (맞는 선지)</li></ul>`,
+  dis:[['{모딘}','ㄷ + ㅣ 그대로','모진 (기출 157번)'],['{쉽디}','-디','쉽지 (기출 161번)'],['{디니}','디- + -니','지니, 떨어지니 (기출 169번)'],['{니ᄅᆞ샤ᄃᆡ}','첫 ㄴ + ㅣ 그대로','이르시되 · 두음 법칙 X (기출 168번)'],['{녀름}','ㄴ + ㅕ','여름'],['{믈} · {블} · {플}','ㅁ·ㅂ·ㅍ + ㅡ','물 · 불 · 풀'],['{거츤}','ㅊ + ㅡ','거친'],['{텬디}','이중 모음, 구개음화 X','천지']],
+  trap:'“두음 법칙이 <b>적용되었다</b>” 선지 조심. {니ᄅᆞ샤ᄃᆡ}처럼 ㄴ이 ㅣ 앞에 그대로 있으면 <b>적용 안 된</b> 거예요.',
+  tip:'<b>ㄷ+ㅣ → ㅈ / 첫 ㄴ+ㅣ → ㅇ / ㅁㅂㅍ+ㅡ → ㅜ / ㅅㅈㅊ+ㅡ → ㅣ</b>',
+  basic:[{q:'‘모딘’이 현대 국어 ‘모진’에 대응하는 것을 보면 구개음화가 나타나지 않았다.',a:true,why:'ㄷ+ㅣ가 그대로예요.'}],
+  deep:[{q:'‘니ᄅᆞ샤ᄃᆡ’는 고유어에서 두음 법칙이 적용된 예이다.',a:false,why:'ㄴ이 그대로라 적용 안 됨. 기출 168번.'},{q:'‘믈’이 ‘물’로 바뀐 것은 원순 모음화 때문이다.',a:true,why:'ㅁ 뒤 ㅡ → ㅜ.'}]},
+ {id:'read3',title:'받침 처리: 올리기와 ㅅ↔ㄷ',
+  bridge:'이어적기 강의에서 배운 걸 <b>해석 기술</b>로 바꾸는 시간이에요. 뜻이 안 통하는 단어를 만나면 받침을 올려 보고, ㅅ 받침은 ㄷ으로도 바꿔 보는 것. 딱 두 가지예요.',
+  core:'뜻이 안 통하면 뒤 글자 첫소리를 앞 글자 받침으로 올려 본다. ㅅ 받침은 ㄷ으로도 바꿔 본다.',
+  body:`<h4>STEP 1. 받침 올리기</h4>
+  <p>{버디}? ‘버디’라는 말은 없죠. 뒤 글자 ㄷ을 앞으로 올리면 <b>벋이</b>(벗이). {기퍼} → 깊어, {바티라} → 밭이라.</p>
+  <h4>STEP 2. ㅅ ↔ ㄷ</h4>
+  <p>근대에는 받침 ㄷ을 ㅅ으로 적었어요(7종성). 그래서 {밋어}는 <b>믿어</b>, {벋}은 지금의 <b>벗</b>. 거꾸로 받침에 <b>ㄷ이 보이면</b> ‘확실히 8종성 시기(15~16세기)’라는 신호예요.</p>
+  <p>15세기엔 {몯}(못 하다, 불능)과 {못}(연못)이 다른 글자였는데, 근대엔 둘 다 ‘못’으로 적혀요. 뜻은 문맥으로 갈라요.</p>
+  <h4>STEP 3. 겹쳐 적은 것 풀기</h4>
+  <p>근대 자료의 {곳치지}, {잇스면}처럼 같은 소리를 두 번 적은 건 하나로 합쳐 읽으면 돼요 → 고치지, 있으면.</p>`,
+  dis:[['{버디}','벋 + 이','벗이'],['{기퍼}','깊- + -어','깊어'],['{바티라}','밭 + 이라','밭이라'],['{밋어}','믿- + -어','믿어 · 근대 7종성'],['{몯} / {못}','불능 / 연못','15세기엔 다른 말'],['{곳치지}','고치- (겹쳐 적음)','고치지 (기출 167번 지문)']],
+  trap:'받침 ㄷ이 보이면 <b>8종성 시기</b> 신호예요. 7종성에선 ㄷ 받침을 안 쓰니까요. 반대로 ㅅ만 있다고 무조건 근대는 아니에요(8종성에도 ㅅ이 있어요).',
+  tip:'<b>안 읽히면 받침 올리기 → 그래도 안 되면 ㅅ을 ㄷ으로.</b>',
+  basic:[{q:'‘버디’는 받침을 올려 ‘벋이(벗이)’로 해석할 수 있다.',a:true,why:'이어적기 되돌리기.'}],
+  deep:[{q:'근대 국어 7종성법에서는 받침 ㄷ을 ㅅ으로 적었다.',a:true,why:'밋어 = 믿어.'},{q:'15세기 문헌의 ‘몯’과 ‘못’은 같은 뜻의 다른 표기이다.',a:false,why:'몯은 불능, 못은 연못.'}]}
+]};
+const U_JEJA={id:'ujeja',title:'훈민정음 제자 원리',sub:'초성 · 중성 · 종성 만드는 법 · 연서와 병서',
+ advice:'제자 원리 용어(가획, 이체, 연서, 병서)를 섞어 쓰고 있어요. 표 하나씩 손으로 다시 그려 보면 금방 잡혀요.',
+ concepts:[
+ {id:'cho',title:'초성: 상형 · 가획 · 이체 · 병서 · 연서',
+  bridge:'중학교 때 배운 훈민정음 제자 원리를 다시 꺼내요. 기출(154번)에서 ‘연서’, ‘병서’가 그대로 나왔어요.',
+  core:'발음 기관을 본뜬 기본자 다섯에 획을 더하고(가획), 모양을 바꾸고(이체), 나란히 쓰고(병서), 위아래로 잇는다(연서).',
+  body:`<div class="tw"><table><tr><th>소리 나는 곳</th><th>기본자</th><th>가획자</th><th>이체자</th></tr>
+  <tr><td>어금닛소리(아음)</td><td>ㄱ</td><td>ㅋ</td><td class="mk">ㆁ</td></tr>
+  <tr><td>혓소리(설음)</td><td>ㄴ</td><td>ㄷ ㅌ</td><td>ㄹ (반혓소리)</td></tr>
+  <tr><td>입술소리(순음)</td><td>ㅁ</td><td>ㅂ ㅍ</td><td></td></tr>
+  <tr><td>잇소리(치음)</td><td>ㅅ</td><td>ㅈ ㅊ</td><td class="mk">ㅿ (반잇소리)</td></tr>
+  <tr><td>목소리(후음)</td><td>ㅇ</td><td class="mk">ㆆ ㅎ</td><td></td></tr></table></div>
+  <p>기본자는 소리 낼 때 혀·입술·목 모양을 본떴어요. ㄱ은 혀뿌리가 목을 막는 모양, ㄴ은 혀끝이 윗잇몸에 닿는 모양, ㅁ은 입 모양, ㅅ은 이 모양, ㅇ은 목구멍 모양.</p>
+  <p>획을 더할수록 소리가 <b>세져요</b>. ㄴ → ㄷ → ㅌ, ㅁ → ㅂ → ㅍ. 이체자(ㆁ, ㄹ, ㅿ)는 획을 더한 게 아니라 모양을 따로 바꾼 거예요.</p>
+  <h4>글자를 합치는 방법</h4>
+  <div class="tw"><table><tr><th>방법</th><th>어떻게</th><th>예</th></tr>
+  <tr><td><b>각자 병서</b></td><td>같은 자음을 나란히</td><td>ㄲ ㄸ ㅃ ㅆ ㅉ ㆅ</td></tr>
+  <tr><td><b>합용 병서</b></td><td>다른 자음을 나란히</td><td class="mk">ㅺ ㅼ ㅽ ㅳ ㅄ ㅶ ㅴ ㅵ</td></tr>
+  <tr><td><b>연서</b></td><td>ㅇ을 입술소리 아래 이어 씀</td><td class="mk">ㅸ (순경음)</td></tr></table></div>
+  <p>훈민정음 언해 원문으로 보면 이래요.</p>
+  <p class="say">ㅇ를 입시울쏘리 아래 니ᅀᅥ 쓰면 입시울 가ᄇᆡ야ᄫᆞᆫ 소리 ᄃᆞ외ᄂᆞ니라 → <b>연서</b><br>첫소리ᄅᆞᆯ 어울워 ᄡᅳᇙ디면 ᄀᆞᆯᄫᅡ 쓰라 → <b>병서</b></p>
+  <p>1933년 한글 맞춤법 통일안에서 된소리는 <b>각자 병서</b>(ㄲ ㄸ…)로 통일됐어요. 그래서 지금 쓰는 쌍자음이 된 거예요.</p>`,
+  dis:[['ㅸ','ㅂ + ㅇ (연서)','순경음 · {수ᄫᅵ} (기출 154번)'],['ㅼ','ㅅ + ㄷ (합용 병서)','{ᄯᆞᄅᆞᆷ} (기출 154번)'],['ㄲ','ㄱ + ㄱ (각자 병서)','같은 자음끼리'],['ㆁ','이체자','어금닛소리 · {ᄆᆡᇰᄀᆞ노니}'],['ㅋ','ㄱ + 획 (가획)','소리가 세짐']],
+  trap:'ㆁ, ㄹ, ㅿ은 <b>이체자</b>예요. 가획자로 분류하면 틀려요. 그리고 기출 154번처럼 {ᄆᆡᇰᄀᆞ노니}의 ㆁ을 병서나 연서로 착각하게 만드는 오답이 나와요.',
+  tip:'<b>연서 = 위아래, 병서 = 좌우.</b> 같은 거 나란히는 각자, 다른 거 나란히는 합용.',
+  basic:[{q:'‘ㅸ’은 ㅇ을 입술소리 아래에 이어 쓰는 연서로 만든 글자이다.',a:true,why:'순경음이에요.'}],
+  deep:[{q:'ㆁ은 ㄱ에 획을 더한 가획자이다.',a:false,why:'이체자예요.'},{q:'‘ㅼ’처럼 서로 다른 자음을 나란히 쓰는 것을 각자 병서라고 한다.',a:false,why:'다른 자음이면 합용 병서.'}]},
+ {id:'jung',title:'중성과 종성',
+  bridge:'ㅏ는 왜 ㅏ 모양일까요? 모음은 하늘·땅·사람을 본떠 만들었어요. 그리고 이게 모음 조화랑 바로 연결돼요.',
+  core:'하늘(ㆍ)·땅(ㅡ)·사람(ㅣ)을 본뜬 기본자에 ㆍ를 한 번 붙이면 초출자, 두 번 붙이면 재출자. 받침은 초성 글자를 다시 쓴다.',
+  body:`<div class="tw"><table><tr><th>기본자</th><th>초출자 (ㆍ 하나)</th><th>재출자 (ㆍ 둘)</th></tr>
+  <tr><td class="mk">ㆍ 하늘</td><td>ㅗ ㅏ</td><td>ㅛ ㅑ</td></tr>
+  <tr><td class="mk">ㅡ 땅</td><td>ㅜ ㅓ</td><td>ㅠ ㅕ</td></tr>
+  <tr><td class="mk">ㅣ 사람</td><td>—</td><td>—</td></tr></table></div>
+  <p>ㆍ(하늘)가 <b>위·바깥</b>에 붙은 ㅗ, ㅏ는 밝은 <b>양성</b>, <b>아래·안쪽</b>에 붙은 ㅜ, ㅓ는 어두운 <b>음성</b>이에요. 모음 조화 표가 여기서 나온 거예요.</p>
+  <p>두 모음을 합칠 때도 같은 편끼리 합쳤어요. ㅗ+ㅏ = ㅘ(양성끼리), ㅜ+ㅓ = ㅝ(음성끼리).</p>
+  <h4>종성</h4>
+  <div class="tw"><table><tr><th>시기</th><th>받침 표기</th><th>예</th></tr>
+  <tr><td>창제 원리</td><td>종성부용초성 (초성 글자를 다시 씀)</td><td>{곶} (용비어천가)</td></tr>
+  <tr><td>15~16세기 실제</td><td>8종성</td><td>{곳}, {깁고}</td></tr>
+  <tr><td>근대</td><td>7종성 (ㄷ → ㅅ)</td><td>꼿</td></tr>
+  <tr><td>현대</td><td>원형을 밝혀 적음</td><td>꽃</td></tr></table></div>
+  <p class="say">음절의 끝소리 규칙(소리)과 8종성법(표기)은 다른 거예요. 현대어는 [꼳]으로 <b>소리</b> 나도 ‘꽃’이라고 <b>적고</b>, 15세기는 소리 나는 대로 ‘곳’이라고 적은 거예요.</p>`,
+  dis:[['ㅗ','ㆍ가 ㅡ 위','초출자 · 양성'],['ㅕ','ㆍ 둘이 ㅣ 왼쪽','재출자 · 음성'],['ㅘ','ㅗ + ㅏ','양성끼리'],['ㅝ','ㅜ + ㅓ','음성끼리']],
+  trap:'“현대 국어 받침은 8종성법을 따른다” → 틀림. 현대는 꽃, 밭처럼 원형을 적어요. 소리 규칙과 표기 규칙을 섞지 마세요.',
+  tip:'<b>ㆍ가 위·바깥 = 양성, 아래·안 = 음성.</b>',
+  basic:[{q:'ㅑ는 기본자에 ㆍ를 두 번 더한 재출자이다.',a:true,why:'ㅏ(초출)에 ㆍ 하나 더.'}],
+  deep:[{q:'ㅘ는 양성 모음끼리, ㅝ는 음성 모음끼리 합친 것이다.',a:true,why:'모음 조화와 같은 원리.'},{q:'현대 국어의 받침 표기는 8종성법을 따른다.',a:false,why:'원형을 밝혀 적어요.'}]}
+]};
+const C_1516={id:'c1516',title:'15세기 vs 16세기',
+  bridge:'같은 중세라도 15세기와 16세기는 꽤 달라요. 학교 시험지 9번처럼 「훈민정음 언해」(1459)와 「소학언해」(1587)를 나란히 놓고 비교하는 문제가 대표적이에요.',
+  core:'15세기엔 동국정운식 한자음, ‘달아’ 같은 활용. 16세기엔 끊어적기, ‘달라’, 명사형 ‘-기’가 늘어난다. 8종성과 방점은 둘 다 있다.',
+  body:`<div class="tw"><table><tr><th>항목</th><th>15세기</th><th>16세기</th></tr>
+  <tr><td>한자음 표기</td><td>동국정운식 ({世·솅}, {國·귁})</td><td>사라짐</td></tr>
+  <tr><td>적는 방식</td><td>이어적기</td><td>끊어적기도 나타남 (몸이며)</td></tr>
+  <tr><td>‘르’ 활용</td><td>{달아}, {닐어} (ㄹㅇ)</td><td>{달라}, {닐러} (ㄹㄹ)</td></tr>
+  <tr><td>명사형 어미</td><td>-옴/-움</td><td>-기도 늘어남</td></tr>
+  <tr><td>모음 조화</td><td>비교적 잘 지킴</td><td>흔들림</td></tr>
+  <tr><td>ㅸ · ㅿ</td><td>씀</td><td>ㅸ 사라짐({받ᄌᆞ온}), ㅿ 사라져 감</td></tr>
+  <tr><td class="hl">공통</td><td class="hl" colspan="2">8종성, 방점, 구개음화·두음 법칙·원순 모음화 없음</td></tr></table></div>
+  <p>시험지 9번을 다시 보면 딱 보여요. (가) 훈민정음 언해 “中國에 <b>달아</b>”, (나) 소학언해 “孔子ㅣ 曾子ᄃᆞ려 <b>닐러</b>”. 같은 ‘르’ 활용인데 15세기는 ㄹㅇ, 16세기는 ㄹㄹ이에요.</p>`,
+  dis:[['{中國에 달아}','달- + -아 (ㄹㅇ)','중국과 달라 · 15세기'],['{닐러}','니르- + -어 (ㄹㄹ)','일러 · 16세기 소학언해'],['{世·솅}','동국정운식 한자음','15세기만'],['{받ᄌᆞ온}','ㅸ → 오','받은 · 16세기'],['몸이며','몸 + 이며','16세기 끊어적기 (소학언해)']],
+  trap:'“16세기 자료에는 방점이 없다” → 틀림. 16세기 <b>말</b>까지는 방점이 있어요. 소학언해(1587)에도 찍혀 있어요.',
+  tip:'<b>달아(15) → 달라(16)</b>, <b>世솅(15) → 世세(16)</b>.',
+  basic:[{q:'‘르’ 불규칙 용언이 15세기에는 ‘달아’, 16세기에는 ‘달라’처럼 활용하였다.',a:true,why:'ㄹㅇ → ㄹㄹ.'}],
+  deep:[{q:'동국정운식 한자음 표기는 16세기 「소학언해」에서도 그대로 쓰였다.',a:false,why:'15세기 후반에 사라져요.'},{q:'15세기와 16세기 문헌 모두 8종성법과 방점이 쓰였다.',a:true,why:'공통점이에요.'}]};
+const C_IRREG={id:'irreg',title:'ㅸ·ㅿ이 사라지며 생긴 불규칙 활용',
+  bridge:'문법 시간에 ‘ㅂ 불규칙(돕다-도와), ㅅ 불규칙(젓다-저어)’ 외웠죠? 그런데 좁다-좁아, 벗다-벗어는 왜 규칙일까요. 답이 중세에 있어요(기출 162번).',
+  core:'원래 어간 끝이 ㅸ, ㅿ이던 말이 그 소리가 사라지면서 불규칙 활용이 됐다. 원래 ㅂ, ㅅ이던 말은 지금도 규칙.',
+  body:`<div class="tw"><table><tr><th>현대</th><th>15세기 모음 어미 앞</th><th>원래 끝소리</th><th>지금</th></tr>
+  <tr><td>좁다 (규칙)</td><td>조바</td><td>ㅂ</td><td>좁아</td></tr>
+  <tr><td>돕다 (불규칙)</td><td>{도ᄫᅡ}</td><td class="mk">ㅸ</td><td>도와</td></tr>
+  <tr><td>벗다 (규칙)</td><td>버서</td><td>ㅅ</td><td>벗어</td></tr>
+  <tr><td>젓다 (불규칙)</td><td>{저ᅀᅥ}</td><td class="mk">ㅿ</td><td>저어</td></tr></table></div>
+  <p>자음 어미 앞(돕고, 젓고)은 8종성 때문에 원래부터 ㅂ, ㅅ으로 적혔어요. 그래서 그 자리는 지금이랑 같아요.</p>
+  <h4>ㅸ은 어떻게 사라졌냐면</h4>
+  <ul><li>ㅏ, ㅓ 앞 → 반모음 <b>w</b>: {도ᄫᅡ} → 도와, {더ᄫᅥ} → 더워</li>
+  <li>ㆍ, ㅡ 앞 → <b>ㅗ, ㅜ</b>: {도ᄫᆞ시니} → 도오시니 → 도우시니, {셔ᄫᅳᆯ} → 셔울 → 서울</li>
+  <li>받침 자리 → 그대로 ㅂ</li></ul>
+  <h4>ㅿ은</h4>
+  <p>16세기 중엽에 그냥 사라져요. {아ᅀᆞ} → 아ᄋᆞ → 아우, {저ᅀᅥ} → 저어. 받침 자리는 ㅅ.</p>`,
+  dis:[['{도ᄫᅡ} → 도와','ㅸ → 반모음 w','ㅂ으로 바뀐 게 아님!'],['{더ᄫᅥ} → 더워','ㅸ → w','덥다'],['{셔ᄫᅳᆯ} → 서울','ㅸ + ㅡ → ㅜ','서울'],['{고ᄫᅡ} → 고와','ㅸ → w','곱다 (기출 163번)'],['{저ᅀᅥ} → 저어','ㅿ 소실','젓다'],['{그ᅀᅥ} → 그어','ㅿ 소실','긋다']],
+  trap:'“{도ᄫᅡ}가 도와가 된 건 ㅸ이 ㅂ으로 바뀐 결과” → 틀림(기출 162번 정답). ㅸ은 모음 앞에서 <b>w(오/우)</b>가 됐어요. ㅂ으로 남은 건 받침 자리뿐이에요.',
+  tip:'<b>불규칙 ㅂ = 옛날 ㅸ, 불규칙 ㅅ = 옛날 ㅿ.</b>',
+  basic:[{q:'현대 국어 ‘도와’는 15세기 ‘도ᄫᅡ’의 ㅸ이 ㅂ으로 바뀐 결과이다.',a:false,why:'ㅸ → 반모음 w예요.'}],
+  deep:[{q:'15세기 ‘젓고’와 현대 ‘젓고’는 자음 어미 앞에서 어간 모양이 같다.',a:true,why:'받침 자리는 ㅅ.'},{q:'‘좁다’는 15세기에도 어간이 ‘좁-’으로 일정했기 때문에 지금도 규칙 활용을 한다.',a:true,why:'원래 ㅂ이었어요.'}]};
+const C_SEM={id:'sem',title:'의미 변화',
+  bridge:'어휘 단원에서 배운 의미 변화 세 가지, 확대·축소·이동 기억나요? 중세 단어로 이걸 묻는 문제가 나와요(기출 152번).',
+  core:'뜻의 범위가 넓어지면 확대, 좁아지면 축소, 뜻 자체가 다른 쪽으로 옮겨 가면 이동.',
+  body:`<div class="tw"><table><tr><th>종류</th><th>단어</th><th>중세</th><th>현대</th></tr>
+  <tr><td rowspan="2"><b>확대</b></td><td>겨레</td><td>친척</td><td>민족</td></tr>
+  <tr><td>다리</td><td>사람·동물의 다리</td><td>물건의 다리까지</td></tr>
+  <tr><td rowspan="3"><b>축소</b></td><td>놈</td><td>사람 일반</td><td>남자를 낮잡는 말</td></tr>
+  <tr><td>{말ᄊᆞᆷ}</td><td>말 일반</td><td>높이거나 낮추는 말</td></tr>
+  <tr><td>얼굴</td><td>형체(몸 전체)</td><td>안면</td></tr>
+  <tr><td rowspan="3"><b>이동</b></td><td>어리다</td><td>어리석다</td><td>나이가 적다</td></tr>
+  <tr><td>{어엿브다}</td><td>불쌍하다</td><td>예쁘다</td></tr>
+  <tr><td>{싁싁ᄒᆞ다}</td><td>엄하다</td><td>씩씩하다</td></tr>
+  <tr><td><b>사라짐</b></td><td>하다(多)</td><td>많다</td><td>없어짐</td></tr></table></div>
+  <h4>판단 순서</h4>
+  <p>① 옛 뜻과 지금 뜻이 <b>같은 줄기</b>인가? → 범위만 바뀌었으면 확대·축소. ② 뜻 자체가 다른 쪽이면 이동.</p>
+  <p class="say">‘하다(많다)’는 함정이에요. 지금의 ‘하다(do)’는 {ᄒᆞ다}에서 온 <b>다른 단어</b>예요. ‘많다’ 뜻의 하다는 그냥 사라졌어요. 그래서 “하다가 의미 축소됐다”는 틀린 말이에요.</p>`,
+  dis:[['{말ᄊᆞ미}','말 일반 → 높임·낮춤','의미 축소 (기출 152번)'],['{어린} 百姓','어리석다 → 나이 적다','의미 이동'],['{노미}','사람 → 남자 낮춤','의미 축소'],['{하니라}','많다 → 사라짐','현대 하다와 다른 말'],['{어엿비}','불쌍히 → 예쁘게','의미 이동 (152번 정답)']],
+  trap:'152번: 말ᄊᆞᆷ·놈을 “확대”라고 한 선지, 어리다를 “축소”라고 한 선지, 하다를 “축소”라고 한 선지가 전부 함정이었어요.',
+  tip:'<b>범위가 변하면 확대·축소, 뜻이 바뀌면 이동.</b>',
+  basic:[{q:'‘어리다’가 ‘어리석다’에서 ‘나이가 적다’로 바뀐 것은 의미 축소의 예이다.',a:false,why:'뜻이 바뀐 의미 이동이에요.'}],
+  deep:[{q:'‘놈’이 ‘사람’에서 남자를 낮잡는 말이 된 것은 의미 축소이다.',a:true,why:'범위가 좁아졌어요.'},{q:'‘겨레’가 ‘친척’에서 ‘민족’으로 바뀐 것은 의미 확대이다.',a:true,why:'범위가 넓어졌어요.'}]};
+UNITS.splice(1,0,U_READ,U_JEJA);
+UNITS.find(u=>u.id==='u1').concepts.push(C_1516);
+UNITS.find(u=>u.id==='u3').concepts.push(C_IRREG);
+UNITS.find(u=>u.id==='u9').concepts.push(C_SEM);
+
+/* 기출 선지를 OX로 자동 변환 */
+EXAMS.filter(e=>e.no>100&&(e.neg||e.pos)).forEach(e=>e.ch.forEach((c,i)=>{DRILL.push({id:'d:'+DRILL.length,src:e.no+'번 '+'①②③④⑤'[i],q:c,a:e.neg?(i+1!==e.ans):(i+1===e.ans),why:e.ex[i],link:e.links[i],pno:e.no})}));
+
+/* ═════════ 예문 더 (개념별) ═════════ */
+const MORE={
+era:[['「석보상절」','1447년','15세기 → 중세'],['「월인천강지곡」','1447~1449년','15세기 → 중세'],['「번역소학」','1518년','16세기 → 중세'],['「두시언해」 중간본','1632년','17세기 → <b>근대</b>. 초간본(1481)과 헷갈리기 쉬움'],['「노걸대언해」','1670년','17세기 → 근대'],['「독립신문」','1896년','19세기 말 → 근대, 띄어쓰기 시작']],
+timeline:[['{ᄆᆞᅀᆞᆷ} → {ᄆᆞᄋᆞᆷ} → 마음','ㅿ 소실 → ㆍ 소실','16세기에 ㅿ이 빠지고, 18세기에 ㆍ가 ㅏ로'],['{ᄒᆞᄅᆞ} → ᄒᆞ르 → 하루','ㆍ 1단계 → 2단계','16세기 / 18세기'],['{ᄡᆞᆯ} → 쌀','어두 자음군 → 된소리','근대'],['{더ᄫᅳ니} → 더우니','ㅸ 소실','15세기 중엽'],['나 + ㅣ = {내} → 내가','주격 가 확산','근대: ㅣ 위에 \'가\'가 한 번 더 붙음'],['{잇ᄉᆞᆸᄂᆞ이다} → 있습니다','-ᄉᆞᆸ-이 상대 높임으로','근대 → 현대']],
+yeon:[['{사ᄅᆞ미}','{사ᄅᆞᆷ} + 이','사람이 · 이어'],['{므른}','믈 + 은','물은 · 이어'],['{바ᄅᆞ래}','{바ᄅᆞᆯ} + 애','바다에 · 이어'],['{머거}','먹- + -어','먹어 · 이어'],['{니겨}','닉- + -어','익혀 · 이어'],['{사ᄅᆞᆷ이}','{사ᄅᆞᆷ} + 이','사람이 · 끊어 (16세기 이후 늘어남)'],['{손ᄋᆞ로}','손 + {ᄋᆞ로}','손으로 · 끊어'],['{사ᄅᆞᆷ미}','{사ᄅᆞᆷ} + 이','사람이 · ㅁ이 두 번 → 거듭']],
+jong8:[['{빗}','빛','빛 · ㅊ → ㅅ'],['{비치}','빛 + 이','빛이 · 모음 앞이라 ㅊ 그대로'],['{좃고}','좇- + -고','좇고 · ㅊ → ㅅ'],['{조차}','좇- + -아','좇아 · ㅊ 살아남'],['{놉고}','높- + -고','높고 · ㅍ → ㅂ'],['{곳}','곶','꽃 · ㅈ → ㅅ'],['{고지}','곶 + 이','꽃이 · 모음 앞이라 ㅈ 그대로']],
+lost:[['{ᄆᆞᅀᆞᆷ}','ㅿ','마음'],['{ᄀᆞᅀᆞᆯ}','ㅿ','가을'],['{겨ᅀᆞᆯ}','ㅿ','겨울'],['{사ᅀᅵ}','ㅿ','사이'],['{고ᄫᆞᆫ}','ㅸ','고운'],['{수ᄫᅵ}','ㅸ','쉬이, 쉽게 (시험지 9번 훈민정음 언해)'],['{ᄃᆞᆯ}','첫음절 ㆍ','달 (18세기에 ㅏ로)'],['{ᄆᆡᇰᄀᆞ노니}','받침 ㆁ','만드니 (시험지 9번)']],
+bangjeom:[[':눈 / ·눈','상성 / 거성','눈(雪)[눈ː] / 눈(目)'],[':밤 / 밤','상성 / 평성','밤(栗)[밤ː] / 밤(夜)'],[':벌 / 벌','상성 / 평성','벌(蜂)[벌ː] / 벌(罰)'],['·내 / 내','주격 거성 / 관형격 평성','내가 / 나의']],
+eodu:[['{ᄠᅳᆮ}','ㅳ · ㅂ계','뜻'],['{ᄡᆞᆯ}','ㅄ · ㅂ계','쌀'],['{ᄧᅡ다}','ㅶ · ㅂ계','짜다'],['{ᄩᅳ다}','ㅷ · ㅂ계','뜨다'],['{ᄭᅮᆷ}','ㅺ · ㅅ계','꿈'],['{ᄯᅡ}','ㅼ · ㅅ계','땅'],['{ᄲᅧ}','ㅽ · ㅅ계','뼈'],['{ᄢᅳ다}','ㅴ · ㅄ계','끼다'],['{ᄣᅢ}','ㅵ · ㅄ계','때'],['볍씨 · 햅쌀','벼 + {ᄡᅵ} · 해 + {ᄡᆞᆯ}','ㅂ이 앞 글자 받침으로 남은 흔적'],['입때 · 접때','이 + {ᄣᅢ} · 저 + {ᄣᅢ}','ㅂ이 남은 흔적']],
+vh:[['{나ᄂᆞᆫ} / 너는','나 + {ᄂᆞᆫ} / 너 + 는','ㅏ 양성 / ㅓ 음성'],['{사ᄅᆞᄆᆞᆯ} / {ᄭᅮ믈}','{ᄋᆞᆯ} / 을','ㆍ 양성 / ㅜ 음성'],['{바ᄅᆞ래} / {므레}','애 / 에','바다에 / 물에'],['{나ᄅᆞᆯ} / 너를','{ᄅᆞᆯ} / 를','나를 / 너를'],['{사ᄅᆞᄆᆡ} / {거부븨}','{ᄋᆡ} / 의','사람의 / 거북의'],['{자바} / {머거}','-아 / -어','잡아 / 먹어 · 어미도 맞춤']],
+hnoun:[['{하ᄂᆞᆯ히}','하ᄂᆞᆯㅎ + 이','하늘이'],['{하ᄂᆞᆯ콰}','하ᄂᆞᆯㅎ + 과','하늘과 · ㅎ+ㄱ → ㅋ'],['{나라해}','나라ㅎ + 애','나라에'],['{뫼해}','뫼ㅎ + 애','산에'],['{돌ᄒᆞᆯ}','돌ㅎ + {ᄋᆞᆯ}','돌을'],['{길헤}','길ㅎ + 에','길에'],['{우희}','우ㅎ + 의','위에 · 특이 처격'],['안팎 · 살코기','안ㅎ + 밖 · 살ㅎ + 고기','현대어에 남은 흔적'],['수탉 · 암캐','수ㅎ + 닭 · 암ㅎ + 개','현대어에 남은 흔적']],
+nom:[['{사ᄅᆞ미}','{사ᄅᆞᆷ} + 이','사람이 · 자음 뒤'],['{네}','너 + ㅣ','네가'],['{제}','저 + ㅣ','자기가 · 뒤에 명사가 오면 관형격!'],['{쇠}','쇼 + ㅣ','소가'],['{배}','바 + ㅣ','바가 (시험지 9번)'],['{ᄒᆡ} 디거늘','{ᄒᆡ} + ∅','해가 지거늘 · ㅣ로 끝나서 ∅ (시험지 7번)'],['{다리}','다리 + ∅','다리가'],['{내가}','나 + ㅣ + 가','근대: ㅣ 위에 가가 덧붙은 모양']],
+gen:[['{ᄂᆞᄆᆡ}','{ᄂᆞᆷ} + {ᄋᆡ}','남의 · 유정물 평칭'],['{사ᄅᆞᄆᆡ}','{사ᄅᆞᆷ} + {ᄋᆡ}','사람의'],['{거부븨}','거붑 + 의','거북의 · 음성이라 의'],['{瞿曇ᄋᆡ} 오ᄉᆞᆯ','瞿曇 + {ᄋᆡ}','구담의 옷을 (시험지 12번)'],['{世尊ㅅ}','世尊 + ㅅ','세존의 · 높임'],['{님긊}','님금 + ㅅ','임금의 · 높임'],['{江ㅅ} 우ㅎ','江 + ㅅ','강의 위 · 무정물'],['{빗믈}','비 + ㅅ + 믈','빗물 (시험지 8번 지문)'],['{믌고기}','믈 + ㅅ + 고기','물고기 (시험지 8번 지문)']],
+adv:[['{므레}','믈 + 에','물에 · 음성'],['{ᄇᆡ예}','{ᄇᆡ} + 예','배에 · ㅣ 뒤'],['{바ᄆᆡ}','밤 + {ᄋᆡ}','밤에 · 특이 처격'],['{나ᄌᆡ}','낮 + {ᄋᆡ}','낮에 · 특이 처격'],['{우희}','우ㅎ + 의','위에 · 특이 처격'],['{乾坤애}','乾坤 + 애','하늘과 땅에 (시험지 7번)'],['{부텻긔}','부텨 + ㅅ + 긔','부처께 · 높임 (시험지 13번)'],['{大王ᄭᅴ}','大王 + ᄭᅴ','대왕께 (시험지 13번)'],['{曾子ᄃᆞ려}','曾子 + {ᄃᆞ려}','증자에게 (시험지 9번)']],
+etc:[['{날}','나 + ㄹ','나를 · 줄임'],['{너를}','너 + 를','음성 모음 뒤'],['{ᄂᆞᄆᆞᆫ}','{ᄂᆞᆷ} + {ᄋᆞᆫ}','남은 · 보조사'],['{ᄆᆞᄋᆞᄆᆞ란}','{ᄆᆞᄋᆞᆷ} + {ᄋᆞ란}','마음은 · 보조사'],['{밤과 낮과}','밤 + 과 · 낮 + 과','밤과 낮(을) · 마지막에도 과'],['{世尊하}','世尊 + 하','세존이시여 · 높임 호격'],['{阿難아}','阿難 + 아','아난아 · 평칭 호격']],
+pron:[['{그듸}','2인칭 높임','그대 (프린트 \'그듸 아바니미\')'],['{ᄌᆞ갸}','재귀 높임','당신(그분 자신)'],['저','재귀 평칭','자기'],['누','미지칭','누구'],['{므스}','미지칭','무엇'],['{어듸}','미지칭','어디 (시험지 7번 \'어듸 가 이시료\')'],['내 {ᄠᅳ디}','나 + ㅣ(관형격)','나의 뜻이'],['{네} 엇뎨 안다','너 + ㅣ(주격)','네가 어찌 아느냐']],
+comp:[['부텨 {ᄃᆞ외샤}','부텨 = 보어','부처가 되시어'],['니르고져 홇 {배}','바 + ㅣ = 주어','이르고자 하는 바가 (시험지 9번)'],['中國에 {달아}','中國에 = 부사어','중국과 달라 · 두 자리 서술어'],['{날}ᄃᆞ려가소','나 + ㄹ = 목적어','나를 데려가오 (시험지 14번)']],
+subj:[['{가샤}','가- + -샤- + (-아)','가시어'],['{겨샤}','겨- + -샤- + (-아)','계시어 (시험지 12번)'],['{니ᄅᆞ샤ᄃᆡ}','니ᄅᆞ- + -샤- + -ᄃᆡ','이르시되'],['{ᄀᆞᆯᄋᆞ샤ᄃᆡ}','ᄀᆞᆯ- + -ᄋᆞ샤- + -ᄃᆡ','가라사대 (시험지 9번)'],['{업스시니}','없- + -으시- + -니','없으시니 (시험지 10번)'],['{니ᄅᆞ샴}','니ᄅᆞ- + -샤- + -옴','이르심 · -옴 앞에서도 -샤-']],
+obj:[['{돕ᄉᆞᆸ고}','돕- + {-ᄉᆞᆸ-} + -고','돕고 · ㅂ 뒤'],['{막ᄉᆞᄫᆞ니}','막- + {-ᄉᆞᄫᆞ-} + -니','막으니 · ㄱ 뒤, 모음 앞'],['{묻ᄌᆞᆸ고}','묻- + {-ᄌᆞᆸ-} + -고','여쭙고 · ㄷ 뒤'],['{얻ᄌᆞᄫᆞ니}','얻- + {-ᄌᆞᄫᆞ-} + -니','얻으니 · ㄷ 뒤, 모음 앞'],['{보ᅀᆞᆸ고}','보- + {-ᅀᆞᆸ-} + -고','뵙고 · 모음 뒤'],['{안ᅀᆞᄫᆞ니}','안- + {-ᅀᆞᄫᆞ-} + -니','안으니 · ㄴ 뒤'],['{받ᄌᆞ온}','받- + {-ᄌᆞ오-} + -ㄴ','받은 · 16세기엔 ㅸ이 오로 (시험지 9번)']],
+rel:[['{ᄒᆞᄂᆞ이다}','ᄒᆞ- + -ᄂᆞ- + -이- + -다','합니다 · ᄒᆞ쇼셔체 평서'],['{ᄒᆞᄂᆞ니잇가}','… + -니- + -잇- + -가','합니까 · ᄒᆞ쇼셔체 의문'],['{ᄒᆞ리잇고}','… + -리- + -잇- + -고','(무엇을) 하겠습니까'],['{ᄒᆞ쇼셔}','ᄒᆞ- + -쇼셔','하소서 · 명령'],['{ᄒᆞᄂᆞᆺ가}','ᄒᆞ야쎠체 의문','합니까 (보통 높임)'],['{ᄒᆞ라}','ᄒᆞ라체 명령','하라'],['{ᄒᆞ얏소}','하오체 (근대)','했소 (시험지 7번 (다))']],
+tense:[['{ᄒᆞ다}','ᄒᆞ- + ∅ + -다','했다 · 동사 ∅ = 과거'],['{됴ᄒᆞ다}','형용사 + ∅','좋다 · 형용사 ∅ = 현재'],['{가ᄂᆞ다}','가- + -ᄂᆞ- + -다','간다 · 현재'],['{ᄒᆞ더라}','ᄒᆞ- + -더- + -라','하더라 · 회상'],['{ᄒᆞ리라}','ᄒᆞ- + -리- + -라','하겠다 · 미래'],['{보앗더라}','보- + -앗- + -더- + -라','보았더라 · 근대에 \'-앗-(았)\' 등장 (시험지 7번 (다))']],
+o:[['{ᄆᆡᇰᄀᆞ노니}','ᄆᆡᇰᄀᆞ- + -노- + -니','(내가) 만드니 · 화자 세종 (시험지 9번)'],['{ᄃᆞᆫ니노니}','ᄃᆞᆫ니- + -노- + -니','(내가) 다니니 (시험지 7번)'],['{ᄉᆞ랑ᄒᆞ노니}','ᄉᆞ랑ᄒᆞ- + -노- + -니','(내가) 생각하니 (시험지 7번)'],['{ᄒᆞ노라}','ᄒᆞ- + -노- + -라','(나는) 하노라 (시험지 7번 (다))'],['내 {니ᄅᆞ논} 말','니ᄅᆞ- + -노- + -ㄴ','내가 이르는 말 · 대상 표시']],
+q:[['{이시료}','이시- + -리- + -오','있을 것인가 · 의문사 \'어듸\' (시험지 7번)'],['{잇ᄂᆞ닛가}','ᄒᆞ야쎠체 판정','있습니까? (예/아니오)'],['{미드니잇가}','판정 + -잇-','믿으시겠습니까? (시험지 10번)'],['{터이뇨}','터 + 이- + -뇨','(어디 갈) 터이냐 · 의문사 \'어ᄃᆡ\' (시험지 7번 (다))'],['네 엇뎨 {가ᄂᆞᆫ다}','2인칭 + 의문사','네가 어찌 가느냐 · 2인칭이 우선']],
+ending:[['{뮐ᄊᆡ}','뮈- + -ㄹᄊᆡ','흔들리므로'],['{아니ᄒᆞᆯᄊᆡ}','아니ᄒᆞ- + -ㄹᄊᆡ','아니하므로 (시험지 9번)'],['{갈오ᄃᆡ}','갈- + -오ᄃᆡ','가로되 (시험지 7번)'],['{사ᄋᆞ리로ᄃᆡ}','{사ᄋᆞᆯ} + 이- + -로ᄃᆡ','사흘이로되 · 이- 뒤 -오ᄃᆡ → -로ᄃᆡ'],['{뷔어ᅀᅡ}','뷔- + -어ᅀᅡ','비어야 (시험지 10번)'],['{디거늘}','디- + -거늘','지거늘 (시험지 7번)']],
+morph:[['{므른}','믈 + 은','물은 · 형태소 2, 단어 2'],['{바ᄅᆞ래}','{바ᄅᆞᆯ} + 애','바다에 · 형태소 2, 단어 2'],['{남ᄀᆞᆫ}','나모(남ㄱ) + {ᄋᆞᆫ}','나무는 · 모음 조사 앞에서 \'남ㄱ\'으로 바뀌는 특수한 명사'],['{여름}','열- + -음','열매 · 파생 명사, 단어 1'],['{하ᄂᆞ니}','하- + -ᄂᆞ- + -니','많으니 · 형태소 3, 단어 1'],['{뮐ᄊᆡ}','뮈- + -ㄹᄊᆡ','흔들리므로 · 형태소 2, 단어 1']],
+caus:[['{머기다}','먹- + -이-','먹이다'],['{살이다}','살- + -이-','살리다'],['{알외다}','알- + -오- + -ㅣ-','알리다'],['{니르키다}','니르- + -키-','일으키다'],['{ᄆᆞᆯ키다}','ᄆᆞᆰ- + -히-','맑히다'],['{便安킈} ᄒᆞ고져','便安ᄒᆞ- + -긔 + ᄒᆞ-','편안하게 하고자 · 긴 사동 (시험지 9번)']],
+nmz:[['{니ᄅᆞ샴}','니ᄅᆞ- + -샤- + -옴','이르심'],['{우룸}','울- + -움','울기 · 명사형'],['{우름}','울- + -음','울음 · 파생 명사'],['{거로미}','걷- + -옴 + 이','걷기가'],['{미워ᄒᆞᆷ}','미워ᄒᆞ- + -ㅁ','미워함 · 근대엔 -옴이 -ㅁ으로 (시험지 7번 (다))'],['{우슴}','웃- + -음','웃음 (시험지 7번 (다))']],
+sai:[['햇빛','해 + 빛','[핻삗] 된소리 → ㅅ 적음'],['빗물','비 + 물','[빈물] ㄴ 덧남 → ㅅ 적음'],['댓잎','대 + 잎','[댄닙] ㄴㄴ 덧남 → ㅅ 적음'],['바닷가','바다 + 가','[바닫까] → ㅅ 적음'],['머리말','머리 + 말','[머리말] 현상 없음 → 안 적음'],['초점','焦 + 點','한자어끼리 → 안 적음'],['숫자','數 + 字','한자어지만 예외 6개 → 적음'],['해님','해 + -님','파생어 → 안 적음']]
+};
+UNITS.forEach(u=>u.concepts.forEach(c=>{if(MORE[c.id])c.dis=c.dis.concat(MORE[c.id])}));
+
+/* ═════════ 선지 근거 문장 (지문 없이 선지만 보이는 문제 해결) ═════════ */
+const PASS10=`<div class="pass"><div class="ot">海東 六龍이 ᄂᆞᄅᆞ샤 일마다 天福이시니 <u>古聖이</u> 同符ᄒᆞ시니<span class="src">「용비어천가」 제1장</span><br>가ᄅᆞᆯ ᄀᆞᇫ애 자거늘 밀므리 사ᄋᆞ리로ᄃᆡ 나거ᅀᅡ ᄌᆞᄆᆞ니이다<br>셤 <u>안해</u> 자싫 제 한비 사ᄋᆞ리로ᄃᆡ 뷔어ᅀᅡ <u>ᄌᆞᄆᆞ니이다</u><span class="src">「용비어천가」 제67장</span><br>千世 우희 미리 定ᄒᆞ샨 漢水北에 累仁開國 <u>ᄒᆞ샤</u> 卜年이 ᄀᆞᇫ업스시니<br>聖神이 니ᅀᆞ샤도 敬天勤民ᄒᆞ샤ᅀᅡ 더욱 구드시리이다<br>님금하 아ᄅᆞ쇼셔 洛水예 山行 가 이셔 하나빌 <u>미드니잇가</u><span class="src">「용비어천가」 제125장</span></div></div>`;
+const L=(tag,ot,tr)=>({tag,ot,tr});
+const CTX={
+'7번 ①':[L('(가) 용비어천가','ᄉᆡ미 기픈 므른 … <u>내히</u> 이러 바ᄅᆞ래 가ᄂᆞ니','샘이 깊은 물은 … 내(川)가 이루어져 바다에 가느니'),L('(나) 두시언해','乾坤애 이 <u>ᄯᅡ히</u> 깁고 險阻ᄒᆞ도다','하늘과 땅에 이 땅이 깊고 험하도다')],
+'7번 ②':[L('(가) 용비어천가','불휘 <u>기픈</u> 남ᄀᆞᆫ','뿌리가 깊은 나무는'),L('(나) 두시언해','이 ᄯᅡ히 <u>깁고</u> 險阻ᄒᆞ도다','이 땅이 깊고 험하도다')],
+'7번 ③':[L('(나) 두시언해','<u>보ᄆᆡ</u> 왯ᄂᆞᆫ 萬里옛 나그내ᄂᆞᆫ','봄에 와 있는 만리의 나그네는'),L('(나) 두시언해','ᄒᆡ 디거늘 거츤 <u>믌ᄀᆞᇫᄋᆡ</u> ᄆᆡ요라','해 지거늘 거친 물가에 매도다')],
+'7번 ④':[L('(나) 두시언해 · 1481','즈믄 묏 안해 <u>ᄇᆡᄅᆞᆯ</u> 이어','천 봉우리 산 안에 배를 띄우고'),L('(다) 신정심상소학 · 1896','내 우름 <u>쇼리를</u> 미워ᄒᆞᄂᆞᆫ 故로','내 울음소리를 미워하는 까닭에')],
+'7번 ⑤':[L('(가) 용비어천가','<u>불휘</u> 기픈 남ᄀᆞᆫ','뿌리가 깊은 나무는'),L('(나) 두시언해','<u>내</u> 본ᄃᆡ ᄇᆞᄅᆞ매 브텨 ᄃᆞᆫ니노니','내가 본디 바람에 불려 다니니'),L('(다) 신정심상소학','<u>부엉이가</u> 비둘기의게 우슴을 보앗더라','부엉이가 비둘기에게 웃음을 보았더라')],
+'8번':[L('지문 요약 ①','중세 관형격: 유정물 → ᄋᆡ/의/ㅣ, 무정물·존칭 → ㅅ','빗물(비+ㅅ+믈), 물고기(믈+ㅅ+고기)에 ㅅ이 있었음'),L('지문 요약 ②','사이시옷 = 순우리말 포함 합성어 + 앞말 모음 끝 + (된소리 / ㄴ 덧남 / ㄴㄴ 덧남)','앞말이 자음으로 끝나면 역사적으로 ㅅ이 있었어도 못 적음')],
+'9번 ①':[L('(가) 훈민정음 언해','文字와로 서르 <u>ᄉᆞᄆᆞᆺ디</u> 아니ᄒᆞᆯᄊᆡ','문자와 서로 통하지 아니하므로'),L('(나) 소학언해','유익ᄒᆞᆫ 이 세 가짓 <u>벋</u>이오','유익한 것이 세 가지 벗이요')],
+'9번 ②':[L('(가) 훈민정음 언해','니르고져 홇 <u>배</u> 이셔도','이르고자 하는 바가 있어도'),L('(가) 훈민정음 언해','ᄆᆞᄎᆞᆷ내 <u>제</u> ᄠᅳ들 시러 펴디 몯ᄒᆞᇙ 노미','끝내 제(자기의) 뜻을 능히 펴지 못하는 사람이'),L('(나) 소학언해','<u>孔子ㅣ</u> 曾子ᄃᆞ려 닐러','공자가 증자에게 일러')],
+'9번 ③':[L('(가) 훈민정음 언해','펴디 몯ᄒᆞᇙ 노미 <u>하니라</u>','펴지 못하는 사람이 많다'),L('(나) 소학언해','헐워 상히오디 아니홈이 효도의 <u>비르소미오</u>','상하게 하지 않음이 효도의 시작이고')],
+'9번 ④':[L('(가) 훈민정음 언해','사ᄅᆞᆷ마다 <u>ᄒᆡᅇᅧ</u> 수ᄫᅵ 니겨','사람마다 하여금 쉽게 익혀'),L('(나) 소학언해','ᄡᅥ 父母를 <u>현뎌케 홈</u>이','그로써 부모를 드러나게 함이')],
+'9번 ⑤':[L('(가) 훈민정음 언해','날로 <u>ᄡᅮ메</u> 便安킈 ᄒᆞ고져','날마다 씀에 편안하게 하고자'),L('(나) 소학언해','일홈을 後世예 베퍼 <u>ᄡᅥ</u> 父母를','이름을 후세에 펴서 그로써 부모를')],
+'10번 ①':[L('용비어천가 제1장','海東 六龍이 ᄂᆞᄅᆞ샤 … <u>古聖이</u> 同符ᄒᆞ시니','해동 여섯 용이 나시어 … 옛 성인이 (하신 일과) 부절을 맞춘 듯 같으시니')],
+'10번 ②':[L('용비어천가 제67장','셤 <u>안해</u> 자싫 제 한비 사ᄋᆞ리로ᄃᆡ','섬 안에 주무실 때 큰비가 사흘이로되')],
+'10번 ⑤':[L('용비어천가 제125장','님금하 아ᄅᆞ쇼셔 洛水예 山行 가 이셔 하나빌 <u>미드니잇가</u>','임금이시여 아소서, 낙수에 사냥 가 있으면서 할아버지(의 공덕)를 믿으시겠습니까?')],
+'11번':[L('용비어천가 제2장','<span class="bx">ᄉᆡ미 기픈 므른 ᄀᆞᄆᆞ래 아니 그츨ᄊᆡ</span>','샘이 깊은 물은 가뭄에 아니 그치므로')],
+'12번':[L('월인석보 권1','ᄒᆞᆫ 菩薩이 <u>王</u> ᄃᆞ외야 겨샤 나라ᄒᆞᆯ 아ᅀᆞ <u>맛디시고</u> … 瞿曇婆羅門ᄋᆞᆯ 맛나샤 <u>ᄌᆞ갓</u> <u>오ᄉᆞ란</u> 밧고 … 果實와 <u>믈와</u> 좌시고','한 보살이 왕 되어 계시어 나라를 아우에게 맡기시고 … 구담바라문을 만나셔서 당신의 옷은 벗고 … 과일과 물을 자시고')],
+'13번 ㉠':[L('보기','大臣이 이 藥 ᄆᆡᇰᄀᆞ라 <u>大王ᄭᅴ</u> 받ᄌᆞᄫᆞᆫ대','대신이 이 약을 만들어 대왕께 바치어')],
+'13번 ㉡':[L('보기 표','ㄱㅂㅅㅎ → -ᄉᆞᆸ- / ㄷㅈㅊ → -ᄌᆞᆸ- / 모음·ㄴㅁㄹ → -ᅀᆞᆸ-','모음 어미 앞에서는 -ᄉᆞᄫᆞ-, -ᄌᆞᄫᆞ-, -ᅀᆞᄫᆞ-'),L('보기','내 아래브터 부텻긔 이런 마ᄅᆞᆯ 몯 ( ㉡ )','내가 예전부터 부처께 이런 말을 못 들으며')],
+'14번 ①':[L('(가) 1586 편지','자내여히고아므려내살셰업ᄉᆞ니…','자네 여의고 아무래도 내 살 수가 없으니 (붙여 씀)'),L('(나) 1896 신정심상소학','이 니야기는 ᄎᆞᆷ 滋味잇ᄉᆞᆸᄂᆞ이다','이 이야기는 참 재미있습니다 (띄어 씀)')],
+'14번 ②':[L('(가) 1586 편지','수이자내ᄒᆞᆫ<u>듸</u>가고져ᄒᆞ니','빨리 자네한테 가고자 하니'),L('(나) 1896','다른 <u>듸</u>로만 가랴고','다른 데로만 가려고')],
+'14번 ③':[L('(가) 1586 편지','자내향ᄒᆡ<u>ᄆᆞᄋᆞᄆᆞᆯ</u>','자네 향한 마음을'),L('(나) 1896','곳치지 안코 … <u>잇스면</u>','고치지 않고 … 있으면')],
+'14번 ④':[L('(가) 1586 편지','<u>자내</u>여히고아므려내살셰업ᄉᆞ니','자네 여의고 아무래도 내 살 수가 없으니')],
+'14번 ⑤':[L('(나) 1896','이 니야기는 ᄎᆞᆷ 滋味<u>잇ᄉᆞᆸᄂᆞ이다</u>','이 이야기는 참 재미있습니다')]
+};
+['ㄱ','ㄴ','ㄷ','ㄹ','ㅁ'].forEach(k=>CTX['8번 '+k]=CTX['8번']);
+['①','②','③','④','⑤'].forEach(k=>CTX['12번 '+k]=CTX['12번']);
+const REF={'b:jong8:0':'7번 ②','b:vh:0':'7번 ④','b:hnoun:0':'7번 ①','p:hnoun:0':'10번 ②','b:adv:0':'7번 ③','p:adv:1':'14번 ②','b:rel:0':'14번 ⑤','p:rel:1':'10번 ⑤','b:comp:0':'14번 ④','p:comp:0':'12번','p:comp:1':'12번','b:eodu:0':'9번 ⑤','p:nom:0':'9번 ②','p:nom:1':'10번 ①','b:pron:0':'12번','p:pron:0':'9번 ②','b:etc:0':'12번','p:etc:0':'12번','b:obj:0':'13번 ㉠','p:obj:0':'13번 ㉡','b:ending:0':'9번 ③','b:morph:0':'11번','p:morph:0':'11번','b:caus:0':'9번 ④','b:nmz:0':'9번 ⑤','b:sai:0':'8번','p:sai:0':'8번','p:sai:1':'8번','p:sai:2':'8번','b:yeon:0':'14번 ③'};
+function ctxHtml(it){
+  if(it.pno){const e=EXAMS.find(x=>x.no===it.pno);return `<div class="ctx"><div class="ctxh">${I.book}<span>${it.pno}번 지문 · ${e.src}</span></div><div class="fullp">${e.pass}</div></div>`}
+  const key=REF[it.id]||it.src,cx=CTX[key];if(!cx)return '';
+  const no=parseInt(key);
+  return `<div class="ctx"><div class="ctxh">${I.book}<span>근거 문장</span></div>${cx.map(l=>`<div class="cl"><span class="ctag">${l.tag}</span><div class="cot">${l.ot}</div><div class="ctr">${l.tr}</div></div>`).join('')}${no?`<button class="link" data-fullpass="${no}">${I.search} 전체 지문 보기</button><div class="fullp"></div>`:''}</div>`;
+}
+
+/* ═════════ 인덱스 ═════════ */
+const CON={},ITEMS={};
+UNITS.forEach((u,ui)=>u.concepts.forEach((c,ci)=>{
+  CON[c.id]={u:ui,c:ci,unit:u.id};
+  c.basic.forEach((k,i)=>ITEMS['b:'+c.id+':'+i]=Object.assign({id:'b:'+c.id+':'+i,src:c.title,link:c.id},k));
+  c.deep.forEach((k,i)=>ITEMS['p:'+c.id+':'+i]=Object.assign({id:'p:'+c.id+':'+i,src:c.title+' 심화',link:c.id},k));
+}));
+DRILL.forEach(d=>ITEMS[d.id]=d);
+EXAMS.forEach(e=>ITEMS['e:'+e.no]={id:'e:'+e.no,src:e.no+'번 실전',q:e.q,link:e.links[e.ans-1],exam:e.no});
+const TOTAL=Object.keys(CON).length;
+const unitOf=id=>{const it=ITEMS[id];return it&&CON[it.link]?CON[it.link].unit:null};
+
+/* ═════════ 상태 ═════════ */
+const KEY='codex.mk.v2';
+const today=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
+const addDays=(s,n)=>{const d=new Date(s+'T00:00:00');d.setDate(d.getDate()+n);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
+const DEF={onb:0,notice:1,done:{},seen:{},rev:{},stat:{},ex:{},days:[],solved:0,ok:0,fs:'m',hc:0,hide:1,last:null};
+let S=JSON.parse(JSON.stringify(DEF));
+try{const r=localStorage.getItem(KEY);if(r)S=Object.assign(S,JSON.parse(r))}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+function touchDay(){const t=today();if(!S.days.includes(t)){S.days.push(t);S.days=S.days.slice(-60);save()}}
+function streak(){let n=0,d=today();if(!S.days.includes(d))d=addDays(d,-1);while(S.days.includes(d)){n++;d=addDays(d,-1)}return n}
+function dueList(day){return Object.keys(S.rev).filter(k=>ITEMS[k]&&S.rev[k].due<=day)}
+function dueOn(day){return Object.keys(S.rev).filter(k=>ITEMS[k]&&S.rev[k].due===day).length}
+function record(id,ok){
+  touchDay();S.solved++;if(ok)S.ok++;
+  const u=unitOf(id);if(u){S.stat[u]=S.stat[u]||{a:0,c:0};S.stat[u].a++;if(ok)S.stat[u].c++}
+  if(!ok)S.rev[id]={due:today(),lv:0};
+  save();
+}
+function reviewed(id,ok){
+  const r=S.rev[id];if(!r)return;
+  if(ok){r.lv++;if(r.lv>=4)delete S.rev[id];else r.due=addDays(today(),[1,3,7][r.lv-1])}
+  else{r.lv=0;r.due=addDays(today(),1)}
+  save();
+}
+
+/* ═════════ 라우팅 ═════════ */
+let R={tab:'home',seg:'concept',unit:0,ci:0,exam:null,sess:null,filter:'전체',onb:0};
+const TABS=[['home','홈',I.home],['units','단원',I.folder],['coach','코치',I.coach],['review','복습',I.repeat],['more','더보기',I.menu]];
+const app=document.getElementById('app');
+let lastTabIdx=0,timerId=null;
+
+function applySettings(){
+  document.documentElement.style.setProperty('--fs',{m:'16px',l:'17.5px',xl:'19px'}[S.fs]||'16px');
+  document.documentElement.classList.toggle('hc',!!S.hc);
+}
+applySettings();
+
+function go(patch,anim){
+  Object.assign(R,patch);
+  if(R.tab!=='units'||R.exam===null)stopTimer();
+  render(anim);window.scrollTo({top:0});
+}
+
+function render(anim){
+  const ti=TABS.findIndex(t=>t[0]===R.tab);
+  const a=anim||(ti<lastTabIdx?'l':ti>lastTabIdx?'':'u');
+  lastTabIdx=ti;
+  let html;
+  if(!S.onb)html=vOnb();
+  else if(R.tab==='home')html=vHome();
+  else if(R.tab==='units'){
+    if(R.exam!==null)html=vExam();
+    else if(R.sess)html=vSess();
+    else if(R.seg==='lesson')html=vLesson();
+    else html=vUnits();
+  }
+  else if(R.tab==='coach')html=R.sess?vSess():vCoach();
+  else if(R.tab==='review')html=R.sess?vSess():vReview();
+  else html=vMore();
+  app.innerHTML=`<div class="view ${a}">${html}</div>`;
+  drawTabs();drawTop();
+  requestAnimationFrame(placeKnobs);
+  if(R.exam!==null&&!S.ex[R.exam]?.locked)startTimer();
+}
+function drawTabs(){
+  const el=document.getElementById('tabs');
+  el.innerHTML=TABS.map(([k,t,ic])=>`<button class="tab ${R.tab===k?'on':''}" data-tab="${k}">${ic}<span>${t}</span></button>`).join('')+'<i class="ind" id="ind"></i>';
+  const on=el.querySelector('.tab.on'),ind=document.getElementById('ind');
+  if(on)ind.style.left=(on.offsetLeft+on.offsetWidth/2-26)+'px';
+}
+function drawTop(){
+  const due=dueList(today()).length;
+  document.getElementById('bell').innerHTML=I.bell+(due?'<i></i>':'');
+  document.getElementById('wallet').innerHTML=`${I.flame}<span>${streak()}일</span>`;
+}
+function placeKnobs(){
+  document.querySelectorAll('.seg').forEach(seg=>{
+    const on=seg.querySelector('button.on'),k=seg.querySelector('.knob');
+    if(on&&k){k.style.left=on.offsetLeft+'px';k.style.width=on.offsetWidth+'px'}
+  });
+}
+
+/* ═════════ 반짝임 · 토스트 ═════════ */
+function sparkle(el,n){
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches||!el)return;
+  const r=el.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;
+  const C=['#56726f','#8fa8a4','#c9a227','#e6c55a','#3d5956','#d6e2df'];
+  for(let i=0;i<(n||16);i++){
+    const s=document.createElement('i');s.className='spk';
+    const a=Math.random()*Math.PI*2,d=55+Math.random()*80;
+    s.style.cssText=`left:${cx-8}px;top:${cy-8}px;--c:${C[i%6]};--x:${Math.cos(a)*d}px;--y:${Math.sin(a)*d}px;animation:fly ${.65+Math.random()*.4}s cubic-bezier(.2,.7,.3,1) forwards`;
+    document.body.appendChild(s);setTimeout(()=>s.remove(),1200);
+  }
+}
+function toast(t){document.querySelectorAll('.toast').forEach(x=>x.remove());const d=document.createElement('div');d.className='toast';d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),2200)}
+
+/* ═════════ 공통 조각 ═════════ */
+const seg=(name,items,cur,cls)=>`<div class="seg ${cls||''}" data-segname="${name}"><i class="knob"></i>${items.map(([k,t])=>`<button class="${k===cur?'on':''}" data-seg="${name}:${k}">${t}</button>`).join('')}</div>`;
+const pageHead=(t,p,q)=>`<div class="ph"><h1>${t}${q?`<button class="qm" data-help="${q}">?</button>`:''}</h1>${p?`<p>${p}</p>`:''}</div>`;
+function oxBox(it,mode,label,deep){
+  return `<div class="ox" data-id="${it.id}" data-mode="${mode}">
+   ${label?`<span class="lb ${deep?'deep':''}">${label}</span>`:''}
+   ${ctxHtml(it)}<div class="q">${f(it.q)}</div>
+   <div class="oxb"><button data-ans="1" aria-label="맞다">${I.o}</button><button data-ans="0" aria-label="틀리다">${I.x}</button></div>
+   <div class="fbw"></div></div>`;
+}
+function unitProg(u){const n=u.concepts.filter(c=>S.done[c.id]).length;return [n,u.concepts.length]}
+function acc(uid){const s=S.stat[uid];return s&&s.a?Math.round(s.c/s.a*100):null}
+function weakest(){
+  let w=null;UNITS.forEach(u=>{const a=acc(u.id),s=S.stat[u.id];if(a!==null&&s.a>=3&&(w===null||a<w.a))w={u,a}});return w;
+}
+
+/* ═════════ 온보딩 ═════════ */
+const ONB=[
+ [I.book,'개념부터','단원마다 1타 강의처럼 "전에 어디서 배웠는지"부터 차근차근 짚고, 바로 아래 확인 문제로 이해했는지 체크해요. 맞히면 심화, 틀리면 변형 문제가 나와요.'],
+ [I.doc,'기출로 실전','시험지 문제를 그대로 옮겨 놨어요. 시간을 재면서 풀고, 선지 다섯 개 전부에 왜 맞고 틀린지 해설이 붙어요.'],
+ [I.repeat,'틀리면 다시','틀린 건 잊을 때쯤 복습에 다시 나와요. 코치 탭에서 단원별 정답률을 보고 어디부터 다시 볼지 알려 줘요.']
+];
+function vOnb(){
+  const [ic,t,d]=ONB[R.onb];
+  return `<div class="onb">${pageHead('반가워요','Codex는 이렇게 써요.')}
+  <div class="onb-c"><div class="onb-ic">${ic}</div><div class="onb-n">${R.onb+1} / 3</div><h3>${t}</h3><p>${d}</p></div>
+  <div class="dots">${ONB.map((_,i)=>`<i class="${i===R.onb?'on':''}"></i>`).join('')}</div>
+  <div class="duo"><button class="btn line" data-onb="prev" ${R.onb===0?'disabled':''}>이전</button><button class="btn" data-onb="next">${R.onb===2?'시작하기':'다음'}</button></div></div>`;
+}
+
+/* ═════════ 홈 ═════════ */
+function vHome(){
+  const d=Object.keys(S.done).length,pct=Math.round(d/TOTAL*100);
+  const lp=S.last&&CON[S.last]?CON[S.last]:{u:0,c:0};
+  const lc=UNITS[lp.u].concepts[lp.c];
+  const due=dueList(today()).length;
+  const C=2*Math.PI*40;
+  const w=weakest();
+  const exDone=EXAMS.filter(e=>S.ex[e.no]?.locked).length;
+  return `${pageHead('오늘 공부','중세국어, 개념부터 기출 선지까지 한 번에.')}
+  ${S.notice?`<div class="notice"><b>처음이신가요?</b><p>단원 1강부터 순서대로 보는 걸 추천해요. 강의를 읽고 확인 문제를 다 풀면 그 개념이 완료로 표시돼요. 시험지 문제는 단원 탭의 <b>실전 기출</b>에 있어요.</p><button class="x" data-notice="0" aria-label="닫기">${I.close}</button></div>`:''}
+  <div class="card"><div class="cont">
+    <div class="ring"><svg viewBox="0 0 92 92"><circle cx="46" cy="46" r="40" stroke="var(--pl)"/><circle cx="46" cy="46" r="40" stroke="var(--p)" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C*(1-pct/100)}" style="transition:stroke-dashoffset .8s"/></svg><b>${pct}%</b></div>
+    <div class="t"><small>${S.last?'이어서 볼 강의':'첫 강의'} · ${UNITS[lp.u].title}</small><h3>${f(lc.title)}</h3><span class="sub">개념 ${d} / ${TOTAL} 완료</span></div>
+  </div><div style="height:20px"></div><button class="btn" data-open="${lp.u}:${lp.c}">강의 이어 보기</button></div>
+  <h2 class="sec">바로 가기</h2>
+  <div class="quick">
+    <button class="qk" data-jump="exam"><span class="ic">${I.doc}</span><div><b>실전 기출</b><span>${exDone} / ${EXAMS.length}문제 풂</span></div></button>
+    <button class="qk" data-jump="ox"><span class="ic">${I.ox}</span><div><b>선지 OX</b><span>${DRILL.length}개 선지</span></div></button>
+    <button class="qk" data-tab="review"><span class="ic">${I.repeat}</span><div><b>오늘 복습</b><span>${due}개 남음</span></div></button>
+  </div>
+  ${w&&w.a<80?`<h2 class="sec">코치 한마디</h2><div class="card"><div class="weak"><span class="ic">${I.target}</span><div><b>${w.u.title} 정답률 ${w.a}%</b><p class="sub" style="margin-top:4px;color:var(--ink2)">${w.u.advice}</p><div style="height:14px"></div><button class="link" data-open="${UNITS.indexOf(w.u)}:0">이 단원 강의 다시 보기 ${I.next}</button></div></div></div>`:''}
+  <h2 class="sec">단원</h2>
+  <div class="ulist">${UNITS.slice(0,3).map((u,i)=>urow(u,i)).join('')}</div>
+  <div style="height:14px"></div><button class="link" data-tab="units">단원 전체 보기 ${I.next}</button>`;
+}
+function urow(u,i){
+  const [n,a]=unitProg(u);
+  return `<button class="urow ${n===a?'done':''}" data-open="${i}:0"><span class="n">${i+1}</span><span class="t"><b>${u.title}</b><span>${f(u.sub)}</span></span><span class="bar"><i style="width:${n/a*100}%"></i></span><span class="chev">${I.next}</span></button>`;
+}
+
+/* ═════════ 단원 ═════════ */
+function vUnits(){
+  const s=R.seg;
+  let body='';
+  if(s==='concept')body=`<div class="ulist">${UNITS.map(urow).join('')}</div>`;
+  else if(s==='exam')body=vExamList();
+  else body=vOxHome();
+  return `${pageHead('단원','강의 → 확인 문제 → 실전 기출 순서로 가면 돼요.','unit')}
+  ${seg('useg',[['concept','개념 강의'],['exam','실전 기출'],['ox','선지 OX']],s,'sm')}
+  <div style="height:24px"></div>${body}`;
+}
+
+/* 강의 */
+function vLesson(){
+  const u=UNITS[R.unit],c=u.concepts[R.ci];
+  S.seen[c.id]=1;S.last=c.id;save();
+  const st=u.concepts.map((x,i)=>`<button aria-label="${x.title}" class="${i===R.ci?'on':S.done[x.id]?'seen':''}" data-step="${i}"></button>`).join('');
+  const isLast=R.ci===u.concepts.length-1;
+  return `<div class="lec">
+  <div class="backbar"><button class="round" data-seg="useg:concept" aria-label="단원 목록">${I.back}</button><div class="t"><b>${R.unit+1}. ${u.title}</b><span>${R.ci+1}강 / ${u.concepts.length}강</span></div></div>
+  <div class="steps">${st}</div>
+  <h1>${f(c.title)}</h1>
+  <div class="blk"><div class="bh"><span class="ic">${I.link}</span>전에 어디서 배웠냐면</div><div class="bridge">${f(c.bridge)}</div></div>
+  <div class="blk"><div class="bh"><span class="ic">${I.key}</span>이 강의 한 줄</div><div class="core"><span class="cl1">${R.unit+1}단원 ${R.ci+1}강</span>${f(c.core)}</div></div>
+  <div class="blk"><div class="bh"><span class="ic">${I.book}</span>차근차근 설명</div><div class="prose">${f(c.body)}</div></div>
+  ${c.dis.length?`<div class="blk"><div class="bh"><span class="ic">${I.scissors}</span>예문으로 익히기 <span class="sub" style="font-weight:600">${c.dis.length}개</span></div><div class="dis">${c.dis.map(([w,p,m])=>`<div class="dw"><span class="w mk">${f(w).replace(/<\/?span[^>]*>/g,'')}</span><span class="pt">${f(p.replace(/ \+ /g,' ＋ ')).replace(/＋/g,'<span class="plus">+</span>')}</span><span class="m">${f(m)}</span></div>`).join('')}</div></div>`:''}
+  <div class="blk"><div class="bh"><span class="ic">${I.alert}</span>시험엔 이렇게 나와요</div><div class="trap"><span class="ic">${I.flag}</span><div>${f(c.trap)}</div></div></div>
+  <div class="blk"><div class="bh"><span class="ic">${I.bulb}</span>외우는 법</div><div class="tip"><span class="ic">${I.bulb}</span><div>${f(c.tip)}</div></div></div>
+  <div class="blk"><div class="bh"><span class="ic">${I.target}</span>바로 확인</div>
+   ${c.basic.map((k,i)=>oxBox(ITEMS['b:'+c.id+':'+i],'basic','확인 '+(i+1))).join('')}
+   <div id="afterBasic"></div></div>
+  <div class="duo" style="margin-top:10px">
+   ${R.ci>0?`<button class="btn line" data-step="${R.ci-1}">이전 강의</button>`:`<button class="btn line" data-seg="useg:concept">목록</button>`}
+   ${!isLast?`<button class="btn" data-step="${R.ci+1}">다음 강의</button>`:(R.unit<UNITS.length-1?`<button class="btn" data-open="${R.unit+1}:0">다음 단원</button>`:`<button class="btn" data-seg="useg:exam">실전 기출 풀기</button>`)}
+  </div></div>`;
+}
+function afterBasic(c){
+  const boxes=[...app.querySelectorAll('.ox[data-mode="basic"]')];
+  if(!boxes.every(b=>b.dataset.lock))return;
+  const allOk=boxes.every(b=>b.dataset.ok==='1');
+  const w=document.getElementById('afterBasic');
+  const deep=c.deep.map((k,i)=>oxBox(ITEMS['p:'+c.id+':'+i],'deep',allOk?'심화 '+(i+1):'변형 '+(i+1),true)).join('');
+  w.innerHTML=`<div class="after ${allOk?'good':'bad'}"><b>${allOk?'좋아요, 한 단계 더 가 볼게요':'괜찮아요, 여기서 한 번 더 짚어요'}</b><p>${allOk?'기본은 잡혔어요. 시험에서 비튼 모양으로 나오는 심화 문제예요.':'위의 "시험엔 이렇게 나와요"를 다시 읽고, 같은 개념을 다르게 물어보는 변형 문제를 풀어 봐요.'}</p></div><div style="height:14px"></div>${deep}<div id="afterDeep"></div>`;
+  if(allOk)sparkle(w.querySelector('.after'),22);
+}
+function afterDeep(c){
+  const boxes=[...app.querySelectorAll('.ox[data-mode="deep"]')];
+  if(!boxes.length||!boxes.every(b=>b.dataset.lock))return;
+  const allBox=[...app.querySelectorAll('.ox[data-mode="basic"],.ox[data-mode="deep"]')];
+  const okN=allBox.filter(b=>b.dataset.ok==='1').length;
+  if(!S.done[c.id]){S.done[c.id]=1;save()}
+  const w=document.getElementById('afterDeep');
+  w.innerHTML=`<div class="after good" style="margin-top:14px"><b>${c.title.replace(/\{|\}/g,'')} 완료</b><p>${okN} / ${allBox.length} 맞혔어요. ${okN===allBox.length?'이 개념은 실전에서도 안 흔들릴 거예요.':'틀린 건 복습 탭에 들어갔어요. 내일 다시 나와요.'}</p></div>`;
+  sparkle(w.querySelector('.after'),okN===allBox.length?26:10);
+  drawTop();
+}
+
+/* 실전 기출 */
+function vExamList(){
+  const row=(e,i)=>{const r=S.ex[e.no];const st=r?.locked?(r.ok?'<span class="st o">맞음</span>':'<span class="st x">틀림</span>'):'<span class="st n">안 풂</span>';
+   return `<button class="exrow" data-exam="${i}"><span class="no" style="${e.no>99?'font-size:.85rem':''}">${e.no}</span><span class="t"><b>${e.src?e.src:'학교 시험지 · '+e.pts+'점'}</b><span>${e.q.replace(/<[^>]+>/g,'').slice(0,34)}…</span></span>${st}</button>`};
+  const sch=EXAMS.map((e,i)=>[e,i]).filter(([e])=>e.no<100),pub=EXAMS.map((e,i)=>[e,i]).filter(([e])=>e.no>100);
+  return `<div class="tile" style="margin-bottom:6px"><b>문제 그대로, 시간 재면서</b><div class="sub" style="margin-top:2px">풀면 선지 다섯 개 모두 해설이 열려요.</div></div>
+  <h2 class="sec">학교 시험지 <span class="sub">${sch.length}문제</span></h2><div class="exlist">${sch.map(([e,i])=>row(e,i)).join('')}</div>
+  <h2 class="sec">평가원 · 교육청 기출 <span class="sub">${pub.length}문제</span></h2><div class="exlist">${pub.map(([e,i])=>row(e,i)).join('')}</div>`;
+}
+function vExam(){
+  const e=EXAMS[R.exam],r=S.ex[e.no]||{};
+  const locked=!!r.locked;
+  return `<div class="backbar"><button class="round" data-seg="useg:exam" aria-label="목록">${I.back}</button><div class="t"><b>실전 기출 ${e.no}번</b><span>${e.src?e.src:'학교 시험지 '+e.no+'번 · '+e.pts+'점'}</span></div></div>
+  <div class="exhead"><span class="sub">${R.exam+1} / ${EXAMS.length}</span><span class="timer ${locked?'':'run'}" id="timer">${I.clock}<span>${fmt(locked?r.t:0)}</span></span></div>
+  <div class="qtxt">${e.no}. ${e.q}</div>
+  ${e.pass}
+  <div class="choices">${e.ch.map((c,i)=>{
+    let cls='';if(locked){if(i+1===e.ans)cls='right';else if(i+1===r.pick)cls='wrong'}
+    return `<button class="ch ${cls}" data-pick="${i+1}" ${locked?'disabled':''}><span class="k">${i+1}</span><span class="c">${f(c)}${locked?`<span class="ex"><span class="tag ${i+1===e.ans?'o':(e.neg?'n':'x')}">${i+1===e.ans?'정답':(e.neg?'맞는 설명':'오답')}</span>${f(e.ex[i])}</span>`:''}</span></button>`}).join('')}</div>
+  ${locked?examAfter(e,r):''}
+  <div class="duo" style="margin-top:22px">
+   ${R.exam>0?`<button class="btn line" data-exam="${R.exam-1}">이전 문제</button>`:`<button class="btn line" data-seg="useg:exam">목록</button>`}
+   ${R.exam<EXAMS.length-1?`<button class="btn" data-exam="${R.exam+1}">다음 문제</button>`:`<button class="btn" data-seg="useg:exam">목록으로</button>`}
+  </div>
+  ${locked?`<div style="height:12px"></div><button class="link" data-retry="${e.no}">${I.replay} 처음부터 다시 풀기</button>`:''}`;
+}
+function examAfter(e,r){
+  const cs=[...new Set(e.links)];
+  return `<div class="after ${r.ok?'good':'bad'}"><b>${r.ok?'정답이에요':'정답은 '+e.ans+'번'} · ${fmt(r.t)}</b>
+  <p>${r.ok?'선지마다 해설이 열렸어요. 맞힌 문제도 "왜 나머지가 맞는지"까지 확인하면 실전에서 시간이 줄어요.':'고른 '+r.pick+'번이 왜 아닌지 해설을 먼저 보고, 아래 개념 강의로 돌아가요. 변형 OX로 한 번 더 확인하면 복습 끝.'}</p>
+  <div style="display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:12px">${cs.map(id=>`<button class="link" data-goc="${id}">${UNITS[CON[id].u].concepts[CON[id].c].title.replace(/\{|\}/g,'')} ${I.next}</button>`).join('')}</div>
+  ${r.ok?'':`<div style="height:16px"></div><button class="btn sm soft" data-variant="${e.no}">변형 OX로 다시 확인</button>`}</div>`;
+}
+const fmt=s=>{s=s||0;return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')};
+let tStart=0;
+function startTimer(){stopTimer();tStart=Date.now();timerId=setInterval(()=>{const el=document.querySelector('#timer span');if(el)el.textContent=fmt(Math.floor((Date.now()-tStart)/1000))},1000)}
+function stopTimer(){if(timerId){clearInterval(timerId);timerId=null}}
+
+/* 선지 OX */
+function vOxHome(){
+  const groups=['전체','학교 시험지','평가원·교육청'];
+  const ids=oxIds();
+  return `<div class="chips">${groups.map(g=>`<button class="chip ${g===R.filter?'on':''}" data-filter="${g}">${g}</button>`).join('')}</div>
+  <div style="height:18px"></div>
+  <div class="card"><b style="font-size:1.1rem">${R.filter==='전체'?'선지 전체':R.filter+' 선지'} ${ids.length}개</b>
+   <p class="sub" style="margin:4px 0 22px">선지 하나하나를 O, X로 판단해요. 틀리면 해설에서 바로 해당 강의로 갈 수 있어요.</p>
+   <div class="two"><button class="btn line" data-start="order">${I.flag} 순서대로</button><button class="btn" data-start="shuffle">${I.shuffle} 섞어서</button></div></div>`;
+}
+function oxIds(){const a=DRILL.map(d=>d.id);if(R.filter==='전체')return a;const sch=R.filter==='학교 시험지';return a.filter(id=>(parseInt(ITEMS[id].src)<100)===sch)}
+function startSess(ids,label,kind){if(!ids.length){toast('풀 문제가 없어요');return}R.sess={ids,i:0,ok:0,label,kind};render('u');window.scrollTo({top:0})}
+function vSess(){
+  const s=R.sess;
+  if(s.i>=s.ids.length){
+    const p=Math.round(s.ok/s.ids.length*100);
+    return `<div class="card res"><div class="big">${s.ok} / ${s.ids.length}</div><p>${p===100?'전부 맞혔어요. 선지 함정을 다 피했어요.':p>=70?'거의 다 왔어요. 틀린 건 복습에 들어갔어요.':'괜찮아요. 틀린 선지의 강의부터 다시 보고 오면 확 달라져요.'}</p>
+     <div class="duo"><button class="btn line" data-endsess="1">닫기</button><button class="btn" data-tab="review">복습 보기</button></div></div>`;
+  }
+  const it=ITEMS[s.ids[s.i]];
+  return `<div class="backbar"><button class="round" data-endsess="1" aria-label="그만하기">${I.back}</button><div class="t"><b>${s.label}</b><span>틀리면 복습에 들어가요</span></div></div>
+  <div class="prog"><span>${s.i+1} / ${s.ids.length}</span><div class="bar"><i style="width:${s.i/s.ids.length*100}%"></i></div><span>${s.ok}개 맞음</span></div>
+  ${it.exam?examStub(it):oxBox(it,'sess',it.src)}
+  <div id="nextw" style="margin-top:18px"></div>`;
+}
+function examStub(it){return `<div class="card"><b>${it.src}</b><p class="sub" style="margin:6px 0 18px">실전 문제는 지문이 있어서 문제 화면에서 다시 풀어요.</p><button class="btn sm" data-exam="${EXAMS.findIndex(e=>e.no===it.exam)}" data-fromrev="1">문제 열기</button></div>`}
+
+
+/* ═════════ 코치 ═════════ */
+function vCoach(){
+  const rate=S.solved?Math.round(S.ok/S.solved*100):0;
+  const times=EXAMS.map(e=>S.ex[e.no]).filter(r=>r&&r.locked).map(r=>r.t);
+  const avg=times.length?Math.round(times.reduce((a,b)=>a+b,0)/times.length):0;
+  const w=weakest();
+  const rows=UNITS.map(u=>{const a=acc(u.id),s=S.stat[u.id];return `<div class="r"><span>${u.title}</span><div class="bar"><i class="${a===null?'':a<50?'low':a<80?'mid':''}" style="width:${a||0}%"></i></div><em>${a===null?'—':a+'%'}</em></div>`}).join('');
+  return `${pageHead('코치','푼 기록을 보고 어디부터 다시 볼지 알려 줘요.')}
+  <div class="stat3"><div class="tile"><b>${S.solved}</b><span>푼 문항</span></div><div class="tile"><b>${S.solved?rate+'%':'—'}</b><span>정답률</span></div><div class="tile"><b>${times.length?fmt(avg):'—'}</b><span>기출 평균 시간</span></div></div>
+  <h2 class="sec">지금 해야 할 것</h2>
+  ${coachAdvice(w,avg,times.length)}
+  <h2 class="sec">단원별 정답률</h2>
+  <div class="card"><div class="acc">${rows}</div><p class="sub" style="margin-top:18px">3문항 이상 푼 단원부터 판단해요. 빨간 막대는 50% 미만이에요.</p></div>`;
+}
+function coachAdvice(w,avg,n){
+  const out=[];
+  if(!S.solved)out.push([I.book,'아직 기록이 없어요','1단원 1강부터 시작해 보세요. 확인 문제를 풀수록 여기 분석이 정확해져요.',`<button class="btn sm" data-open="0:0">1강 시작하기</button>`]);
+  if(w&&w.a<80){const ui=UNITS.indexOf(w.u);out.push([I.target,`${w.u.title} — 정답률 ${w.a}%`,w.u.advice,`<div class="two"><button class="btn sm line" data-open="${ui}:0">강의 다시</button><button class="btn sm" data-unitox="${w.u.id}">이 단원 변형 OX</button></div>`])}
+  const due=dueList(today()).length;
+  if(due)out.push([I.repeat,`오늘 복습 ${due}개`,'틀린 건 잊기 직전에 다시 보는 게 제일 효율적이에요. 하루 이틀 미루면 처음부터 다시 외우는 거랑 비슷해져요.',`<button class="btn sm" data-review="1">복습 시작</button>`]);
+  if(n&&avg>150)out.push([I.clock,`기출 평균 ${fmt(avg)}`,'한 문제 2분 30초가 넘어요. 지문을 다 읽기 전에 밑줄 단어와 현대어 풀이부터 맞대 보세요. 대부분 그 단계에서 답이 갈려요.','']);
+  if(!out.length)out.push([I.spark||I.target,'흔들리는 단원이 없어요','실전 기출을 시간 재고 다시 풀어 보세요. 1분 안에 정답과 근거를 말할 수 있으면 완벽해요.',`<button class="btn sm" data-jump="exam">실전 기출</button>`]);
+  return out.map(([ic,t,p,b])=>`<div class="advice" style="margin-bottom:12px"><span class="ic">${ic}</span><div style="flex:1"><b>${t}</b><p>${p}</p>${b?`<div style="height:14px"></div>${b}`:''}</div></div>`).join('');
+}
+
+/* ═════════ 복습 (Qnote) ═════════ */
+function vReview(){
+  const t=today(),due=dueList(t);
+  const all=Object.keys(S.rev).filter(k=>ITEMS[k]);
+  return `${pageHead('복습','잊을 때쯤 다시 나와요')}
+  <div class="today"><small>오늘 복습</small><b>${due.length}개</b><span>${due.length?'세 번 연속 맞히면 졸업해요':'오늘은 다 했어요'}</span></div>
+  ${due.length?`<div style="height:18px"></div><button class="btn" data-review="1">오늘 복습 시작</button>`:''}
+  <div class="nextrev"><b>다음 복습</b><div class="r"><span>내일</span><b>${dueOn(addDays(t,1))}개</b></div><div class="r"><span>모레</span><b>${dueOn(addDays(t,2))}개</b></div></div>
+  <h2 class="sec">복습 목록 ${all.length}개</h2>
+  ${all.length?all.map(k=>{const it=ITEMS[k],r=S.rev[k];return `<div class="ritem"><div class="s">${it.src} · ${r.due<=t?'오늘':r.due.slice(5).replace('-','/')}</div><div class="q">${f(it.q)}</div><div style="height:8px"></div><button class="link" data-goc="${it.link}">개념 보기 ${I.next}</button></div>`}).join(''):`<div class="empty"><b>아직 틀린 문제가 없어요</b><p>확인 문제, 선지 OX, 실전 기출에서 틀리면 여기에 모여요.</p></div>`}`;
+}
+
+/* ═════════ 더보기 (Qnote 설정) ═════════ */
+function vMore(){
+  return `${pageHead('더보기','화면과 기록을 관리해요.')}
+  <div class="card setcard"><h3>보기</h3>
+   <div class="preview"><b>미리보기</b><span>이 카드처럼 글자 크기·대비가 적용돼요. <span class="mk">ᄒᆞ쇼셔</span> <span class="mk">듣ᄌᆞᄫᆞ며</span></span></div>
+   <p class="lab">글자 크기</p>
+   ${seg('fs',[['m','보통'],['l','크게'],['xl','더 크게']],S.fs)}
+   <div class="tg"><div class="t"><b>고대비 모드</b><span>글자와 테두리를 더 또렷하게 표시해요.</span></div><button class="sw ${S.hc?'on':''}" data-sw="hc" aria-label="고대비 모드"></button></div>
+  </div>
+  <div class="card setcard"><h3>화면 표시</h3>
+   <div class="tg" style="margin-top:0"><div class="t"><b>스크롤 시 상·하단 바 숨기기</b><span>아래로 스크롤하면 상단바와 하단 탭이 사라져 화면을 넓게 쓰고, 위로 올리면 다시 나타나요.</span></div><button class="sw ${S.hide?'on':''}" data-sw="hide" aria-label="바 숨기기"></button></div>
+  </div>
+  <h2 class="sec">설정</h2>
+  <div class="sgrid">
+   <button class="sbtn" data-reonb="1">${I.book}<span>사용법 다시 보기</span></button>
+   <button class="sbtn" data-notice="1">${I.bulb}<span>안내 박스 다시 켜기</span></button>
+   <button class="sbtn" data-resetrev="1">${I.repeat}<span>복습 목록 비우기</span></button>
+   <button class="sbtn danger" data-reset="1">${I.trash}<span>기록 모두 지우기</span></button>
+  </div>
+  <div class="foot"><span>개념 ${Object.keys(S.done).length}/${TOTAL}</span><span>푼 문항 ${S.solved}</span><span>연속 ${streak()}일</span></div>
+  <p class="sub" style="text-align:center;margin-top:10px">옛한글이 네모로 보이면 기기 글꼴이 옛한글을 지원하지 않는 거예요. 최신 크롬·삼성 인터넷에서 보세요.</p>`;
+}
+
+/* ═════════ 채점 ═════════ */
+function answerOX(box,btn){
+  if(box.dataset.lock)return;box.dataset.lock=1;
+  const it=ITEMS[box.dataset.id],pick=btn.dataset.ans==='1',ok=pick===it.a,mode=box.dataset.mode;
+  box.dataset.ok=ok?'1':'0';
+  box.querySelectorAll('.oxb button').forEach(b=>{b.disabled=true;if((b.dataset.ans==='1')===it.a)b.classList.add('r');else if(b===btn)b.classList.add('w')});
+  if(ok)sparkle(btn);else{box.classList.remove('shake');void box.offsetWidth;box.classList.add('shake')}
+  if(R.sess&&R.sess.kind==='review')reviewed(it.id,ok);
+  record(it.id,ok);
+  if(R.sess&&R.sess.kind==='review'&&!ok)S.rev[it.id]={due:addDays(today(),1),lv:0},save();
+  const showLink=mode==='sess';
+  box.querySelector('.fbw').innerHTML=`<div class="fb ${ok?'ok':'no'}"><strong>${ok?'맞았어요':'아쉬워요'} · 정답 ${it.a?'O':'X'}</strong>${f(it.why)}${showLink?`<div style="height:8px"></div><button class="link" data-goc="${it.link}">관련 강의 보기 ${I.next}</button>`:''}</div>`;
+  if(mode==='basic')afterBasic(UNITS[R.unit].concepts[R.ci]);
+  if(mode==='deep')afterDeep(UNITS[R.unit].concepts[R.ci]);
+  if(mode==='sess'){if(ok)R.sess.ok++;document.getElementById('nextw').innerHTML=`<button class="btn" data-nextq="1">${R.sess.i+1<R.sess.ids.length?'다음 문제':'결과 보기'}</button>`}
+  drawTop();
+}
+function pickExam(n){
+  const e=EXAMS[R.exam];if(S.ex[e.no]?.locked)return;
+  const t=Math.floor((Date.now()-tStart)/1000);stopTimer();
+  const ok=n===e.ans;
+  S.ex[e.no]={locked:1,pick:n,ok:ok?1:0,t};
+  const id='e:'+e.no;
+  if(S.rev[id])reviewed(id,ok);
+  record(id,ok);
+  if(!ok)S.rev[id]={due:today(),lv:0},save();
+  render('u');
+  const target=app.querySelector(ok?'.ch.right':'.ch.wrong');
+  if(target){target.scrollIntoView({block:'center',behavior:'smooth'});if(ok)setTimeout(()=>sparkle(target,24),250);else target.classList.add('shake')}
+}
+
+/* ═════════ 이벤트 ═════════ */
+document.addEventListener('click',ev=>{
+  const t=ev.target.closest('button');if(!t)return;const d=t.dataset;
+  if(d.ans!==undefined){answerOX(t.closest('.ox'),t);return}
+  if(d.onb){if(d.onb==='next'){if(R.onb<2){R.onb++;render('')}else{S.onb=1;save();go({tab:'home'},'u')}}else if(R.onb>0){R.onb--;render('l')}return}
+  if(d.tab){R.sess=null;R.exam=null;if(d.tab==='units'&&R.seg==='lesson')R.seg='concept';go({tab:d.tab});return}
+  if(d.open){const [u,c]=d.open.split(':').map(Number);R.sess=null;go({tab:'units',seg:'lesson',unit:u,ci:c,exam:null},'');return}
+  if(d.goc){const p=CON[d.goc];if(p){R.sess=null;go({tab:'units',seg:'lesson',unit:p.u,ci:p.c,exam:null},'')}return}
+  if(d.step!==undefined){const n=+d.step,back=n<R.ci;R.ci=n;render(back?'l':'');window.scrollTo({top:0});return}
+  if(d.seg){const [name,val]=d.seg.split(':');
+    if(name==='useg'){R.exam=null;R.sess=null;stopTimer();const order=['concept','exam','ox'];const back=order.indexOf(val)<order.indexOf(R.seg);go({tab:'units',seg:val},back?'l':'')}
+    if(name==='fs'){S.fs=val;save();applySettings();render('u')}
+    return}
+  if(d.jump){R.sess=null;R.exam=null;go({tab:'units',seg:d.jump},'');return}
+  if(d.exam!==undefined){const i=+d.exam;if(d.fromrev){const no=EXAMS[i].no;delete S.ex[no];save();R.sess=null}go({tab:'units',seg:'exam',exam:i},'');return}
+  if(d.fullpass){const box=t.nextElementSibling;if(box.innerHTML){box.innerHTML='';t.lastChild.textContent=' 전체 지문 보기'}else{const no=+d.fullpass;const e=EXAMS.find(x=>x.no===no);box.innerHTML=no===10?PASS10:(e?e.pass:'');t.lastChild.textContent=' 지문 접기'}return}
+  if(d.pick){pickExam(+d.pick);return}
+  if(d.retry){delete S.ex[+d.retry];save();render('u');return}
+  if(d.variant){const e=EXAMS.find(x=>x.no===+d.variant);const ids=[];[...new Set(e.links)].forEach(cid=>{const c=UNITS[CON[cid].u].concepts[CON[cid].c];c.basic.forEach((_,i)=>ids.push('b:'+cid+':'+i));c.deep.forEach((_,i)=>ids.push('p:'+cid+':'+i))});R.exam=null;stopTimer();startSess(ids.sort(()=>Math.random()-.5),e.no+'번 변형 OX','ox');return}
+  if(d.filter){R.filter=d.filter;render('u');return}
+  if(d.start){let ids=oxIds();if(d.start==='shuffle')ids=ids.slice().sort(()=>Math.random()-.5);startSess(ids,R.filter==='전체'?'선지 OX':R.filter+' 선지','ox');return}
+  if(d.nextq){R.sess.i++;render('');window.scrollTo({top:0});return}
+  if(d.endsess){R.sess=null;render('l');return}
+  if(d.review){const ids=dueList(today());R.tab='review';startSess(ids,'오늘 복습','review');return}
+  if(d.unitox){const u=UNITS.find(x=>x.id===d.unitox);const ids=[];u.concepts.forEach(c=>{c.basic.forEach((_,i)=>ids.push('b:'+c.id+':'+i));c.deep.forEach((_,i)=>ids.push('p:'+c.id+':'+i))});DRILL.forEach(x=>{if(CON[x.link]&&CON[x.link].unit===u.id)ids.push(x.id)});startSess(ids.sort(()=>Math.random()-.5),u.title+' 변형 OX','ox');return}
+  if(d.notice!==undefined){S.notice=+d.notice;save();if(R.tab==='more')toast('홈에 안내 박스를 다시 띄웠어요');render('u');return}
+  if(d.sw){S[d.sw]=S[d.sw]?0:1;save();applySettings();t.classList.toggle('on');if(d.sw==='hide'&&!S.hide)document.body.classList.remove('hide');return}
+  if(d.reonb){S.onb=0;R.onb=0;save();render('u');return}
+  if(d.resetrev){if(confirm('복습 목록을 비울까요?')){S.rev={};save();render('u');toast('복습 목록을 비웠어요')}return}
+  if(d.reset){if(confirm('개념 완료, 푼 기록, 복습 목록을 모두 지울까요?')){const keep={fs:S.fs,hc:S.hc,hide:S.hide,onb:1};S=Object.assign(JSON.parse(JSON.stringify(DEF)),keep);save();render('u');toast('기록을 모두 지웠어요')}return}
+  if(d.help){toast(d.help==='unit'?'강의를 끝까지 풀면 개념 완료로 표시돼요':'');return}
+  if(t.id==='bell'){const n=dueList(today()).length;toast(n?`오늘 복습 ${n}개가 기다리고 있어요`:'새 알림이 없어요');return}
+});
+
+/* 스크롤 시 바 숨기기 */
+let lastY=0;
+addEventListener('scroll',()=>{
+  if(!S.hide)return;const y=scrollY;
+  if(y>lastY+8&&y>120)document.body.classList.add('hide');
+  else if(y<lastY-8)document.body.classList.remove('hide');
+  lastY=y;
+},{passive:true});
+addEventListener('resize',()=>{placeKnobs();drawTabs()});
+
+touchDay();
+render('u');
+/* 앱 설치(PWA): GitHub Pages(https)에서만 동작 */
+if('serviceWorker' in navigator&&location.protocol==='https:'){addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))}
+</script>
+</body>
+</html>
