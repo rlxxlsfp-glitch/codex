@@ -1,5 +1,5 @@
 /* Codex 오프라인 캐시. 앱을 고치면 VERSION 숫자를 올려 주세요. */
-const VERSION = 'codex-v2';
+const VERSION = 'codex-v3';
 const CORE = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-maskable.png', './apple-touch-icon.png'];
 
 self.addEventListener('install', e => {
