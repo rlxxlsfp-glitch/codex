@@ -1,18 +1,16 @@
 /* Codex 오프라인 캐시. 앱을 고치면 VERSION 숫자를 올려 주세요. */
-const VERSION = 'codex-v2';
+const VERSION = 'codex-v3';
 const CORE = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-maskable.png', './apple-touch-icon.png'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(VERSION).then(c => c.addAll(CORE)).then(() => self.skipWaiting()));
 });
 self.addEventListener('activate', e => {
-  e.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k.startsWith('codex-') && k !== VERSION).map(k => caches.delete(k)))).then(() => self.clients.claim()));
+  e.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k !== VERSION).map(k => caches.delete(k)))).then(() => self.clients.claim()));
 });
 self.addEventListener('fetch', e => {
   const req = e.request;
   if (req.method !== 'GET') return;
-  // 로그인·동기화 통신(Firebase)은 캐시하지 않고 그대로 통과
-  if (/(^|\.)(firestore|identitytoolkit|securetoken|www)\.googleapis\.com$|(^|\.)firebaseapp\.com$|^apis\.google\.com$|^accounts\.google\.com$/.test(new URL(req.url).hostname)) return;
   // 앱 화면: 인터넷 되면 최신 버전, 안 되면 저장본
   if (req.mode === 'navigate') {
     e.respondWith(fetch(req).then(r => { const c = r.clone(); caches.open(VERSION).then(x => x.put('./index.html', c)); return r; }).catch(() => caches.match('./index.html')));
